@@ -20,10 +20,10 @@ const connect = async () => {
 };
 
 //middlewares
-app.use("auth/auth", authRoute);
-app.use("auth/users", usersRoute);
-app.use("auth/hotels", hotelsRoute);
-app.use("auth/rooms", roomsRoute);
+app.use("/api/auth", authRoute);
+app.use("/api/users", usersRoute);
+app.use("/api/hotels", hotelsRoute);
+app.use("/api/rooms", roomsRoute);
 
 app.listen(8900, () => {
   connect();
