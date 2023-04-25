@@ -1,6 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import authRoute from "./routes/auth.js";
+import usersRoute from "./routes/users.js";
+import hotelsRoute from "./routes/hotels.js";
+import roomsRoute from "./routes/rooms.js";
 
 const app = express();
 
@@ -15,9 +19,11 @@ const connect = async () => {
   }
 };
 
-app.get("/", (req, res)=>{
-  res.send("hello first request!");
-})
+//middlewares
+app.use("auth/auth", authRoute);
+app.use("auth/users", usersRoute);
+app.use("auth/hotels", hotelsRoute);
+app.use("auth/rooms", roomsRoute);
 
 app.listen(8900, () => {
   connect();
