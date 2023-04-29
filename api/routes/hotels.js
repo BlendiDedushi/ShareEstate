@@ -1,6 +1,12 @@
 import express from "express";
 import { createError } from "../utils/error.js";
-import { createHotel, deleteHotel, getHotel, getHotels, updateHotel } from "../controllers/hotel.js";
+import {
+  createHotel,
+  deleteHotel,
+  getHotel,
+  getHotels,
+  updateHotel,
+} from "../controllers/hotel.js";
 
 const router = express.Router();
 
@@ -8,16 +14,15 @@ const router = express.Router();
 router.post("/", createHotel);
 
 //update
-router.put("/:id", updateHotel)
+router.put("/:id", updateHotel);
 
 //delete
-router.delete("/:id", deleteHotel)
-
+router.delete("/:id", deleteHotel);
 
 //get by id
-router.get("/:id", getHotel)
+router.get("/:id", getHotel);
 
-//Get 
-router.get("/", getHotels)
+//Get
+router.get("/", getHotels);
 
 export default router;
