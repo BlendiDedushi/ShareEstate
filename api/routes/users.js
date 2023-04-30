@@ -25,6 +25,7 @@ const router = express.Router();
 router.put("/:id", verifyUser, updateUser);
 
 //delete
+router.delete("/:id",verifyUser,deleteUser);
 router.delete("/:id", deleteUser);
 
 //get by id
