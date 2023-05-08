@@ -6,10 +6,30 @@ import usersRoute from "./routes/users.js";
 import hotelsRoute from "./routes/hotels.js";
 import roomsRoute from "./routes/rooms.js";
 import cookieParser from "cookie-parser";
+import sequelize from "./connection.js";
+import User from "./models/User.js";
 
 const app = express();
 
 dotenv.config();
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connected to MSSQL database!');
+  })
+  .catch((error) => {
+    console.error('Unable to connect to the database:', error);
+  });
+
+  User.sync()
+  .then(() => {
+    console.log('User model synchronized with the database!');
+  })
+  .catch((error) => {
+    console.error('Unable to synchronize User model:', error);
+  });
+
 
 const connect = async () => {
   try {
