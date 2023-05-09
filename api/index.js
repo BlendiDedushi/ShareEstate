@@ -3,13 +3,33 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import authRoute from "./routes/auth.js";
 import usersRoute from "./routes/users.js";
-import hotelsRoute from "./routes/hotels.js";
+import estatesRoute from "./routes/estates.js";
 import roomsRoute from "./routes/rooms.js";
 import cookieParser from "cookie-parser";
+import sequelize from "./connection.js";
+import User from "./models/User.js";
 
 const app = express();
 
 dotenv.config();
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connected to MSSQL database!');
+  })
+  .catch((error) => {
+    console.error('Unable to connect to the database:', error);
+  });
+
+  User.sync()
+  .then(() => {
+    console.log('User model synchronized with the database!');
+  })
+  .catch((error) => {
+    console.error('Unable to synchronize User model:', error);
+  });
+
 
 const connect = async () => {
   try {
@@ -30,7 +50,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
-app.use("/api/hotels", hotelsRoute);
+app.use("/api/estates", estatesRoute);
 app.use("/api/rooms", roomsRoute);
 
 app.use((err, req, res, next) => {
