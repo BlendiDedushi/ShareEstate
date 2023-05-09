@@ -1,3 +1,4 @@
+import { Link } from "next/link";
 import styles from "./searchItem.module.css";
 
 const SearchItem = () => {
@@ -31,7 +32,7 @@ const SearchItem = () => {
         <div className={styles.siDetailTexts}>
           <span className={styles.siPrice}>$112</span>
           <span className={styles.siTaxOp}>Includes taxes and fees</span>
-          <button className={styles.siCheckButton}>See availability</button>
+          <button className={styles.siCheckButton}><Link href={'/hotel/1'}>See availability</Link></button>
         </div>
       </div>
     </div>
