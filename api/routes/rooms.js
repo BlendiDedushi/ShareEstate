@@ -4,13 +4,13 @@ import { createRoom, deleteRoom, getRoom, getRooms, updateRoom } from "../contro
 const router = express.Router();
 
 //create
-router.post("/:hotelid", createRoom);
+router.post("/:estateid", createRoom);
 
 //update
 router.put("/:id", updateRoom);
 
 //delete
-router.delete("/:id/:hotelid", deleteRoom);
+router.delete("/:id/:estateid", deleteRoom);
 
 //get by id
 router.get("/:id", getRoom);

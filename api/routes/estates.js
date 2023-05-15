@@ -6,7 +6,8 @@ import {
   getEstates,
   updateEstate,
 } from "../controllers/estate.js";
-import { verifyAdmin } from "../utils/verifyToken.js";
+import { verifyAdmin, verifyToken } from "../utils/verifyToken.js";
+
 
 const router = express.Router();
 
@@ -24,5 +25,7 @@ router.get("/:id", getEstate);
 
 //Get
 router.get("/", getEstates);
+
+
 
 export default router;
