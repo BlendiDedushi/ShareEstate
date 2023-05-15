@@ -14,10 +14,8 @@ import {
   import "react-date-range/dist/theme/default.css"; // theme css file
   import { format } from "date-fns";
   import { useRouter } from "next/router";
-  import moment from 'moment';
   
   const Header = ({ type }) => {
-    const router = useRouter();
     const [destination, setDestination] = useState("");
     const [openDate, setOpenDate] = useState(false);
     const [date, setDate] = useState([
@@ -33,8 +31,8 @@ import {
       children: 0,
       room: 1,
     });
-
-    console.log(date);
+  
+    const navigate = useRouter();
   
     const handleOption = (name, operation) => {
       setOptions((prev) => {
@@ -46,14 +44,7 @@ import {
     };
   
     const handleSearch = () => {
-      // const formattedStartDate = moment(date[0].startDate).format('YYYY-MM-DD'); // Format the start date using moment.js
-      // const formattedEndDate = moment(date[0].endDate).format('YYYY-MM-DD'); // Format the end date using moment.js
-      // const formattedDateRange = `[${formattedStartDate}, ${formattedEndDate}]`; // Create a string representation of an array with the formatted start and end dates
-      // router.push({
-      //   pathname: "/hotels",
-      //   query: {destination, date: formattedDateRange, options: options}
-      // })
-      router.push({pathname: "/hotels",  query: { destination, date :JSON.stringify(date), options: JSON.stringify(options) } });
+      navigate("/hotels", { state: { destination, date, options } });
     };
   
     return (
