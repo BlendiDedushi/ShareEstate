@@ -6,7 +6,7 @@ import usersRoute from "./routes/users.js";
 import estatesRoute from "./routes/estates.js";
 import roomsRoute from "./routes/rooms.js";
 import cookieParser from "cookie-parser";
-import sequelize from "./connection.js";
+import sequelize from "./db/connection.js";
 import User from "./models/User.js";
 import Reservation from "./models/Reservation.js";
 import reservationRoute from './routes/reservation.js';
@@ -40,6 +40,11 @@ sequelize
   })
   .then(() => {
     console.log('MSSQL models synchronized with the database!');
+
+    // Define the associations between User and Reservation
+    User.hasMany(Reservation, { foreignKey: 'userId', as: 'reservations' });
+    Reservation.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
     return Reservation.sync(); // Sync Reservation model with the database
   })
   .then(() => {
@@ -47,8 +52,6 @@ sequelize
     return connect(); // Connect to MongoDB
   })
   .then(() => {
-    User.hasMany(Reservation, { foreignKey: 'userId', as: 'reservations' });
-    Reservation.belongsTo(User, { foreignKey: 'userId', as: 'user' });
     console.log('Database relationships established!');
   })
   .catch((error) => {

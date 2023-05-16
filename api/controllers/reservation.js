@@ -1,16 +1,19 @@
-import Reservation from '../models/Reservation.js';
-import Estate from '../models/Estate.js';
+import Reservation from "../models/Reservation.js";
+import Estate from "../models/Estate.js";
 
 // POST /api/reservations
 export const createReservation = async (req, res, next) => {
   try {
-    const { startDate, endDate, userId, estateId, paymentMethod } = req.body;
+    const { startDate, endDate, estateId, paymentMethod } = req.body;
+
+    // Retrieve the user from the decoded token
+    const userId = req.user.id;
 
     // Retrieve the estate details from MongoDB
     const estate = await Estate.findById(estateId);
 
     if (!estate) {
-      return res.status(404).json({ success: false, message: 'Estate not found' });
+      return res.status(404).json({ success: false, message: "Estate not found" });
     }
 
     // Extract the necessary details from the estate object
