@@ -9,40 +9,40 @@ dotenv.config();
 const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 export const processPayment = async (req, res, next) => {
-  try {
-    const { reservationId, cardNumber, expMonth, expYear, cvc } = req.body;
-
-    const reservation = await Reservation.findByPk(reservationId);
-
-    if (!reservation) {
-      return res.status(404).json({ success: false, message: "Reservation not found" });
-    }
-
-    const paymentAmount = reservation.price;
-
-    const user = await User.findByPk(req.user.id);
-    const customerId = user.stripeCustomerId;
-
-
-    const paymentMethod = await stripe.paymentMethods.create({
-      type: 'card',
-      card: {
-        number: cardNumber,
-        exp_month: expMonth,
-        exp_year: expYear,
-        cvc: cvc,
-      },
-    });
-
-    await stripe.paymentMethods.attach(paymentMethod.id, {
-      customer: customerId,
-    });
+    try {
+      const { reservationId, cardNumber, expMonth, expYear, cvc } = req.body;
+  
+      const reservation = await Reservation.findByPk(reservationId);
+  
+      if (!reservation) {
+        return res.status(404).json({ success: false, message: "Reservation not found" });
+      }
+  
+      const paymentAmount = reservation.price;
+  
+      const user = await User.findByPk(req.user.id);
+      const customerId = user.stripeCustomerId;
+  
+      // Create a card token
+      const cardToken = await createCardToken(cardNumber, expMonth, expYear, cvc);
+  
+      const paymentMethod = await stripe.paymentMethods.create({
+        type: 'card',
+        card: {
+          token: cardToken,
+        },
+      });
+  
+      // Attach the payment method to the customer
+      await stripe.paymentMethods.attach(paymentMethod.id, {
+        customer: customerId,
+      });
 
     const paymentIntent = await stripe.paymentIntents.create({
       amount: paymentAmount * 100,
       currency: 'usd',
       customer: customerId,
-      payment_method: paymentMethod.id, 
+      payment_method: paymentMethod.id,
       confirm: true,
       metadata: {
         reservationId: reservationId.toString(),
@@ -57,9 +57,8 @@ export const processPayment = async (req, res, next) => {
       amount: paymentAmount,
       updatedAt: new Date(),
       createdAt: new Date(),
-      paymentIntentId: retrievedPaymentIntent.id, 
+      paymentIntentId: retrievedPaymentIntent.id,
     });
-
 
     const paymentDetails = await stripe.paymentIntents.retrieve(retrievedPaymentIntent.id);
 
@@ -77,3 +76,16 @@ export const createCustomer = async (name, email) => {
 
   return customer.id;
 };
+
+export const createCardToken = async (cardNumber, expMonth, expYear, cvc) => {
+    const token = await stripe.tokens.create({
+      card: {
+        number: cardNumber,
+        exp_month: expMonth,
+        exp_year: expYear,
+        cvc: cvc,
+      },
+    });
+  
+    return token.id;
+  };
