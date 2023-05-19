@@ -45,6 +45,10 @@ Reservation.init(
       type: DataTypes.ENUM('Cash', 'By Credit Card', 'PayPal'),
       allowNull: false,
     },
+    price: {
+      type: DataTypes.FLOAT, 
+      allowNull: false,
+    },
   },
   {
     sequelize,

@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+import { createCustomer } from "./payment.js";
 
 export const register = async (req, res, next) => {
   try {
@@ -14,7 +15,13 @@ export const register = async (req, res, next) => {
       password: hash,
     });
 
-    // await newUser.save();
+      const stripeCustomerId = await createCustomer(
+      req.body.username,
+      req.body.email
+    );
+    newUser.stripeCustomerId = stripeCustomerId;
+    await newUser.save();
+
     res.status(200).send("User has been created");
   } catch (err) {
     next(err);
@@ -44,7 +51,7 @@ export const login = async (req, res, next) => {
         httpOnly: true,
       })
       .status(200)
-      .json({ user, token }); // Include the user and token in the response
+      .json({ user, token }); 
   } catch (err) {
     next(err);
   }

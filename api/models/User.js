@@ -24,6 +24,10 @@ User.init(
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    stripeCustomerId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     sequelize, 

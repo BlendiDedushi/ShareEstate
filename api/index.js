@@ -10,6 +10,7 @@ import sequelize from "./db/connection.js";
 import User from "./models/User.js";
 import Reservation from "./models/Reservation.js";
 import reservationRoute from './routes/reservation.js';
+import Payment from "./models/Payment.js";
 
 
 const app = express();
@@ -44,6 +45,9 @@ sequelize
     // Define the associations between User and Reservation
     User.hasMany(Reservation, { foreignKey: 'userId', as: 'reservations' });
     Reservation.belongsTo(User, { foreignKey: 'userId', as: 'user' });
+
+    Reservation.hasOne(Payment, { foreignKey: "reservationId", as: "payment" });
+    Payment.belongsTo(Reservation, { foreignKey: "reservationId", as: "reservation" });
 
     return Reservation.sync(); // Sync Reservation model with the database
   })
