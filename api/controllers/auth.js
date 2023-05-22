@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 import { createCustomer } from "./payment.js";
+import RoommatePreferences from "../models/RoommatePreferences.js";
 
 export const register = async (req, res, next) => {
   try {
@@ -14,6 +15,13 @@ export const register = async (req, res, next) => {
       email: req.body.email,
       password: hash,
     });
+    await newUser.save();
+
+    if (req.body.roommatePreference) {
+      const roommatePreference = await RoommatePreferences.create(req.body.roommatePreference);
+      roommatePreference.userId = newUser.id;
+      await roommatePreference.save();
+    }
 
       const stripeCustomerId = await createCustomer(
       req.body.username,
@@ -56,3 +64,4 @@ export const login = async (req, res, next) => {
     next(err);
   }
 };
+

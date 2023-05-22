@@ -7,11 +7,11 @@ import estatesRoute from "./routes/estates.js";
 import roomsRoute from "./routes/rooms.js";
 import cookieParser from "cookie-parser";
 import sequelize from "./db/connection.js";
+import reservationRoute from './routes/reservation.js';
 import User from "./models/User.js";
 import Reservation from "./models/Reservation.js";
-import reservationRoute from './routes/reservation.js';
 import Payment from "./models/Payment.js";
-
+import rommatefindRoute from "./routes/rommatefind.js";
 
 const app = express();
 
@@ -49,7 +49,9 @@ sequelize
     Reservation.hasOne(Payment, { foreignKey: "reservationId", as: "payment" });
     Payment.belongsTo(Reservation, { foreignKey: "reservationId", as: "reservation" });
 
-    return Reservation.sync(); // Sync Reservation model with the database
+
+    // return Reservation.sync(); 
+    return sequelize.sync();
   })
   .then(() => {
     console.log('Reservation model synchronized with the database!');
@@ -72,6 +74,7 @@ app.use('/api/users', usersRoute);
 app.use('/api/estates', estatesRoute);
 app.use('/api/rooms', roomsRoute);
 app.use('/api/reservation',reservationRoute);
+app.use('/api/roommates',rommatefindRoute);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
