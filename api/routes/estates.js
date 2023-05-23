@@ -21,10 +21,10 @@ router.put("/:id",verifyAgent, updateEstate);
 router.delete("/:id",verifyAgent, deleteEstate);
 
 //get by id
-router.get("/:id", getEstate);
+router.get("/:id",verifyToken, getEstate);
 
 //Get
-router.get("/", getEstates);
+router.get("/", verifyToken, getEstates);
 
 
 

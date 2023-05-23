@@ -47,3 +47,20 @@ export const getUsers = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getAddress = async (req, res, next) => {
+  try {
+    const userId = req.user.id; 
+
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return next(createError(404, "User not found!"));
+    }
+
+    const { address, latitude, longitude } = user;
+
+    res.status(200).json({ address, latitude, longitude });
+  } catch (err) {
+    next(err);
+  }
+};

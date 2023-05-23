@@ -28,6 +28,14 @@ export const register = async (req, res, next) => {
       req.body.email
     );
     newUser.stripeCustomerId = stripeCustomerId;
+
+    if (req.body.address) {
+      const coordinates = await newUser.getCoordinatesFromAddress(req.body.address);
+      newUser.address = req.body.address;
+      newUser.latitude = coordinates.latitude;
+      newUser.longitude = coordinates.longitude;
+    }
+
     await newUser.save();
 
     res.status(200).send("User has been created");
