@@ -7,14 +7,6 @@ class RoommatePreferences extends Model {}
 
 RoommatePreferences.init(
   {
-    minAge: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    maxAge: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
     gender: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -22,11 +14,6 @@ RoommatePreferences.init(
     smoking: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
-    },
-    ageWeight: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 1,
     },
     genderWeight: {
       type: DataTypes.INTEGER,

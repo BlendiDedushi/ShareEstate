@@ -6,19 +6,19 @@ import {
   getEstates,
   updateEstate,
 } from "../controllers/estate.js";
-import { verifyAdmin, verifyToken } from "../utils/verifyToken.js";
+import { verifyAdmin, verifyAgent, verifyToken } from "../utils/verifyToken.js";
 
 
 const router = express.Router();
 
 //create
-router.post("/", createEstate);
+router.post("/",verifyAgent, createEstate);
 
 //update
-router.put("/:id",verifyAdmin, updateEstate);
+router.put("/:id",verifyAgent, updateEstate);
 
 //delete
-router.delete("/:id",verifyAdmin, deleteEstate);
+router.delete("/:id",verifyAgent, deleteEstate);
 
 //get by id
 router.get("/:id", getEstate);

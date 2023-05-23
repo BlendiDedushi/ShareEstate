@@ -19,9 +19,10 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    isAdmin: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
+    role: {
+      type: DataTypes.ENUM('admin', 'user', 'agent'),
+      defaultValue: 'user',
+      allowNull: false,
     },
     stripeCustomerId: {
       type: DataTypes.STRING,

@@ -49,7 +49,7 @@ export const login = async (req, res, next) => {
       return next(createError(400, "Wrong password!"));
 
     const token = jwt.sign(
-      { id: user.id, username: user.username ,isAdmin: user.isAdmin },
+      { id: user.id, username: user.username ,role: user.role },
       process.env.JWT,
       { expiresIn: "1h" }
     );

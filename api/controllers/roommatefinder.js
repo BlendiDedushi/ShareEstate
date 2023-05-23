@@ -32,11 +32,10 @@ const findPotentialRoommates = async (preferences) => {
     ) {
       score += roommatePreferences.smokingWeight;
     }
-
+    console.log(score);
     return { roommate, score };
   });
 
-  // Sort potential roommates by score in descending order
   matchedRoommates.sort((a, b) => b.score - a.score);
 
   return matchedRoommates.map((match) => match.roommate);
@@ -44,7 +43,7 @@ const findPotentialRoommates = async (preferences) => {
 
 export const findRoommate = async (req, res) => {
   try {
-    const userId = req.user.id; // Assuming authenticated user's ID is available
+    const userId = req.user.id; 
 
     const userPreferences = await RoommatePreferences.findOne({
       where: { userId },
@@ -56,10 +55,18 @@ export const findRoommate = async (req, res) => {
         .json({ message: "User does not have any roommate preferences" });
     }
 
+    const { gender, smoking } = req.query;
+
+    if (!gender || !smoking) {
+      return res
+        .status(400)
+        .json({ error: "Both gender and smoking preferences are required" });
+    }
+
     const preferences = {
       userId,
-      gender: req.query.gender,
-      smoking: req.query.smoking,
+      gender,
+      smoking,
     };
 
     const matchedRoommates = await findPotentialRoommates(preferences);
