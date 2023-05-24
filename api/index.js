@@ -12,10 +12,13 @@ import User from "./models/User.js";
 import Reservation from "./models/Reservation.js";
 import Payment from "./models/Payment.js";
 import rommatefindRoute from "./routes/rommatefind.js";
+import cors from "cors";
 
 const app = express();
 
 dotenv.config();
+
+app.use(cors());
 
 const connect = async () => {
   try {
@@ -64,9 +67,12 @@ sequelize
     console.error('Unable to connect to the databases:', error);
   });
 
+
+
 // Middlewares
 app.use(cookieParser());
 app.use(express.json());
+
 
 // Routes
 app.use('/api/auth', authRoute);

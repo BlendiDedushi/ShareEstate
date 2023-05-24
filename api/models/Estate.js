@@ -47,6 +47,11 @@ const EstateSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  createdBy: {
+    type: String,
+    ref: "User",
+    required: true,
+  },
 });
 
 export default mongoose.model("Estate", EstateSchema);
