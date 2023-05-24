@@ -83,9 +83,8 @@ import {
               </h1>
               <p className={styles.headerDesc}>
                 Get rewarded for your travels – unlock instant savings of 10% or
-                more with a free Lamabooking account
+                more
               </p>
-              <button className={styles.headerBtn}>Sign in / Register</button>
               <div className={styles.headerSearch}>
                 <div className={styles.headerSearchItem}>
                   <FontAwesomeIcon icon={faBed} className={styles.headerIcon} />
@@ -195,7 +194,12 @@ import {
                     Search
                   </button>
                 </div>
+                
               </div>
+              <br></br>
+              <br></br>
+              <br></br>
+              <br></br>
             </>
           )}
         </div>
