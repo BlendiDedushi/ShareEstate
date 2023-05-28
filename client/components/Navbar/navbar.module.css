@@ -1,6 +1,6 @@
 .navbar {
     height: 50px;
-    background-color: #003580;
+    background-color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,9 +23,11 @@
 .navButton {
     margin-left: 20px;
     border: none;
-    padding: 5px 10px;
+    padding: 7px 13px;
     cursor: pointer;
-    color: #003580;
+    border-radius: 8px;
+    color: #417054;
+    background-color: #EFEFEF;
 }
   
 .label {
