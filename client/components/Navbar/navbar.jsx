@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Modal from "react-modal";
 import styles from "./navbar.module.css";
+import Link from "next/link";
 
 const Navbar = () => {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -67,116 +68,18 @@ const Navbar = () => {
       <div className={styles.navContainer}>
         <span className={styles.logo}>ShareEstate</span>
         <div className={styles.navItems}>
-          <button className={styles.navButton} onClick={handleRegisterClick}>
-            Register
-          </button>
-          <button className={styles.navButton} onClick={handleLoginClick}>
-            Login
-          </button>
+          <Link href={'/registration'}>
+            <button className={styles.navButton}>
+              Register
+            </button>
+          </Link>
+          <Link href={'/login'}>
+            <button className={styles.navButton}>
+              Login
+            </button>
+          </Link>
         </div>
       </div>
-      <Modal
-        isOpen={isRegisterModalOpen}
-        onRequestClose={handleCloseRegisterModal}
-        className={styles.modal}
-        overlayClassName={styles.modalOverlay}
-      >
-        <div className={styles.modalContent}>
-          <h2>Register Form</h2>
-          <br></br>
-          <div className={styles.formGroup}>
-            <input
-              type="text"
-               id="registerUsername"
-               value={username}
-                  onChange={handleUsernameChange}
-                   className={styles.inputField}
-                   placeholder=" "
-             />
-             <label htmlFor="registerUsername" className={styles.label}>
-                Username
-              </label>
-        </div>
-        <div className={styles.formGroup}>
-            <input
-              type="text"
-               id="registerEmail"
-               value={email}
-                  onChange={handleEmailChange}
-                   className={styles.inputField}
-                   placeholder=" "
-             />
-             <label htmlFor="registerEmail" className={styles.label}>
-                Email
-              </label>
-        </div>
-        <div className={styles.formGroup}>
-            <input
-              type="text"
-               id="registerPassword"
-               value={password}
-                  onChange={handlePasswordChange}
-                   className={styles.inputField}
-                   placeholder=" "
-             />
-             <label htmlFor="registerPassword" className={styles.label}>
-                Password
-              </label>
-        </div>
-
-         
-          <button className={styles.signupButton} onClick={handleRegister}>
-            Sign Up
-          </button>
-          <button className={styles.closeButton} onClick={handleCloseRegisterModal}>
-            Close
-          </button>
-        </div>
-      </Modal>
-      <Modal
-        isOpen={isLoginModalOpen}
-        onRequestClose={handleCloseLoginModal}
-        className={styles.modal}
-        overlayClassName={styles.modalOverlay}
-      >
-        <div className={styles.modalContent}>
-          <h2>Login Form</h2>
-          <br></br>
-          <div className={styles.formGroup}>
-            <input
-              type="text"
-               id="registerUsername"
-               value={username}
-                  onChange={handleUsernameChange}
-                   className={styles.inputField}
-                   placeholder=" "
-             />
-             <label htmlFor="registerUsername" className={styles.label}>
-                Username
-              </label>
-        </div>
-        <div className={styles.formGroup}>
-            <input
-              type="text"
-               id="registerPassword"
-               value={password}
-                  onChange={handlePasswordChange}
-                   className={styles.inputField}
-                   placeholder=" "
-             />
-             <label htmlFor="registerPassword" className={styles.label}>
-                Password
-              </label>
-        </div>
-
-          <button className={styles.loginButton} onClick={handleLogin}>
-            Login
-          </button>
-          <button className={styles.closeButton} onClick={handleCloseLoginModal}>
-            Close
-          </button>
-        </div>
-      </Modal>
     </div>
   );
 };
