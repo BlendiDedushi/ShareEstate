@@ -6,6 +6,7 @@ import MailList from "@/components/MailList/mailList";
 import Navbar from "@/components/Navbar/navbar";
 import PropertyList from "@/components/PropertyList/propertyList";
 import styles from "./style/index.module.css";
+import AgentDashboard from "@/components/AgentDashboard/agentDashboard";
 
 const Home = () => {
   return (
@@ -19,6 +20,7 @@ const Home = () => {
         <h1 className={styles.homeTitle}>Homes guests love</h1>
         <FeaturedProperties/>
         <MailList/>
+        <AgentDashboard />
         <Footer/>
       </div>
     </div>

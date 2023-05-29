@@ -1,6 +1,18 @@
 import styles from "./propertyList.module.css";
+import { useEffect } from "react";
+import axios from "axios";
 
 const PropertyList = () => {
+
+  useEffect(() => {
+    const getEstate = async () =>{
+      await axios.get("http://localhost:8900/api/estates").then(res =>{
+        console.log(res);
+      })
+    }
+    getEstate();
+  },[])
+
   return (
     <div className={styles.pList}>
       <div className={styles.pListItem}>
