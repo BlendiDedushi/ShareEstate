@@ -1,63 +1,56 @@
-import styles from './featuredProperties.module.css';
+import Link from "next/link";
+import styles from "./featuredProperties.module.css";
+import React from "react";
 
-const FeaturedProperties = () => {
+const FeaturedProperties = ({ data }) => {
   return (
     <div className={styles.fp}>
-      <div className={styles.fpItem}>
-        <img
-          src="https://cf.bstatic.com/xdata/images/hotel/square600/13125860.webp?k=e148feeb802ac3d28d1391dad9e4cf1e12d9231f897d0b53ca067bde8a9d3355&o=&s=1"
-          alt=""
-          className={styles.fpImg}
-        />
-        <span className={styles.fpName}>Aparthotel Stare Miasto</span>
-        <span className={styles.fpCity}>Madrid</span>
-        <span className={styles.fpPrice}>Starting from $120</span>
-        <div className={styles.fpRating}>
-          <button>8.9</button>
-          <span>Excellent</span>
+      <div className="w-[70%] flex justify-between mx-auto my-[150px]">
+        <div className="border border-[#dbdbdb] rounded-[6px] h-[280px] p-[30px] flex flex-col gap-[15px] w-[30%]">
+          <img className="w-[46px] " src="/images/home.svg" />
+          <h4 className="text-[#333] text-[24px] font-medium">Find a home</h4>
+          <p className="text-[#727272]">
+            Search listings in 192 countries and 18 languages.
+          </p>
+        </div>
+        <div className="border border-[#dbdbdb] rounded-[6px] h-[280px] p-[30px] flex flex-col gap-[15px] w-[30%]">
+          <img className="w-[46px] " src="/images/people.svg" />
+          <h4 className="text-[#333] text-[24px] font-medium">
+            Discover amazing people
+          </h4>
+          <p className="text-[#727272]">
+            Connect with users using ShareEstate mailbox
+          </p>
+        </div>
+        <div className="border border-[#dbdbdb] rounded-[6px] h-[280px] p-[30px] flex flex-col gap-[15px] w-[30%]">
+          <img className="w-[46px] " src="/images/pet.svg" />
+          <h4 className="text-[#333] text-[24px] font-medium">Pet</h4>
+          <p className="text-[#727272]">
+            Use search filters to find places and people that are pet friendly.
+          </p>
         </div>
       </div>
-      <div className={styles.fpItem}>
-        <img
-          src="https://cf.bstatic.com/xdata/images/hotel/max1280x900/215955381.jpg?k=ff739d1d9e0c8e233f78ee3ced82743ef0355e925df8db7135d83b55a00ca07a&o=&hp=1"
-          alt=""
-          className={styles.fpImg}
-        />
-        <span className={styles.fpName}>Comfort Suites Airport</span>
-        <span className={styles.fpCity}>Austin</span>
-        <span className={styles.fpPrice}>Starting from $140</span>
-        <div className={styles.fpRating}>
-          <button>9.3</button>
-          <span>Exceptional</span>
-        </div>
-      </div>
-      <div className={styles.fpItem}>
-        <img
-          src="https://cf.bstatic.com/xdata/images/hotel/max1280x900/232902339.jpg?k=3947def526b8af0429568b44f9716e79667d640842c48de5e66fd2a8b776accd&o=&hp=1"
-          alt=""
-          className={styles.fpImg}
-        />
-        <span className={styles.fpName}>Four Seasons Hotel</span>
-        <span className={styles.fpCity}>Lisbon</span>
-        <span className={styles.fpPrice}>Starting from $99</span>
-        <div className={styles.fpRating}>
-          <button>8.8</button>
-          <span>Excellent</span>
-        </div>
-      </div>
-      <div className={styles.fpItem}>
-        <img
-          src="https://cf.bstatic.com/xdata/images/hotel/max1280x900/322658536.jpg?k=3fffe63a365fd0ccdc59210188e55188cdb7448b9ec1ddb71b0843172138ec07&o=&hp=1"
-          alt=""
-          className={styles.fpImg}
-        />
-        <span className={styles.fpName}>Hilton Garden Inn</span>
-        <span className={styles.fpCity}>Berlin</span>
-        <span className={styles.fpPrice}>Starting from $105</span>
-        <div className={styles.fpRating}>
-          <button>8.9</button>
-          <span>Excellent</span>
-        </div>
+      <div className={styles.properties}>
+        {data?.map((estate) => (
+          <Link href={`/estate/${estate._id}`}>
+          <div key={estate.id} className={styles.fpItem}>
+            <img
+              src="https://cf.bstatic.com/xdata/images/hotel/square600/13125860.webp?k=e148feeb802ac3d28d1391dad9e4cf1e12d9231f897d0b53ca067bde8a9d3355&o=&s=1"
+              alt=""
+              className={styles.fpImg}
+            />
+            <span className={styles.fpName}>{estate.name}</span>
+            <span className={styles.fpCity}>{estate.city}</span>
+            <span className={styles.fpPrice}>
+              Starting from ${estate.cheapestPrice}
+            </span>
+            <div className={styles.fpRating}>
+              <button>{estate.rating}</button>
+              <span>Excellent</span>
+            </div>
+          </div>
+          </Link>
+        ))}
       </div>
     </div>
   );

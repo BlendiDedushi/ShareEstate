@@ -1,22 +1,39 @@
 .fp {
     width: 100%;
-    max-width: 1024px;
-    display: flex;
-    justify-content: space-between;
+    /* max-width: 1024px; */
+    /* display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr; */
+    /* justify-content: space-between; */
+    /* gap: 20px; */
+    background-color: #fff;
+    padding-bottom: 130px;
+}
+
+.properties {
+    width: 70%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    /* justify-content: space-between; */
     gap: 20px;
+    /* background-color: #fff; */
 }
 
 .fpItem {
-    flex: 1;
     gap: 10px;
     display: flex;
     flex-direction: column;
+    border: 1px solid #dbdbdb;
+    border-radius: 6px;
+    padding: 8px;
+    cursor: pointer;
 }
 
 .fpImg {
     width: 100%;
     height: 250px;
     object-fit: cover;
+    border-radius: 12px;
 }
 
 .fpName {
@@ -33,12 +50,13 @@
 }
 
 .fpRating>button {
-    background-color: #003580;
+    background-color: #417054;
     color: white;
     border: none;
-    padding: 3px;
+    padding: 2px 7px;
     margin-right: 10px;
     font-weight: bold;
+    border-radius: 6px;
 }
 
 .fpRating>span {

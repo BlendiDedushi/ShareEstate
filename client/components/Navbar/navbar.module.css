@@ -1,8 +1,9 @@
 .navbar {
     height: 50px;
-    background-color: #003580;
+    background-color: #fff;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .navContainer {
@@ -14,6 +15,7 @@
     justify-content: space-between;
 }
 
+
 .logo {
     font-weight: 500;
 }
@@ -21,7 +23,129 @@
 .navButton {
     margin-left: 20px;
     border: none;
-    padding: 5px 10px;
+    padding: 7px 13px;
     cursor: pointer;
-    color: #003580;
+    border-radius: 8px;
+    color: #417054;
+    background-color: #EFEFEF;
 }
+  
+.label {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: all 0.2s;
+    color: #888;
+  }
+  
+  .inputField {
+    display: flex;
+    justify-content: center;
+    width: 370px;
+    padding: 8px;
+    border: 7px solid #2d5a9e;
+    border-radius: 20px;
+  }
+  .inputField:focus + .label,
+.inputField:not(:placeholder-shown) + .label {
+  transform: translate(0, -200%) scale(0.8);
+  color: #000;
+}
+  
+  .signupButton {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .loginButton {
+    background-color: #3f51b5;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  
+  .closeButton {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  .navbar {
+    /* Your navbar styles here */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+  }
+  
+  .modalContent {
+    /* Your modal content styles here */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .signupButton,
+  .loginButton {
+    /* Your button styles here */
+    margin-top: 16px;
+  }
+  
+  .closeButton {
+    /* Your close button styles here */
+    margin-top: 8px;
+  }
+  
+
+
+
+
+
+
+
+
+  .modal {
+    /* Your modal styles here */
+    width: 400px; /* Adjust the width as needed */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .modalContent {
+    /* Your modal content styles here */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px; /* Adjust the padding as needed */
+  }
+  
+  .formGroup {
+    position: relative;
+    margin-bottom: 16px;
+  }
+    
+  .signupButton,
+  .loginButton {
+    /* Your button styles here */
+    margin-top: 16px;
+    width: 100%; /* Adjust the button width as needed */
+  }
+  
+  .closeButton {
+    /* Your close button styles here */
+    margin-top: 8px;
+    width: 100%; /* Adjust the button width as needed */
+  }
+  

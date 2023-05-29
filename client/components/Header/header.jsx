@@ -49,7 +49,17 @@ import {
   
     return (
       <div className={styles.header}>
-        <div
+        <div  className="container m-auto flex justify-between w-[65%] mb-[80px] mt-[20px]">
+          <div className="w-[50%]">
+            <h1 className="text-[48px] mt-[80px] text-[#417054] font-semibold">Roommates</h1>
+            <p className="text-[#727272] text-[24px]">Find your perfect roommate</p>
+            <input type="text" placeholder="Enter a city" className="border pl-[10px] rounded-[12px] border-[#333] h-[72px] w-full mt-[30px]"/>
+          </div>
+          <div className="w-[37%]">
+            <img className="w-full" src="/images/phone.svg"/>
+          </div>
+        </div>
+        {/* <div
           className={styles.
             type === "list" ? "headerContainer listMode" : "headerContainer"
           }
@@ -83,9 +93,8 @@ import {
               </h1>
               <p className={styles.headerDesc}>
                 Get rewarded for your travels – unlock instant savings of 10% or
-                more with a free Lamabooking account
+                more
               </p>
-              <button className={styles.headerBtn}>Sign in / Register</button>
               <div className={styles.headerSearch}>
                 <div className={styles.headerSearchItem}>
                   <FontAwesomeIcon icon={faBed} className={styles.headerIcon} />
@@ -195,10 +204,15 @@ import {
                     Search
                   </button>
                 </div>
+                
               </div>
+              <br></br>
+              <br></br>
+              <br></br>
+              <br></br>
             </>
           )}
-        </div>
+        </div> */}
       </div>
     );
   };
