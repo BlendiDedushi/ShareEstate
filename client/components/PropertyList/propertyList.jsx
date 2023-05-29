@@ -6,7 +6,6 @@ const countries = [
   { name: 'France', image: '/images/case-logo.svg' },
   { name: 'Italy', image: '/images/case-logo.svg' },
   { name: 'Germany', image: '/images/case-logo.svg' },
-  { name: 'Serbia', image: '/images/case-logo.svg' },
   { name: 'Austria', image: '/images/case-logo.svg' },
   { name: 'United Kingdom', image: '/images/case-logo.svg' },
   { name: 'United Kingdom', image: '/images/case-logo.svg' },

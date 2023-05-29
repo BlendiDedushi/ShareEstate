@@ -64,7 +64,7 @@ const Register = () => {
         </div>
         <div className={styles.formGroup}>
             <input
-              type="text"
+              type="password"
                id="registerPassword"
                value={password}
                   onChange={handlePasswordChange}
