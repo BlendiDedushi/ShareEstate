@@ -1,10 +1,12 @@
 .navbar {
-    height: 50px;
+    /* Your navbar styles here */
     background-color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100px;
 }
+  
 
 .navContainer {
     width: 100%;
@@ -14,7 +16,6 @@
     align-items: center;
     justify-content: space-between;
 }
-
 
 .logo {
     font-weight: 500;
@@ -44,8 +45,9 @@
     display: flex;
     justify-content: center;
     width: 370px;
+    margin: 3px 0px;
     padding: 8px;
-    border: 7px solid #2d5a9e;
+    border: 6px solid #417054;
     border-radius: 20px;
   }
   .inputField:focus + .label,
@@ -55,7 +57,7 @@
 }
   
   .signupButton {
-    background-color: #3f51b5;
+    background-color: #417054;
     color: #fff;
     padding: 8px 16px;
     border: none;
@@ -64,7 +66,7 @@
   }
   
   .loginButton {
-    background-color: #3f51b5;
+    background-color: #417054;
     color: #fff;
     padding: 8px 16px;
     border: none;
@@ -72,21 +74,14 @@
     cursor: pointer;
   }
   
-  .closeButton {
+  /* .closeButton {
     background-color: #000000;
     color: #ffffff;
     padding: 8px 16px;
     border: none;
     border-radius: 20px;
     cursor: pointer;
-  }
-  .navbar {
-    /* Your navbar styles here */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
-  }
+  } */
   
   .modalContent {
     /* Your modal content styles here */
@@ -114,38 +109,48 @@
 
 
 
-  .modal {
-    /* Your modal styles here */
-    width: 400px; /* Adjust the width as needed */
+  /* .modal {
+    width: 400px; 
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
+  } */
   
   .modalContent {
     /* Your modal content styles here */
+    margin-top: 150px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px; /* Adjust the padding as needed */
+    padding: 20px;
+  }
+
+  .modalContent>h2{
+    border-bottom: 2px solid #000;
+    pointer-events: none;
   }
   
   .formGroup {
+
     position: relative;
     margin-bottom: 16px;
   }
     
   .signupButton,
   .loginButton {
-    /* Your button styles here */
     margin-top: 16px;
-    width: 100%; /* Adjust the button width as needed */
+    width: 15%; 
   }
+
+  .loginButton:hover,
+  .signupButton:hover{
+    box-shadow: 0px 1px 15px 5px #2f523d;
+  }
+
   
-  .closeButton {
-    /* Your close button styles here */
+  /* .closeButton {
     margin-top: 8px;
-    width: 100%; /* Adjust the button width as needed */
+    width: 100%; 
   }
-  
+   */
