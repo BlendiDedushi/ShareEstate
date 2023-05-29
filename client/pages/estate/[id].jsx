@@ -1,6 +1,5 @@
-import styles from "./style/Hotel.module.css";
+import styles from "../style/Hotel.module.css";
 import Navbar from "@/components/Navbar/navbar";
-import Header from "@/components/Header/header";
 import MailList from "@/components/MailList/mailList";
 import Footer from "@/components/Footer/footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,10 +10,43 @@ import {
   faLocationDot,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import axios from "axios";
 
-const Hotel = () => {
+// This capacity gets called at fabricate time
+export async function getStaticPaths() {
+    // Fetch data from an external API or database
+    const data = await axios.get('http://localhost:8900/api/estates');
+    const estates = await data.data;
+  
+    // Get the ways we need to pre-render in light of posts
+    const paths = estates.map((estate) => ({
+      params: { id: estate._id.toString() }, // Convert id to string
+    }));
+  
+    return {
+      paths: paths,
+      fallback: false,
+    };
+  }
+
+ 
+export async function getStaticProps(context){
+    const { params } = context;
+    console.log( context, 'c0on')
+    const response = await axios.get(`http://localhost:8900/api/estates/${ params.id }`);
+    const data = await response.data;
+   
+    return {
+        props:{
+            estate: data,
+        },
+    }
+}
+
+const Hotel = ({estate}) => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+
 
   const photos = [
     {
@@ -57,7 +89,7 @@ const Hotel = () => {
   return (
     <div>
       <Navbar />
-      <Header type="list" />
+      {/* <Header type="list" /> */}
       <div className={styles.hotelContainer}>
         {open && (
           <div className={styles.slider}>
@@ -83,13 +115,13 @@ const Hotel = () => {
         )}
         <div className={styles.hotelWrapper}>
           <button className={styles.bookNow}>Reserve or Book Now!</button>
-          <h1 className={styles.hotelTitle}>Tower Street Apartments</h1>
+          <h1 className={styles.hotelTitle}>{estate?.name}</h1>
           <div className={styles.hotelAddress}>
             <FontAwesomeIcon icon={faLocationDot} />
-            <span>Elton St 125 New york</span>
+            <span>{estate.city} {estate.address}</span>
           </div>
           <span className={styles.hotelDistance}>
-            Excellent location – 500m from center
+            Excellent location – {estate.distance} from center
           </span>
           <span className={styles.hotelPriceHighlight}>
             Book a stay over $114 at this property and get a free airport taxi
@@ -110,17 +142,7 @@ const Hotel = () => {
             <div className={styles.hotelDetailsTexts}>
               <h1 className={styles.hotelTitle}>Stay in the heart of City</h1>
               <p className={styles.hotelDesc}>
-                Located a 5-minute walk from St. Florian's Gate in Krakow, Tower
-                Street Apartments has accommodations with air conditioning and
-                free WiFi. The units come with hardwood floors and feature a
-                fully equipped kitchenette with a microwave, a flat-screen TV,
-                and a private bathroom with shower and a hairdryer. A fridge is
-                also offered, as well as an electric tea pot and a coffee
-                machine. Popular points of interest near the apartment include
-                Cloth Hall, Main Market Square and Town Hall Tower. The nearest
-                airport is John Paul II International Kraków–Balice, 16.1 km
-                from Tower Street Apartments, and the property offers a paid
-                airport shuttle service.
+                {estate.desc}
               </p>
             </div>
             <div className={styles.hotelDetailsPrice}>
@@ -130,7 +152,7 @@ const Hotel = () => {
                 excellent location score of 9.8!
               </span>
               <h2>
-                <b>$945</b> (9 nights)
+                <b>${estate.cheapestPrice}</b> (9 nights)
               </h2>
               <button>Reserve or Book Now!</button>
             </div>
