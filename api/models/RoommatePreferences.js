@@ -37,7 +37,6 @@ RoommatePreferences.init(
   }
 );
 
-// Define the associations
 User.hasOne(RoommatePreferences, { foreignKey: 'userId' });
 RoommatePreferences.belongsTo(User, { foreignKey: 'userId' });
 

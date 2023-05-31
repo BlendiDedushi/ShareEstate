@@ -5,6 +5,7 @@ import {
   getUser,
   getUsers,
   getAddress,
+  sendEmail,
 } from "../controllers/user.js";
 import { verifyToken, verifyAdmin } from "../utils/verifyToken.js";
 
@@ -23,6 +24,8 @@ router.delete("/:id", verifyAdmin, deleteUser);
 router.get("/:id", verifyAdmin,getUser);
 
 router.get("/address/:id",verifyToken, getAddress);
+
+router.post('/send-email/:estateId',verifyToken,sendEmail);
 
 
 export default router;
