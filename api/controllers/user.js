@@ -73,13 +73,12 @@ export const sendEmail = async (req, res, next) => {
   const { subject, message } = req.body;
 
   try {
-    // Find the estate by ID
+
     const estate = await Estate.findById(estateId);
     if (!estate) {
       return res.status(404).json({ success: false, message: 'Estate not found.' });
     }
 
-    // Find the agent who created the estate
     const agent = await User.findOne({ where: { id: estate.createdBy } });
     if (!agent) {
       return res.status(404).json({ success: false, message: 'Agent not found.' });
@@ -96,7 +95,6 @@ export const sendEmail = async (req, res, next) => {
       },
     });
 
-    // Compose the email message
     const mailOptions = {
       from: req.user.email,
       to: agent.email,
@@ -104,7 +102,6 @@ export const sendEmail = async (req, res, next) => {
       text: message,
     };
 
-    // Send the email
     await transporter.sendMail(mailOptions);
 
     res.status(200).json({ success: true, message: 'Email sent successfully.' });
