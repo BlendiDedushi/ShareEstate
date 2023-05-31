@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-export const uploadPhotos = upload.array("photos", 5); 
+const uploadPhotos = upload.array("photos", 5); 
 
 export const createEstate = async (req, res, next) => {
   uploadPhotos(req, res, async (err) => {
@@ -38,14 +38,21 @@ export const createEstate = async (req, res, next) => {
      return res.status(500).json({ success: false, message: "Server error" });
    }
 
-   console.log(uploadPhotos);
-   const newEstate = new Estate(req.body);
+   const { address } = req.body;
+
+   try {
+   const coordinates = await Estate.getCoordinatesFromAddress(address);
+
+      const newEstate = new Estate({
+        ...req.body,
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+      });
 
    if (req.files) {
      newEstate.photos = req.files.map((file) => file.filename);
    }
 
-   try {
      const agentId = req.user.id;
 
      const user = await User.findOne({ where: { id: agentId } });
