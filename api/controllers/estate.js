@@ -1,29 +1,69 @@
 import Estate from "../models/Estate.js";
 import User from "../models/User.js";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import fs from 'fs';
+import multer from 'multer';
+import path from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+
+
+const __dirname = dirname(__filename);
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    const uploadPath = path.join(__dirname, '..', 'uploads');
+    fs.mkdirSync(uploadPath, { recursive: true });
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const extension = path.extname(file.originalname);
+    cb(null, file.fieldname + '-' + uniqueSuffix + extension);
+  },
+});
+
+
+const upload = multer({ storage });
+
+export const uploadPhotos = upload.array("photos", 5); 
 
 export const createEstate = async (req, res, next) => {
-  const newEstate = new Estate(req.body);
+  uploadPhotos(req, res, async (err) => {
+   if (err instanceof multer.MulterError) {
+     return res.status(400).json({ success: false, message: err.message });
+   } else if (err) {
+     return res.status(500).json({ success: false, message: "Server error" });
+   }
 
-  try {
-    const agentId = req.user.id;
+   console.log(uploadPhotos);
+   const newEstate = new Estate(req.body);
 
-    // Find the user in the Sequelize database
-    const user = await User.findOne({ where: { id: agentId } });
+   if (req.files) {
+     newEstate.photos = req.files.map((file) => file.filename);
+   }
 
-    if (!user) {
-      // Handle case when user is not found in the Sequelize database
-      return res.status(404).json({ success: false, message: "User not found." });
-    }
+   try {
+     const agentId = req.user.id;
 
-    // Assign the user's id to the createdBy field of the Estate document
-    newEstate.createdBy = user.id;
+     const user = await User.findOne({ where: { id: agentId } });
 
-    const savedEstate = await newEstate.save();
-    res.status(200).json(savedEstate);
-  } catch (err) {
-    next(err);
-  }
+     if (!user) {
+       return res.status(404).json({ success: false, message: "User not found." });
+     }
+
+     newEstate.createdBy = user.id;
+
+     const savedEstate = await newEstate.save();
+     res.status(200).json(savedEstate);
+   } catch (err) {
+     next(err);
+   }
+ });
 };
+
 export const updateEstate = async (req, res, next) => {
   try {
     const updatedEstate = await Estate.findByIdAndUpdate(
