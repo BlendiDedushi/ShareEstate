@@ -134,3 +134,15 @@ export const getEstates = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getEstatesByCityName = async (req, res, next) => {
+  try {
+    const { cityName } = req.params;
+
+    const estates = await Estate.find({ city: cityName });
+
+    res.status(200).json(estates);
+  } catch (err) {
+    next(err);
+  }
+};

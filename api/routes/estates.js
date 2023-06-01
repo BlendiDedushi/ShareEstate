@@ -5,6 +5,7 @@ import {
   getEstate,
   getEstates,
   updateEstate,
+  getEstatesByCityName,
 } from "../controllers/estate.js";
 import { verifyAdmin, verifyAgent, verifyToken } from "../utils/verifyToken.js";
 
@@ -26,6 +27,7 @@ router.get("/:id", getEstate);
 //Get
 router.get("/", getEstates);
 
-
+// Get estates by city name
+router.get("/city/:cityName", getEstatesByCityName);
 
 export default router;

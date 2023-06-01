@@ -38,9 +38,7 @@ export async function getStaticProps(context) {
 const Cities = ({ estate }) => {
   return (
     <div>
-      <Navbar />
-      <span>{estate.city}</span>
-      <Footer />
+      <h1>Hello</h1>
     </div>
   );
 };
