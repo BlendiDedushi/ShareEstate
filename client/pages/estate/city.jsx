@@ -8,13 +8,13 @@ export async function getStaticPaths() {
   const estates = await data.data;
 
   const paths = estates.map((estate) => ({
-    params: { id: estate.city },
+    params: { city: estate.city },
   }));
 
   return {
     paths: paths,
     fallback: false,
-  };
+  }; 
 }
 
 
@@ -39,7 +39,7 @@ const Cities = ({ estate }) => {
   return (
     <div>
       <Navbar />
-      <span>{estate.city} {estate.address}</span>
+      <span>{estate.city}</span>
       <Footer />
     </div>
   );
