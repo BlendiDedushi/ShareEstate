@@ -1,83 +1,21 @@
+import Link from "next/link";
 import styles from "./propertyList.module.css";
-import { CountryList } from "../countryCard";
+import React from "react";
 
-const countries = [
-  { name: 'Kosovo', image: '/images/case-logo.svg' },
-  { name: 'France', image: '/images/case-logo.svg' },
-  { name: 'Italy', image: '/images/case-logo.svg' },
-  { name: 'Germany', image: '/images/case-logo.svg' },
-  { name: 'Austria', image: '/images/case-logo.svg' },
-  { name: 'United Kingdom', image: '/images/case-logo.svg' },
-  { name: 'United Kingdom', image: '/images/case-logo.svg' },
-  { name: 'United Kingdom', image: '/images/case-logo.svg' },
-  { name: 'United Kingdom', image: '/images/case-logo.svg' },
-  // Add more countries here...
-];
-
-const PropertyList = () => {
+const PropertyList = ({ data }) => {
   return (
-    <div className={styles.pList}>
-      {/* <div className="container mx-auto px-4 py-8">
-      <CountryList />
-    </div> */}
-    {countries.map((country, index) => (
-        <div key={index} className={styles.pListItem}>
-        <img
-          src="https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o="
-          alt=""
-          className={styles.pListImg}
-        />
-        <div className={styles.pListTitles}>
-          <h1>{country.name}</h1>
-          {/* <h2>233 hotels</h2> */}
-        </div>
-      </div>
-    ))}
-      
-      {/* <div className={styles.pListItem}>
-        <img
-          src="https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-apartments_300/9f60235dc09a3ac3f0a93adbc901c61ecd1ce72e.jpg"
-          alt=""
-          className={styles.pListImg}
-        />
-        <div className={styles.pListTitles}>
-          <h1>Apartments</h1>
-          <h2>2331 hotels</h2>
-        </div>
-      </div>
-      <div className={styles.pListItem}>
-        <img
-          src="https://cf.bstatic.com/static/img/theme-index/carousel_320x240/bg_resorts/6f87c6143fbd51a0bb5d15ca3b9cf84211ab0884.jpg"
-          alt=""
-          className={styles.pListImg}
-        />
-        <div className={styles.pListTitles}>
-          <h1>Resorts</h1>
-          <h2>2331 hotels</h2>
-        </div>
-      </div>
-      <div className={styles.pListItem}>
-        <img
-          src="https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-villas_300/dd0d7f8202676306a661aa4f0cf1ffab31286211.jpg"
-          alt=""
-          className={styles.pListImg}
-        />
-        <div className={styles.pListTitles}>
-          <h1>Villas</h1>
-          <h2>2331 hotels</h2>
-        </div>
-      </div>
-      <div className={styles.pListItem}>
-        <img
-          src="https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-chalet_300/8ee014fcc493cb3334e25893a1dee8c6d36ed0ba.jpg"
-          alt=""
-          className={styles.pListImg}
-        />
-        <div className={styles.pListTitles}>
-          <h1>Cabins</h1>
-          <h2>2331 hotels</h2>
-        </div>
-      </div> */}
+    <div className={styles.plists}>
+      {data?.map((estate) => (
+        <Link href={`/estate/${estate.city}`}>
+          <div key={estate.city} className={styles.plItem}>
+            <img
+              src="https://image.cnbcfm.com/api/v1/image/107229932-1682347932426-gettyimages-1401566574-_02a9324.jpeg?v=1683841133&w=929&h=523&vtcrop=y"
+              alt=""
+            />
+            <span className={styles.plCity}>{estate.city}</span>
+          </div>
+        </Link>
+      ))}
     </div>
   );
 };

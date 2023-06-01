@@ -30,11 +30,11 @@ const Home = ({data}) => {
       <div className={styles.homeContainer}>
         <Featured/>
         <h1 className='text-[32px] text-[#333] font-medium'>View roommates in popular cities</h1>
-        <PropertyList/>
+        <PropertyList data={data}/>
         {/* <h1 className={styles.homeTitle}>Homes guests love</h1> */}
         <FeaturedProperties data={data}/>
         <MailList/>
-        <AgentDashboard />
+        {/* <AgentDashboard /> */}
         <Footer/>
       </div>
     </div>
