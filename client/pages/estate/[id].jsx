@@ -88,7 +88,7 @@ const Hotel = ({ estate }) => {
     setSlideNumber(newSlideNumber);
   };
 
-  const Map = dynamic(() => import("components/Map/map"), { ssr: false });
+  const Map = dynamic(() => import("components/Map/map"), { loading: () => <p>loading...</p>,  ssr: false });
 
   return (
     <div>
@@ -169,7 +169,7 @@ const Hotel = ({ estate }) => {
             </div>
           </div>
         </div>
-        <Map />
+        <Map latitude={estate.latitude} longitude={estate.longitude} />
       </div>
       <MailList />
       <Footer />

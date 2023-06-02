@@ -16,16 +16,6 @@ export async function getStaticProps(context) {
   };
 }
 
-export async function getStaticProps2(context) {
-  const data2 = await axios.get("http://localhost:8900/api/estates/city");
-  const jsonData = await data2.data;
-
-  return {
-    props: {
-      data2: jsonData,
-    },
-  };
-}
 
 const ByCity = ({ data }) => {
   return (
