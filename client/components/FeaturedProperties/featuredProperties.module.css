@@ -10,39 +10,38 @@
 }
 
 .properties {
-    width: 70%;
-    margin: auto;
+    margin: 40px;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    /* justify-content: space-between; */
-    gap: 20px;
-    /* background-color: #fff; */
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    gap: 30px;
 }
 
 .fpItem {
-    gap: 10px;
+    gap: 5px;
     display: flex;
     flex-direction: column;
-    border: 1px solid #dbdbdb;
+    border: 2px solid #417054;
     border-radius: 6px;
-    padding: 8px;
-    cursor: pointer;
+    padding: 10px;
+    cursor: default;
+    
 }
 
 .fpImg {
-    width: 100%;
-    height: 250px;
+    height: 200px;
     object-fit: cover;
-    border-radius: 12px;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
 .fpName {
-    color: #333;
-    font-weight: bold;
+    color: #000000;
+    font-size: large;
+    font-weight: 700;
 }
 
 .fpCity {
-    font-weight: 300;
+    font-weight: 500;
 }
 
 .fpPrice {
@@ -61,4 +60,4 @@
 
 .fpRating>span {
     font-size: 14px;
-}
+} 

@@ -1,6 +1,4 @@
 import axios from "axios";
-import Navbar from "@/components/Navbar/navbar";
-import Footer from "@/components/Footer/footer";
 
 export async function getStaticPaths() {
 
@@ -36,11 +34,6 @@ export async function getStaticProps(context) {
 }
 
 const Cities = ({ estate }) => {
-  return (
-    <div>
-      <h1>Hello</h1>
-    </div>
-  );
 };
 
 export default Cities;

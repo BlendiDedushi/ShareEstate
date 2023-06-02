@@ -1,7 +1,8 @@
 import Footer from "@/components/Footer/footer";
-import Header from "@/components/Header/header";
 import MailList from "@/components/MailList/mailList";
 import Navbar from "@/components/Navbar/navbar";
+import PropertyList from "@/components/PropertyList/propertyList";
+import styles from "./style/index.module.css";
 import axios from "axios";
 
 export async function getStaticProps(context) {
@@ -26,15 +27,20 @@ export async function getStaticProps2(context) {
   };
 }
 
-const Home = ({ data }) => {
+const ByCity = ({ data }) => {
   return (
     <div>
       <Navbar />
-      <Header />
-      <MailList />
-      <Footer />
+      <div className={styles.homeContainer}>
+        <h1 className="text-[32px] text-[#333] font-medium">
+          Book Estates in popular cities
+        </h1>
+        <PropertyList data={data} />
+        <MailList />
+        <Footer />
+      </div>
     </div>
   );
 };
 
-export default Home;
+export default ByCity;

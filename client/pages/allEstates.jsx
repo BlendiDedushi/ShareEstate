@@ -1,5 +1,5 @@
+import FeaturedProperties from "@/components/FeaturedProperties/featuredProperties";
 import Footer from "@/components/Footer/footer";
-import Header from "@/components/Header/header";
 import MailList from "@/components/MailList/mailList";
 import Navbar from "@/components/Navbar/navbar";
 import axios from "axios";
@@ -26,15 +26,15 @@ export async function getStaticProps2(context) {
   };
 }
 
-const Home = ({ data }) => {
+const AllEstates = ({ data }) => {
   return (
     <div>
       <Navbar />
-      <Header />
+      <FeaturedProperties data={data} />
       <MailList />
       <Footer />
     </div>
   );
 };
 
-export default Home;
+export default AllEstates;

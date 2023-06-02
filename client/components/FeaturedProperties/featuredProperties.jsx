@@ -5,8 +5,8 @@ import React from "react";
 const FeaturedProperties = ({ data }) => {
   return (
     <div className={styles.fp}>
-      <div className="w-[70%] flex justify-between mx-auto my-[150px]">
-        <div className="border border-[#dbdbdb] rounded-[6px] h-[280px] p-[30px] flex flex-col gap-[15px] w-[30%]">
+      <div className="w-[70%] flex justify-between mx-auto my-[20px]">
+        {/* <div className="border border-[#dbdbdb] rounded-[6px] h-[280px] p-[30px] flex flex-col gap-[15px] w-[30%]">
           <img className="w-[46px] " src="/images/home.svg" />
           <h4 className="text-[#333] text-[24px] font-medium">Find a home</h4>
           <p className="text-[#727272]">
@@ -28,7 +28,7 @@ const FeaturedProperties = ({ data }) => {
           <p className="text-[#727272]">
             Use search filters to find places and people that are pet friendly.
           </p>
-        </div>
+        </div> */}
       </div>
       <div className={styles.properties}>
         {data?.map((estate) => (
