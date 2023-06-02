@@ -29,3 +29,13 @@
     justify-content: center;
     font-weight: 500;
 }
+
+.properties {
+  width: 70%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  /* justify-content: space-between; */
+  gap: 20px;
+  /* background-color: #fff; */
+}

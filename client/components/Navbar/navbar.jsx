@@ -12,6 +12,13 @@ const Navbar = () => {
           <Image src='/images/case-logo.svg' width={60} height={60}/>
           <span className='text-[20px] font-semibold text-[#333333]'>ShareEstate</span>
         </div>
+        <div>
+        <Link href={'/FeaturedPropertiesPage'}>
+            <button className={styles.navButton}>
+              All Estates
+            </button>
+          </Link>
+        </div>
         <div className={styles.navItems}>
           <Link href={'/registration'}>
             <button className={styles.navButton}>

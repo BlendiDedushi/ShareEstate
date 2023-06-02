@@ -8,7 +8,6 @@ import PropertyList from "@/components/PropertyList/propertyList";
 import styles from "./style/index.module.css";
 import AgentDashboard from "@/components/AgentDashboard/agentDashboard";
 import axios from "axios";
-import dynamic from 'next/dynamic'
 
 export async function getStaticProps(context) {
   // Fetch data from an external API or database
@@ -40,10 +39,8 @@ export async function getStaticProps2(context) {
 
 
 const Home = ({data}) => {
-  const Map = dynamic(() => import('components/Map/map'), { ssr: false });
   return (
     <div>
-      <Map />
       <Navbar />
       <Header/>
       <div className={styles.homeContainer}>

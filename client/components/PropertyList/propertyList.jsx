@@ -49,9 +49,10 @@ const PropertyList = ({ data }) => {
         <span className={styles.plCity}>Lipjan</span>
       </div>
 
-      {filteredEstates.length > 0 ? (
-        <div className={styles.properties}>
-          {filteredEstates.map((estate) => (
+      
+          {filteredEstates.length > 0 ? (
+              <div className={styles.properties}>
+            {filteredEstates.map((estate) => (
             <Link key={estate._id} href={`/estate/${estate._id}`}>
               <div className={styless.fpItem}>
                 <img
@@ -70,15 +71,13 @@ const PropertyList = ({ data }) => {
                 </div>
               </div>
             </Link>
-          ))}
-          <button onClick={resetFilter}>Back to Cities</button>
+          ))} 
         </div>
       ) : null}
-    </div>
+            <button className={styles.button} onClick={resetFilter}>Back to Cities</button>
+        </div>
+   
   );
 };
 
 export default PropertyList;
-
-
-
