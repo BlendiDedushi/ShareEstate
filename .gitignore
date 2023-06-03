@@ -1,1 +1,5 @@
 .env
+/.idea/.gitignore
+/.idea/modules.xml
+/.idea/ShareEstate.iml
+/.idea/vcs.xml
