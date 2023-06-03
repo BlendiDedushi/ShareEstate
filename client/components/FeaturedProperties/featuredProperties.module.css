@@ -1,31 +1,47 @@
 .fp {
     width: 100%;
-    max-width: 1024px;
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
+    /* max-width: 1024px; */
+    /* display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr; */
+    /* justify-content: space-between; */
+    /* gap: 20px; */
+    background-color: #fff;
+    padding-bottom: 130px;
+}
+
+.properties {
+    margin: 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    gap: 30px;
 }
 
 .fpItem {
-    flex: 1;
-    gap: 10px;
+    gap: 5px;
     display: flex;
     flex-direction: column;
+    border: 2px solid #417054;
+    border-radius: 6px;
+    padding: 10px;
+    cursor: default;
+    
 }
 
 .fpImg {
-    width: 100%;
-    height: 250px;
+    height: 200px;
     object-fit: cover;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
 .fpName {
-    color: #333;
-    font-weight: bold;
+    color: #000000;
+    font-size: large;
+    font-weight: 700;
 }
 
 .fpCity {
-    font-weight: 300;
+    font-weight: 500;
 }
 
 .fpPrice {
@@ -33,14 +49,15 @@
 }
 
 .fpRating>button {
-    background-color: #003580;
+    background-color: #417054;
     color: white;
     border: none;
-    padding: 3px;
+    padding: 2px 7px;
     margin-right: 10px;
     font-weight: bold;
+    border-radius: 6px;
 }
 
 .fpRating>span {
     font-size: 14px;
-}
+} 

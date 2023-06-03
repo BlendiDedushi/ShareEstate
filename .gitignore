@@ -1,5 +1,3 @@
 .env
-/.idea/.gitignore
-/.idea/modules.xml
-/.idea/ShareEstate.iml
-/.idea/vcs.xml
+api/node_modules
+api/config.js

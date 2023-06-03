@@ -1,30 +1,89 @@
-.pList {
-    width: 100%;
-    max-width: 1024px;
-    display: flex;
-    justify-content: space-between;
+.plists {
+    width: 70%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 20px;
 }
 
-.pListItem {
-    flex: 1;
-    border-radius: 10px;
-    overflow: hidden;
+.plItem {
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #000000;
+    border-radius: 6px;
+    padding: 8px;
     cursor: pointer;
 }
 
-.pListImg {
+.plItem>img {
     width: 100%;
-    height: 150px;
+    height: 250px;
     object-fit: cover;
+    border-radius: 12px;
 }
 
-.pListTitles>h1 {
-    font-size: 18px;
-    color: #444;
+.plCity {
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
 }
 
-.pListTitles>h2 {
+
+.filteredCities {
+    margin: 30px;
+    border-top: 3px solid;
+}
+
+.properties {
+    margin: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    gap: 30px;
+}
+
+.fpItem {
+    gap: 5px;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #417054;
+    border-radius: 6px;
+    padding: 10px;
+    cursor: default;
+    
+}
+
+.fpImg {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.fpName {
+    color: #000000;
+    font-size: large;
+    font-weight: 700;
+}
+
+.fpCity {
+    font-weight: 500;
+}
+
+.fpPrice {
+    font-weight: 500;
+}
+
+.fpRating>button {
+    background-color: #417054;
+    color: white;
+    border: none;
+    padding: 2px 7px;
+    margin-right: 10px;
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+.fpRating>span {
     font-size: 14px;
-    font-weight: 300;
-}
+} 

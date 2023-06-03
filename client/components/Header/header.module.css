@@ -1,6 +1,6 @@
 .header {
-    background-color: #003580;
-    color: white;
+    background-color: #fff;
+    /* color: white; */
     display: flex;
     justify-content: center;
     position: relative;

@@ -23,7 +23,6 @@ export const processPayment = async (req, res, next) => {
       const user = await User.findByPk(req.user.id);
       const customerId = user.stripeCustomerId;
   
-      // Create a card token
       const cardToken = await createCardToken(cardNumber, expMonth, expYear, cvc);
   
       const paymentMethod = await stripe.paymentMethods.create({
@@ -33,7 +32,6 @@ export const processPayment = async (req, res, next) => {
         },
       });
   
-      // Attach the payment method to the customer
       await stripe.paymentMethods.attach(paymentMethod.id, {
         customer: customerId,
       });

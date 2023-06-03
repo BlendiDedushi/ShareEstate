@@ -4,7 +4,6 @@ import { verifyToken } from '../utils/verifyToken.js';
 
 const router = express.Router();
 
-//create
 router.get("/",verifyToken,findRoommate);
 
 export default router;

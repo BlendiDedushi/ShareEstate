@@ -1,4 +1,6 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+import fetch from 'node-fetch';
+
 const EstateSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -12,8 +14,12 @@ const EstateSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  address: {
-    type: String,
+  latitude: {
+    type: Number,
+    required: true,
+  },
+  longitude: {
+    type: Number,
     required: true,
   },
   distance: {
@@ -49,9 +55,29 @@ const EstateSchema = new mongoose.Schema({
   },
   createdBy: {
     type: String,
-    ref: "User",
+    ref: 'User',
     required: true,
   },
 });
 
-export default mongoose.model("Estate", EstateSchema);
+EstateSchema.statics.getCoordinatesFromAddress = async function (address) {
+  const encodedAddress = encodeURIComponent(address);
+  const url = `https://nominatim.openstreetmap.org/search?q=${encodedAddress}&format=json`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.length > 0) {
+      const { lat, lon } = data[0];
+      return { latitude: parseFloat(lat), longitude: parseFloat(lon) };
+    } else {
+      throw new Error('No coordinates found for the given address');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+};
+
+export default mongoose.model('Estate', EstateSchema);

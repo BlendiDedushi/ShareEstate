@@ -1,4 +1,6 @@
 import User from "../models/User.js";
+import Estate from "../models/Estate.js";
+import nodemailer from 'nodemailer';
 
 export const updateUser = async (req, res, next) => {
   try {
@@ -62,5 +64,48 @@ export const getAddress = async (req, res, next) => {
     res.status(200).json({ address, latitude, longitude });
   } catch (err) {
     next(err);
+  }
+};
+
+
+export const sendEmail = async (req, res, next) => {
+  const { estateId } = req.params;
+  const { subject, message } = req.body;
+
+  try {
+
+    const estate = await Estate.findById(estateId);
+    if (!estate) {
+      return res.status(404).json({ success: false, message: 'Estate not found.' });
+    }
+
+    const agent = await User.findOne({ where: { id: estate.createdBy } });
+    if (!agent) {
+      return res.status(404).json({ success: false, message: 'Agent not found.' });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_EMAIL,
+        pass: process.env.GMAIL_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+
+    const mailOptions = {
+      from: req.user.email,
+      to: agent.email,
+      subject: subject,
+      text: message,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ success: true, message: 'Email sent successfully.' });
+  } catch (error) {
+    next(error);
   }
 };
