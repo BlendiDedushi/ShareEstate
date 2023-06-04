@@ -13,6 +13,7 @@ import { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import {useCookies} from "react-cookie";
 
 // This capacity gets called at fabricate time
 export async function getStaticPaths() {
@@ -49,10 +50,14 @@ export async function getStaticProps(context) {
 const Hotel = ({ estate }) => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const [cookie] = useCookies(['token']);
+
+
+  console.log(estate.photos);
 
   const photos = [
     {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg?k=56ba0babbcbbfeb3d3e911728831dcbc390ed2cb16c51d88159f82bf751d04c6&o=&hp=1",
+      src: estate.photos[0],
     },
     {
       src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707367.jpg?k=cbacfdeb8404af56a1a94812575d96f6b80f6740fd491d02c6fc3912a16d8757&o=&hp=1",
@@ -162,7 +167,7 @@ const Hotel = ({ estate }) => {
                 <h2>
                   <b>${estate.cheapestPrice}</b> (9 nights)
                 </h2>
-                <Link href={"/PaymentPage"}>
+                <Link href={cookie.token ? "/PaymentPage" : "/login"}>
                 <button className={styles.reserveButton}>Reserve or Book Now!</button>
                 </Link>
               </div>

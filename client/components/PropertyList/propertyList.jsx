@@ -1,14 +1,20 @@
 import styles from "./propertyList.module.css";
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import Link from "next/link";
+import {useRouter} from "next/router";
 
 const PropertyList = ({ data }) => {
-  const [filteredEstates, setFilteredEstates] = useState([]);
+  const router = useRouter();
+  const [filteredEstates, setFilteredEstates] = useState([router?.query?.city]);
 
   const filterEstatesByCity = (city) => {
     const filteredData = data.filter((estate) => estate.city === city);
     setFilteredEstates(filteredData);
   };
+
+  useEffect(() => {
+    filterEstatesByCity(router?.query?.city);
+  },[router?.query?.city]);
 
   const resetFilter = () => {
     setFilteredEstates([]);
@@ -65,20 +71,20 @@ const PropertyList = ({ data }) => {
         {filteredEstates.length > 0 ? (
           <div className={styles.properties}>
             {filteredEstates.map((estate) => (
-              <Link key={estate._id} href={`/estate/${estate._id}`}>
+              <Link key={estate?._id} href={`/estate/${estate?._id}`}>
                 <div className={styles.fpItem}>
                   <img
                     src="https://cf.bstatic.com/xdata/images/hotel/square600/13125860.webp?k=e148feeb802ac3d28d1391dad9e4cf1e12d9231f897d0b53ca067bde8a9d3355&o=&s=1"
                     alt=""
                     className={styles.fpImg}
                   />
-                  <span className={styles.fpName}>Name: {estate.name}</span>
-                  <span className={styles.fpCity}>Location: {estate.city}</span>
+                  <span className={styles.fpName}>Name: {estate?.name}</span>
+                  <span className={styles.fpCity}>Location: {estate?.city}</span>
                   <span className={styles.fpPrice}>
-                    Price: {estate.cheapestPrice}€
+                    Price: {estate?.cheapestPrice}€
                   </span>
                   <div className={styles.fpRating}>
-                    <button>{estate.rating}</button>
+                    <button>{estate?.rating}</button>
                   </div>
                 </div>
               </Link>

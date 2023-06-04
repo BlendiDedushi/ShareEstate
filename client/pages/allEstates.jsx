@@ -3,8 +3,9 @@ import Footer from "@/components/Footer/footer";
 import MailList from "@/components/MailList/mailList";
 import Navbar from "@/components/Navbar/navbar";
 import axios from "axios";
+import {useRouter} from "next/router";
 
-export async function getStaticProps(context) {
+export async function getStaticProps() {
   const data = await axios.get("http://localhost:8900/api/estates");
   const jsonData = await data.data;
 
@@ -16,6 +17,8 @@ export async function getStaticProps(context) {
 }
 
 const AllEstates = ({ data }) => {
+    const router = useRouter();
+console.log(router.query);
   return (
     <div>
       <Navbar />

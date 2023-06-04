@@ -26,7 +26,6 @@
     "react-leaflet": "^4.2.1",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.11.2",
-    "react-stripe-elements": "^6.1.2",
     "tailwindcss": "^3.3.2"
   }
 }
