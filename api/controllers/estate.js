@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-const uploadPhotos = upload.array("photos", 5); 
+const uploadPhotos = upload.array("photos", 6); 
 
 export const createEstate = async (req, res, next) => {
   uploadPhotos(req, res, async (err) => {
