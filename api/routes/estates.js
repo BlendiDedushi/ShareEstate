@@ -5,6 +5,7 @@ import {
   getEstate,
   getEstates,
   updateEstate,
+  uploadedPhotos,
 } from "../controllers/estate.js";
 import { verifyAdmin, verifyAgent, verifyToken } from "../utils/verifyToken.js";
 
@@ -24,4 +25,8 @@ router.get("/:id", getEstate);
 
 //Get
 router.get("/", getEstates);
+
+router.post("/:id/photos", verifyAgent, uploadedPhotos);
+
+
 export default router;

@@ -21,7 +21,9 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     const extension = path.extname(file.originalname);
-    cb(null, file.fieldname + '-' + uniqueSuffix + extension);
+    const filename = file.fieldname + '-' + uniqueSuffix + extension;
+    const filePath = path.join('uploads', filename); 
+    cb(null, filename);
   },
 });
 
@@ -49,9 +51,10 @@ export const createEstate = async (req, res, next) => {
         longitude: coordinates.longitude,
       });
 
-   if (req.files) {
-     newEstate.photos = req.files.map((file) => file.filename);
-   }
+      if (req.files) {
+        const filepaths = req.files.map((file) => path.join('uploads', file.filename)); 
+        newEstate.photos = filepaths;
+      }
 
      const agentId = req.user.id;
 
@@ -145,4 +148,34 @@ export const getEstatesByCityName = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+};
+
+
+export const uploadedPhotos = async (req, res, next) => {
+  uploadPhotos(req, res, async (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ success: false, message: err.message });
+    } else if (err) {
+      return res.status(500).json({ success: false, message: "Server error" });
+    }
+
+    const estateId = req.params.id;
+
+    try {
+      const estate = await Estate.findById(estateId);
+      if (!estate) {
+        return res.status(404).json({ success: false, message: "Estate not found" });
+      }
+
+      if (req.files) {
+        const filepaths = req.files.map((file) => path.join('uploads', file.filename)); // Updated: Save file paths
+        estate.photos.push(...filepaths);
+        await estate.save();
+      }
+
+      res.status(200).json({ success: true, message: "Photos uploaded successfully" });
+    } catch (err) {
+      next(err);
+    }
+  });
 };
