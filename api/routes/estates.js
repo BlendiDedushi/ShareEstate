@@ -8,7 +8,6 @@ import {
 } from "../controllers/estate.js";
 import { verifyAdmin, verifyAgent, verifyToken } from "../utils/verifyToken.js";
 
-
 const router = express.Router();
 
 //create
@@ -25,7 +24,4 @@ router.get("/:id", getEstate);
 
 //Get
 router.get("/", getEstates);
-
-
-
 export default router;

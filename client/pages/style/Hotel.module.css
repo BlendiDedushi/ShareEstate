@@ -1,3 +1,7 @@
+.cont{
+  display: flex;
+  gap: 50px;
+}
 .hotelContainer {
     display: flex;
     flex-direction: column;
@@ -99,7 +103,7 @@
   .hotelDetailsPrice > h2 {
     font-weight: 300;
   }
-  .hotelDetailsPrice > button {
+  .hotelDetailsPrice > Link > button {
     border: none;
     padding: 10px 20px;
     background-color: #0071c2;
@@ -149,3 +153,14 @@
     color: lightgray;
     cursor: pointer;
   }
+
+  .reserveButton {
+    border: none;
+    padding: 10px 20px;
+    background-color: #0071c2;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  

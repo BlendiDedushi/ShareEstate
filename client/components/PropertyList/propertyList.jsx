@@ -1,83 +1,97 @@
 import styles from "./propertyList.module.css";
-import { CountryList } from "../countryCard";
+import React, {useEffect, useState} from "react";
+import Link from "next/link";
+import {useRouter} from "next/router";
 
-const countries = [
-  { name: 'Kosovo', image: '/images/case-logo.svg' },
-  { name: 'France', image: '/images/case-logo.svg' },
-  { name: 'Italy', image: '/images/case-logo.svg' },
-  { name: 'Germany', image: '/images/case-logo.svg' },
-  { name: 'Austria', image: '/images/case-logo.svg' },
-  { name: 'United Kingdom', image: '/images/case-logo.svg' },
-  { name: 'United Kingdom', image: '/images/case-logo.svg' },
-  { name: 'United Kingdom', image: '/images/case-logo.svg' },
-  { name: 'United Kingdom', image: '/images/case-logo.svg' },
-  // Add more countries here...
-];
+const PropertyList = ({ data }) => {
+  const router = useRouter();
+  const [filteredEstates, setFilteredEstates] = useState([router?.query?.city]);
 
-const PropertyList = () => {
+  const filterEstatesByCity = (city) => {
+    const filteredData = data.filter((estate) => estate.city === city);
+    setFilteredEstates(filteredData);
+  };
+
+  useEffect(() => {
+    filterEstatesByCity(router?.query?.city);
+  },[router?.query?.city]);
+
+  const resetFilter = () => {
+    setFilteredEstates([]);
+  };
+
   return (
-    <div className={styles.pList}>
-      {/* <div className="container mx-auto px-4 py-8">
-      <CountryList />
-    </div> */}
-    {countries.map((country, index) => (
-        <div key={index} className={styles.pListItem}>
-        <img
-          src="https://cf.bstatic.com/xdata/images/xphoto/square300/57584488.webp?k=bf724e4e9b9b75480bbe7fc675460a089ba6414fe4693b83ea3fdd8e938832a6&o="
-          alt=""
-          className={styles.pListImg}
-        />
-        <div className={styles.pListTitles}>
-          <h1>{country.name}</h1>
-          {/* <h2>233 hotels</h2> */}
+    <div>
+      <div className={styles.plists}>
+        <div
+          className={styles.plItem}
+          onClick={() => filterEstatesByCity("New York")}
+        >
+          <img
+            src="https://i.natgeofe.com/k/5b396b5e-59e7-43a6-9448-708125549aa1/new-york-statue-of-liberty_2x1.jpg"
+            alt=""
+          />
+          <span className={styles.plCity}>New York</span>
+        </div>
+
+        <div
+          className={styles.plItem}
+          onClick={() => filterEstatesByCity("Presheve")}
+        >
+          <img
+            src="https://euronews.al/en/wp-content/uploads/2021/06/Presheva.jpg"
+            alt=""
+          />
+          <span className={styles.plCity}>Presheve</span>
+        </div>
+
+        <div
+          className={styles.plItem}
+          onClick={() => filterEstatesByCity("Prishtina")}
+        >
+          <img
+            src="https://prishtinainsight.com/wp-content/uploads/2022/08/IMG-8230.jpg"
+            alt=""
+          />
+          <span className={styles.plCity}>Prishtina</span>
+        </div>
+
+        <div
+          className={styles.plItem}
+          onClick={() => filterEstatesByCity("Lipjan")}
+        >
+          <img
+            src="https://www.kosovo-vacations.com/ressourcen/images/lipjan-winter.jpg"
+            alt=""
+          />
+          <span className={styles.plCity}>Lipjan</span>
         </div>
       </div>
-    ))}
-      
-      {/* <div className={styles.pListItem}>
-        <img
-          src="https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-apartments_300/9f60235dc09a3ac3f0a93adbc901c61ecd1ce72e.jpg"
-          alt=""
-          className={styles.pListImg}
-        />
-        <div className={styles.pListTitles}>
-          <h1>Apartments</h1>
-          <h2>2331 hotels</h2>
-        </div>
+      <div className={styles.filteredCities}>
+        {filteredEstates.length > 0 ? (
+          <div className={styles.properties}>
+            {filteredEstates.map((estate) => (
+              <Link key={estate?._id} href={`/estate/${estate?._id}`}>
+                <div className={styles.fpItem}>
+                  <img
+                    src="https://cf.bstatic.com/xdata/images/hotel/square600/13125860.webp?k=e148feeb802ac3d28d1391dad9e4cf1e12d9231f897d0b53ca067bde8a9d3355&o=&s=1"
+                    alt=""
+                    className={styles.fpImg}
+                  />
+                  <span className={styles.fpName}>Name: {estate?.name}</span>
+                  <span className={styles.fpCity}>Location: {estate?.city}</span>
+                  <span className={styles.fpPrice}>
+                    Price: {estate?.cheapestPrice}€
+                  </span>
+                  <div className={styles.fpRating}>
+                    <button>{estate?.rating}</button>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : null}
       </div>
-      <div className={styles.pListItem}>
-        <img
-          src="https://cf.bstatic.com/static/img/theme-index/carousel_320x240/bg_resorts/6f87c6143fbd51a0bb5d15ca3b9cf84211ab0884.jpg"
-          alt=""
-          className={styles.pListImg}
-        />
-        <div className={styles.pListTitles}>
-          <h1>Resorts</h1>
-          <h2>2331 hotels</h2>
-        </div>
-      </div>
-      <div className={styles.pListItem}>
-        <img
-          src="https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-villas_300/dd0d7f8202676306a661aa4f0cf1ffab31286211.jpg"
-          alt=""
-          className={styles.pListImg}
-        />
-        <div className={styles.pListTitles}>
-          <h1>Villas</h1>
-          <h2>2331 hotels</h2>
-        </div>
-      </div>
-      <div className={styles.pListItem}>
-        <img
-          src="https://cf.bstatic.com/static/img/theme-index/carousel_320x240/card-image-chalet_300/8ee014fcc493cb3334e25893a1dee8c6d36ed0ba.jpg"
-          alt=""
-          className={styles.pListImg}
-        />
-        <div className={styles.pListTitles}>
-          <h1>Cabins</h1>
-          <h2>2331 hotels</h2>
-        </div>
-      </div> */}
     </div>
   );
 };

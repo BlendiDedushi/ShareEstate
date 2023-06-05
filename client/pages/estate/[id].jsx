@@ -11,46 +11,53 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import axios from "axios";
+import Link from "next/link";
+import dynamic from "next/dynamic";
+import {useCookies} from "react-cookie";
 
 // This capacity gets called at fabricate time
 export async function getStaticPaths() {
-    // Fetch data from an external API or database
-    const data = await axios.get('http://localhost:8900/api/estates');
-    const estates = await data.data;
-  
-    // Get the ways we need to pre-render in light of posts
-    const paths = estates.map((estate) => ({
-      params: { id: estate._id.toString() }, // Convert id to string
-    }));
-  
-    return {
-      paths: paths,
-      fallback: false,
-    };
-  }
+  // Fetch data from an external API or database
+  const data = await axios.get("http://localhost:8900/api/estates");
+  const estates = await data.data;
 
- 
-export async function getStaticProps(context){
-    const { params } = context;
-    console.log( context, 'c0on')
-    const response = await axios.get(`http://localhost:8900/api/estates/${ params.id }`);
-    const data = await response.data;
-   
-    return {
-        props:{
-            estate: data,
-        },
-    }
+  // Get the ways we need to pre-render in light of posts
+  const paths = estates.map((estate) => ({
+    params: { id: estate._id.toString() }, // Convert id to string
+  }));
+
+  return {
+    paths: paths,
+    fallback: false,
+  };
 }
 
-const Hotel = ({estate}) => {
+export async function getStaticProps(context) {
+  const { params } = context;
+  console.log(context, "c0on");
+  const response = await axios.get(
+    `http://localhost:8900/api/estates/${params.id}`
+  );
+  const data = await response.data;
+
+  return {
+    props: {
+      estate: data,
+    },
+  };
+}
+
+const Hotel = ({ estate }) => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const [cookie] = useCookies(['token']);
 
+
+  console.log(estate.photos);
 
   const photos = [
     {
-      src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707778.jpg?k=56ba0babbcbbfeb3d3e911728831dcbc390ed2cb16c51d88159f82bf751d04c6&o=&hp=1",
+      src: estate.photos[0],
     },
     {
       src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707367.jpg?k=cbacfdeb8404af56a1a94812575d96f6b80f6740fd491d02c6fc3912a16d8757&o=&hp=1",
@@ -83,84 +90,94 @@ const Hotel = ({estate}) => {
       newSlideNumber = slideNumber === 5 ? 0 : slideNumber + 1;
     }
 
-    setSlideNumber(newSlideNumber)
+    setSlideNumber(newSlideNumber);
   };
+
+  const Map = dynamic(() => import("components/Map/map"), { loading: () => <p>loading...</p>,  ssr: false });
 
   return (
     <div>
       <Navbar />
       {/* <Header type="list" /> */}
-      <div className={styles.hotelContainer}>
-        {open && (
-          <div className={styles.slider}>
-            <FontAwesomeIcon
-              icon={faCircleXmark}
-              className={styles.close}
-              onClick={() => setOpen(false)}
-            />
-            <FontAwesomeIcon
-              icon={faCircleArrowLeft}
-              className={styles.arrow}
-              onClick={() => handleMove("l")}
-            />
-            <div className={styles.sliderWrapper}>
-              <img src={photos[slideNumber].src} alt="" className={styles.sliderImg} />
-            </div>
-            <FontAwesomeIcon
-              icon={faCircleArrowRight}
-              className={styles.arrow}
-              onClick={() => handleMove("r")}
-            />
-          </div>
-        )}
-        <div className={styles.hotelWrapper}>
-          <button className={styles.bookNow}>Reserve or Book Now!</button>
-          <h1 className={styles.hotelTitle}>{estate?.name}</h1>
-          <div className={styles.hotelAddress}>
-            <FontAwesomeIcon icon={faLocationDot} />
-            <span>{estate.city} {estate.address}</span>
-          </div>
-          <span className={styles.hotelDistance}>
-            Excellent location – {estate.distance} from center
-          </span>
-          <span className={styles.hotelPriceHighlight}>
-            Book a stay over $114 at this property and get a free airport taxi
-          </span>
-          <div className={styles.hotelImages}>
-            {photos.map((photo, i) => (
-              <div className={styles.hotelImgWrapper} key={i}>
+      <div className={styles.cont}>
+        <div className={styles.hotelContainer}>
+          {open && (
+            <div className={styles.slider}>
+              <FontAwesomeIcon
+                icon={faCircleXmark}
+                className={styles.close}
+                onClick={() => setOpen(false)}
+              />
+              <FontAwesomeIcon
+                icon={faCircleArrowLeft}
+                className={styles.arrow}
+                onClick={() => handleMove("l")}
+              />
+              <div className={styles.sliderWrapper}>
                 <img
-                  onClick={() => handleOpen(i)}
-                  src={photo.src}
+                  src={photos[slideNumber].src}
                   alt=""
-                  className={styles.hotelImg}
+                  className={styles.sliderImg}
                 />
               </div>
-            ))}
-          </div>
-          <div className={styles.hotelDetails}>
-            <div className={styles.hotelDetailsTexts}>
-              <h1 className={styles.hotelTitle}>Stay in the heart of City</h1>
-              <p className={styles.hotelDesc}>
-                {estate.desc}
-              </p>
+              <FontAwesomeIcon
+                icon={faCircleArrowRight}
+                className={styles.arrow}
+                onClick={() => handleMove("r")}
+              />
             </div>
-            <div className={styles.hotelDetailsPrice}>
-              <h1>Perfect for a 9-night stay!</h1>
+          )}
+          <div className={styles.hotelWrapper}>
+            <h1 className={styles.hotelTitle}>{estate?.name}</h1>
+            <div className={styles.hotelAddress}>
+              <FontAwesomeIcon icon={faLocationDot} />
               <span>
-                Located in the real heart of Krakow, this property has an
-                excellent location score of 9.8!
+                {estate.city} {estate.address}
               </span>
-              <h2>
-                <b>${estate.cheapestPrice}</b> (9 nights)
-              </h2>
-              <button>Reserve or Book Now!</button>
+            </div>
+            <span className={styles.hotelDistance}>
+              Excellent location – {estate.distance} from center
+            </span>
+            <span className={styles.hotelPriceHighlight}>
+              Book a stay over $114 at this property and get a free airport taxi
+            </span>
+            <div className={styles.hotelImages}>
+              {photos.map((photo, i) => (
+                <div className={styles.hotelImgWrapper} key={i}>
+                  <img
+                    onClick={() => handleOpen(i)}
+                    src={photo.src}
+                    alt=""
+                    className={styles.hotelImg}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className={styles.hotelDetails}>
+              <div className={styles.hotelDetailsTexts}>
+                <h1 className={styles.hotelTitle}>Stay in the heart of City</h1>
+                <p className={styles.hotelDesc}>{estate.desc}</p>
+              </div>
+              <div className={styles.hotelDetailsPrice}>
+                <h1>Perfect for a 9-night stay!</h1>
+                <span>
+                  Located in the real heart of Krakow, this property has an
+                  excellent location score of 9.8!
+                </span>
+                <h2>
+                  <b>${estate.cheapestPrice}</b> (9 nights)
+                </h2>
+                <Link href={cookie.token ? "/PaymentPage" : "/login"}>
+                <button className={styles.reserveButton}>Reserve or Book Now!</button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-        <MailList />
-        <Footer />
+        <Map latitude={estate.latitude} longitude={estate.longitude} />
       </div>
+      <MailList />
+      <Footer />
     </div>
   );
 };
