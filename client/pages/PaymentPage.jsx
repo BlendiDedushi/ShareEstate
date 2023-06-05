@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CardElement, Elements, useElements, useStripe } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-const stripePromise = loadStripe('YOUR_PUBLISHABLE_KEY');
+const stripePromise = loadStripe(process.env.STRIPE_PUBLISHABLE_KEY);
 
 const PaymentPage = () => {
   const [paymentError, setPaymentError] = useState(null);

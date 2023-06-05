@@ -11,9 +11,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import axios from "axios";
-import Link from "next/link";
 import dynamic from "next/dynamic";
 import {useCookies} from "react-cookie";
+import {useRouter} from "next/router";
 
 // This capacity gets called at fabricate time
 export async function getStaticPaths() {
@@ -48,12 +48,11 @@ export async function getStaticProps(context) {
 }
 
 const Hotel = ({ estate }) => {
+  const router = useRouter();
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [cookie] = useCookies(['token']);
 
-
-  console.log(estate.photos);
 
   const photos = [
     {
@@ -75,6 +74,25 @@ const Hotel = ({ estate }) => {
       src: "https://cf.bstatic.com/xdata/images/hotel/max1280x900/261707389.jpg?k=52156673f9eb6d5d99d3eed9386491a0465ce6f3b995f005ac71abc192dd5827&o=&hp=1",
     },
   ];
+
+  const handleReservation = async () => {
+    if(cookie.token){
+      await axios.post("http://localhost:8900/api/reservation", {
+          startDate: "2023-05-16",
+          endDate: "2023-05-18",
+          estateId: estate?._id,
+          paymentMethod: "Cash",
+      }, {
+        headers: {
+          Authorization: `Bearer ${cookie.token}`
+        }
+      }).then((res) => {
+        router.push({pathname:'/PaymentPage', query:{id: res.data.reservation.id}});
+      })
+    }else{
+      await router.push('login');
+    }
+  }
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -167,9 +185,7 @@ const Hotel = ({ estate }) => {
                 <h2>
                   <b>${estate.cheapestPrice}</b> (9 nights)
                 </h2>
-                <Link href={cookie.token ? "/PaymentPage" : "/login"}>
-                <button className={styles.reserveButton}>Reserve or Book Now!</button>
-                </Link>
+                <button onClick={handleReservation} className={styles.reserveButton}>Reserve or Book Now!</button>
               </div>
             </div>
           </div>
