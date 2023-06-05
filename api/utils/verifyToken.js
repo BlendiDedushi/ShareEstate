@@ -2,10 +2,16 @@ import jwt from "jsonwebtoken";
 import { createError } from "../utils/error.js";
 
 
+export const invalidatedTokens = []; 
+
 export const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return next(createError(401, "You are not authenticated!"));
+  }
+
+  if (invalidatedTokens.includes(token)) {
+    return next(createError(401, "Token is no longer valid!"));
   }
 
   const token = authHeader.split(" ")[1];

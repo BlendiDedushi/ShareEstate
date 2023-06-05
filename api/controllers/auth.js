@@ -4,6 +4,7 @@ import { createError } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 import { createCustomer } from "./payment.js";
 import RoommatePreferences from "../models/RoommatePreferences.js";
+import { invalidatedTokens } from "../utils/verifyToken.js";
 
 export const register = async (req, res, next) => {
   try {
@@ -74,3 +75,16 @@ export const login = async (req, res, next) => {
   }
 };
 
+export const logout = (req, res) => {
+  try {
+    const token = req.cookies.access_token;
+    
+    invalidatedTokens.push(token);
+
+    res.clearCookie("access_token");
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+};
