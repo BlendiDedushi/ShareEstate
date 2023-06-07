@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {useCookies} from "react-cookie";
 
+
 const Navbar = () => {
   const [cookie] = useCookies(['token']);
   const [token, setToken] = useState(false);
@@ -44,6 +45,12 @@ const Navbar = () => {
           </div>
         }
       </div>
+      {/* {token &&
+
+      } */}
+      <Link href={"/AgentDashboard"}>
+              <button className={styles.navButton}>MyProfile</button>
+        </Link>
     </div>
   );
 };

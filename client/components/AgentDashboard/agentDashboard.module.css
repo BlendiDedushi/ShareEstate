@@ -1,85 +1,178 @@
-.container {
-    max-width: 800px;
-    margin: 0 auto;
+.dash {
+    display: flex;
+    padding: 20px 20px 0px 20px;
+    /* height: 77vh; */
+    /* border: 1px solid black; */
+}
+
+.left {
+    width: 20%;
+}
+.left>ul>li>img {
+    height: 20px;
+    margin: 2px 10px;
+    padding: 1px;
+}
+
+.left>ul>li {
+    color: white;
+    background-color: #417054;
+    line-height: 25px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.left>ul>li.active {
+    background-color: #135f13;
+    /* Update the background color for active list items */
+}
+
+.left>ul>li.activeD {
+    background-color: #9b3224;
+    /* Update the background color for active list items */
+}
+
+.left>ul>li.activeU {
+    background-color: #9bc43b;
+    /* Update the background color for active list items */
+}
+
+.right {
+    width: 80%;
+    height: 541px;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    overflow: auto;
+}
+
+.right::-webkit-scrollbar {
+    display: none;
+}
+
+.createForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: white;
+}
+
+.createForm>label {
+    display: flex;
+    border: 1px dotted black;
+    border-radius: 5px;
+    padding: 4px;
+    background-color: #6a706d;
+}
+
+.createForm>label>p {
+    width: 150px;
+}
+
+.createForm>label>input{
+    color: #000000;
+    border-radius: 10px;
+    padding: 0px 10px;
+}
+
+.btns{
+    display: flex;
+    justify-content: space-between;
+}
+.btns>button {
+    width: 150px;
+    background-color: #417054;
+    border-radius: 7px;
+    color: white;
+}
+.btns>button:nth-child(1){
+    width: 60px;
+    background-color: #a51d0b;
+    border-radius: 7px;
+    color: white;
+}
+
+.properties {
+    margin: 30px 30px 0px 30px;
+    display: grid;
     padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .container h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
-  }
-  
-  .container h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
-  
-  .container form {
-    margin-bottom: 20px;
-  }
-  
-  .container label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: bold;
-  }
-  
-  .container input[type="text"],
-  .container input[type="number"],
-  .container textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .container input[type="checkbox"] {
-    margin-top: 5px;
-  }
-  
-  .container textarea {
-    height: 80px;
-  }
-  
-  .container button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 30px;
+    overflow: auto;
+    background-color: #ffffff;
+    border-radius: 20px;
+    height: 511px;
+}
+
+.properties::-webkit-scrollbar {
+    display: none;
+}
+
+.fpItem {
+    gap: 5px;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #9bc43b;
+    border-radius: 6px;
+    padding: 10px;
+    cursor: default;
+
+}
+
+.fpItemD {
+    gap: 5px;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #9b3224;
+    border-radius: 6px;
+    padding: 10px;
+    cursor: default;
+
+}
+
+.fpImg {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 20px;
     cursor: pointer;
-  }
-  
-  .container ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .container li {
-    margin-bottom: 5px;
-  }
-  
-  /* Additional Styling */
-  
-  .subHeading {
-    margin-top: 20px;
-  }
-  
-  .list {
-    padding-left: 20px;
-  }
-  
-  .error {
-    color: red;
+}
+
+.fpName {
+    color: #000000;
+    font-size: large;
+    font-weight: 700;
+}
+
+.fpCity {
+    font-weight: 500;
+}
+
+.fpPrice {
+    font-weight: 500;
+}
+
+.fpRating>button {
+    background-color: #417054;
+    color: white;
+    border: none;
+    padding: 2px 7px;
+    margin-right: 10px;
+    border-radius: 6px;
+
+}
+
+.fpRatingg>button {
+    background-color: #a51d0b;
+    color: white;
+    border: none;
+    padding: 2px 7px;
+    margin-right: 10px;
+    border-radius: 6px;
+
+}
+
+.fpRating>span {
     font-size: 14px;
-    margin-top: 5px;
-  }
-  
-  .success {
-    color: green;
-    font-size: 14px;
-    margin-top: 5px;
-  }
-  
+}
