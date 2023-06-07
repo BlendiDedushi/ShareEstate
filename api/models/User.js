@@ -57,6 +57,14 @@ User.init(
       type: DataTypes.FLOAT,
       allowNull: true,
     },
+    avatar: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    googleId :{
+      type : DataTypes.STRING,
+      allowNull:true
+    }
   },
   {
     sequelize, 

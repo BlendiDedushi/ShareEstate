@@ -13,12 +13,16 @@ import Reservation from "./models/Reservation.js";
 import Payment from "./models/Payment.js";
 import rommatefindRoute from "./routes/rommatefind.js";
 import cors from "cors";
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import session from "express-session";
+import { googleLogin } from "./controllers/auth.js";
 
 const app = express();
 
 dotenv.config();
-
 app.use(cors());
+
 
 const connect = async () => {
   try {
@@ -34,6 +38,32 @@ const connect = async () => {
 
 mongoose.connection.on('disconnected', () => {
   console.log('MongoDB disconnected');
+});
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      callbackURL: process.env.CALLBACK_URL,
+    },
+    (accessToken, refreshToken, profile, done) => {
+      done(null, profile);
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findByPk(id);
+    done(null, user);
+  } catch (error) {
+    done(error);
+  }
 });
 
 sequelize
@@ -68,10 +98,17 @@ sequelize
   });
 
 
+  app.use(session({
+    resave: false,
+    saveUninitialized: true,
+    secret: 'SECRET' 
+  }));
 
 // Middlewares
 app.use(cookieParser());
 app.use(express.json());
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // Routes
@@ -81,6 +118,18 @@ app.use('/api/estates', estatesRoute);
 app.use('/api/rooms', roomsRoute);
 app.use('/api/reservation',reservationRoute);
 app.use('/api/roommates',rommatefindRoute);
+
+app.get(
+  '/api/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+// Callback URL after successful Google authentication
+app.get(
+  '/api/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  googleLogin
+);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

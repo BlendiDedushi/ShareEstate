@@ -5,30 +5,7 @@ import { dirname } from 'path';
 import fs from 'fs';
 import multer from 'multer';
 import path from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-
-
-const __dirname = dirname(__filename);
-
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = path.join(__dirname, '..', 'uploads');
-    fs.mkdirSync(uploadPath, { recursive: true });
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const extension = path.extname(file.originalname);
-    const filename = file.fieldname + '-' + uniqueSuffix + extension;
-    const filePath = path.join('uploads', filename); 
-    cb(null, filename);
-  },
-});
-
-
-const upload = multer({ storage });
+import upload from "../utils/multer.js";
 
 const uploadPhotos = upload.array("photos", 6); 
 
@@ -168,7 +145,7 @@ export const uploadedPhotos = async (req, res, next) => {
       }
 
       if (req.files) {
-        const filepaths = req.files.map((file) => path.join('uploads', file.filename)); // Updated: Save file paths
+        const filepaths = req.files.map((file) => path.join('uploads', file.filename)); 
         estate.photos.push(...filepaths);
         await estate.save();
       }

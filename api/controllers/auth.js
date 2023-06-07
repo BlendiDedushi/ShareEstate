@@ -88,3 +88,37 @@ export const logout = (req, res) => {
     throw error;
   }
 };
+
+export const googleLogin = async (req, res, next) => {
+  try {
+    const googleUser = req.user;
+
+    let user = await User.findOne({ where: { email: googleUser.emails[0].value } });
+
+    if (!user) {
+      user = await User.create({
+        username: googleUser.displayName,
+        email: googleUser.emails[0].value,
+        password:'',
+        googleId: googleUser.id,
+      });
+    } else if (!user.googleId) {
+      // Update the user's googleId if it's not set
+      user.googleId = googleUser.id;
+      await user.save();
+    }
+
+    const token = jwt.sign(
+      { id: user.id, username: user.username ,role: user.role , email: user.email},
+      process.env.JWT,
+      { expiresIn: "1h" }
+    );
+
+    res.cookie('access_token', token, {
+      httpOnly: true,
+    }).status(200).json({ user, token });
+  } catch (err) {
+    next(err);
+  }
+};
+
