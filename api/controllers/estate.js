@@ -36,15 +36,15 @@ export const createEstate = async (req, res, next) => {
         newEstate.photos = filepaths;
       }
 
-    //  const agentId = req.user.id;
+        const agentId = req.user.id;
 
-    //  const user = await User.findOne({ where: { id: agentId } });
+        const user = await User.findOne({ where: { id: agentId } });
 
-    //  if (!user) {
-    //    return res.status(404).json({ success: false, message: "User not found." });
-    //  }
+        if (!user) {
+          return res.status(404).json({ success: false, message: "User not found." });
+        }
 
-    //  newEstate.createdBy = user.id;
+        newEstate.createdBy = user.id;
 
      const savedEstate = await newEstate.save();
      res.status(200).json(savedEstate);
