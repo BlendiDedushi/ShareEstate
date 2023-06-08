@@ -127,3 +127,40 @@ export const sendEmail = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const sendMessage = async (req, res, next) => {
+  const { userId } = req.params;
+  const { subject, message } = req.body;
+
+  try {
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found.' });
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_EMAIL,
+        pass: process.env.GMAIL_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+
+    const mailOptions = {
+      from: req.user.email,
+      to: user.email,
+      subject: subject,
+      text: message,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ success: true, message: 'Message sent successfully.' });
+  } catch (error) {
+    next(error);
+  }
+};

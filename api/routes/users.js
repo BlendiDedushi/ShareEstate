@@ -6,6 +6,7 @@ import {
   getUsers,
   getAddress,
   sendEmail,
+  sendMessage,
 } from "../controllers/user.js";
 import { verifyToken, verifyAdmin } from "../utils/verifyToken.js";
 
@@ -23,6 +24,6 @@ router.get("/address/:id",verifyToken, getAddress);
 
 router.post('/send-email/:estateId',verifyToken,sendEmail);
 
-
+router.post('/contact-user/:userId',verifyToken,sendMessage)
 
 export default router;

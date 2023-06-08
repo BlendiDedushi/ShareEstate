@@ -58,6 +58,45 @@ const EstateSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  characteristics: {
+    rooms: {
+      type: Number,
+      required: true,
+    },
+    bathrooms: {
+      type: Number,
+      required: true,
+    },
+    parking: {
+      type: Boolean,
+      default: false,
+    },
+    balcony: {
+      type: Boolean,
+      default: false,
+    }
+  },
+  lifestyle: {
+    smoking: {
+      type: Boolean,
+      default: false,
+    },
+    studentFriendly: {
+      type: Boolean,
+      default: false,
+    },
+    familyFriendly: {
+      type: Boolean,
+      default: false,
+    },
+    petsAllowed: {
+      type: Boolean,
+      default: false,
+    },
+    ageRestrictions: {
+      type: [Number],
+    },
+  },
 });
 
 EstateSchema.statics.getCoordinatesFromAddress = async function (address) {
