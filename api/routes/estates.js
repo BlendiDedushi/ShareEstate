@@ -12,13 +12,13 @@ import { verifyAdmin, verifyAgent, verifyToken } from "../utils/verifyToken.js";
 const router = express.Router();
 
 //create
-router.post("/", verifyAgent , createEstate);
+router.post("/",  createEstate);
 
 //update
-router.put("/:id",verifyAgent, updateEstate);
+router.put("/:id", updateEstate);
 
 //delete
-router.delete("/:id",verifyAgent, deleteEstate);
+router.delete("/:id", deleteEstate);
 
 //get by id
 router.get("/:id", getEstate);
@@ -26,7 +26,7 @@ router.get("/:id", getEstate);
 //Get
 router.get("/", getEstates);
 
-router.post("/:id/photos", verifyAgent, uploadedPhotos);
+router.post("/:id/photos",  uploadedPhotos);
 
 
 export default router;
