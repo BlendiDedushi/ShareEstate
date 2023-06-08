@@ -29,7 +29,10 @@ export const createEstate = async (req, res, next) => {
       });
 
       if (req.files) {
-        const filepaths = req.files.map((file) => path.join('uploads', file.filename)); 
+        const filepaths = req.files.map((file) =>{
+          const fullPath = path.resolve(file.path);
+          return fullPath
+        })
         newEstate.photos = filepaths;
       }
 

@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.get("/", verifyToken, getUsers);
 
-router.put("/:id", verifyAdmin, updateUser);
+router.put("/:id", verifyToken, updateUser);
 
 router.delete("/:id", verifyAdmin, deleteUser);
 
@@ -22,6 +22,7 @@ router.get("/:id", verifyAdmin,getUser);
 router.get("/address/:id",verifyToken, getAddress);
 
 router.post('/send-email/:estateId',verifyToken,sendEmail);
+
 
 
 export default router;

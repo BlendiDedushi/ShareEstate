@@ -2,20 +2,20 @@ import User from "../models/User.js";
 import Estate from "../models/Estate.js";
 import nodemailer from 'nodemailer';
 import upload from "../utils/multer.js";
+import { createError } from "../utils/error.js";
+import path from "path";
 
 export const updateUser = async (req, res, next) => {
   try {
     upload.single('avatar')(req, res, async (err) => {
       if (err) {
-        // Handle multer upload error
-        console.log(err);
         return next(err);
       }
 
       const { file } = req;
       if (file) {
-        // If an avatar file is uploaded, save the file path in the database
-        req.body.avatar = file.path;
+        const fullPath = path.resolve(file.path);
+        req.body.avatar = fullPath;
       }
 
       const [updatedRows] = await User.update(req.body, {
