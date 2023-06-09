@@ -3,17 +3,25 @@ import styles from "./navbar.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import {useCookies} from "react-cookie";
+import { useRouter } from "next/router";
 
 
 const Navbar = () => {
-  const [cookie] = useCookies(['token']);
+  const [cookie, setCookie, removeCookie] = useCookies(['token']);
   const [token, setToken] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (cookie.token) {
       setToken(true);
     }
   },[])
+
+  const logout = () => {
+    removeCookie('token');
+    setToken(false);
+    router.push("/");
+  };
 
   return (
     <div className={styles.navbar}>
@@ -45,12 +53,16 @@ const Navbar = () => {
           </div>
         }
       </div>
-      {/* {token &&
-
-      } */}
-      <Link href={"/AgentDashboard"}>
+      {token &&
+      <div>
+        <Link href={"/AgentDashboard"}>
               <button className={styles.navButton}>MyProfile</button>
         </Link>
+        <button className={styles.navButton} onClick={logout}>
+            Logout
+        </button>
+      </div>
+      }
     </div>
   );
 };
