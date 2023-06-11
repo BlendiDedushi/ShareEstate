@@ -16,7 +16,7 @@ import cors from "cors";
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import session from "express-session";
-import { googleLogin } from "./controllers/auth.js";
+import jwt from "jsonwebtoken";
 
 const app = express();
 
@@ -125,11 +125,27 @@ app.get(
 );
 
 // Callback URL after successful Google authentication
-app.get(
-  '/api/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  googleLogin
-);
+app.get('/api/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+  try {
+    // Generate the JWT token
+    const user = req.user;
+    const token = jwt.sign(
+        { id: user.id, username: user.username, role: user.role, email: user.email },
+        process.env.JWT,
+        { expiresIn: '1h' }
+    );
+
+    // Set the cookie on the response
+    res.cookie('token', token,);
+
+    // Redirect the user back to the frontend with the token and user data as query parameters
+    const redirectURL = `http://localhost:3000?token=${token}&user=${encodeURIComponent(JSON.stringify(user))}`;
+    res.redirect(redirectURL);
+  } catch (err) {
+    console.error('Google login callback error:', err);
+    res.status(500).json({ message: 'Google login failed' });
+  }
+});
 
 // Error handling middleware
 app.use((err, req, res, next) => {

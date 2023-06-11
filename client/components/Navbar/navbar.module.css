@@ -47,7 +47,7 @@
     width: 370px;
     margin: 3px 0px;
     padding: 8px;
-    border: 6px solid #417054;
+    border: 2px solid #417054;
     border-radius: 20px;
   }
   .inputField:focus + .label,

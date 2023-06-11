@@ -12,6 +12,14 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [cookies, setCookie] = useCookies(['token']);
 
+    const handleGoogleLogin = async () => {
+        try {
+            window.location.href = 'http://localhost:8900/api/auth/google';
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
     };
@@ -83,11 +91,20 @@ const Login = () => {
                     Password
                 </label>
             </div>
+            <Link href="/forget-password" className='mt-[10px] text-[14px] text-[#135de3] underline'>Forget
+                password?</Link>
 
             <button className={styles.loginButton} onClick={handleLogin}>
                 Login
             </button>
-            <Link href="/registration" className='mt-[15px] text-[14px] text-[#135de3] underline'>You don't have an account? Create a new one</Link>
+
+            <button className={`${styles.loginButton} bg-[#fff] text-[#1a1a1a] flex justify-center`}
+                    onClick={handleGoogleLogin}>
+                <img alt={'google logo'} className={'w-[20px] mr-[10px]'}
+                     src={'/images/Google__G__Logo.svg.png'}/> Login with Google
+            </button>
+            <Link href="/registration" className='mt-[15px] text-[14px] text-[#135de3] underline'>You don't have an
+                account? Create a new one</Link>
         </div>
     );
 };
