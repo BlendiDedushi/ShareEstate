@@ -64,6 +64,14 @@ User.init(
     googleId :{
       type : DataTypes.STRING,
       allowNull:true
+    },
+    resetPasswordToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    resetPasswordExpires: {
+      type: DataTypes.DATE,
+      allowNull: true,
     }
   },
   {
@@ -71,7 +79,7 @@ User.init(
     modelName: 'User', 
     tableName: 'Users',
     timestamps: true,
-  }
+  },
 );
 
 export default User;
