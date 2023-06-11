@@ -17,6 +17,7 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import session from "express-session";
 import { googleLogin } from "./controllers/auth.js";
+import Estate from "./models/Estate.js";
 
 const app = express();
 

@@ -76,19 +76,30 @@ export const deleteEstate = async (req, res, next) => {
 };
 export const getEstate = async (req, res, next) => {
   try {
-    const estate = await Estate.findById(req.params.id)
-    .populate("createdBy", "name email")
-    .exec();
+    const estate = await Estate.findById(req.params.id).exec();
 
     if (!estate) {
       return next(createError(404, "Estate not found!"));
     }
-    
-    res.status(200).json(estate);
+
+    const user = await User.findByPk(estate.createdBy);
+    const estateWithUser = {
+      ...estate.toObject(),
+      createdBy: user
+        ? {
+            email: user.email,
+            username: user.username,
+            avatar: user.avatar,
+          }
+        : null,
+    };
+
+    res.status(200).json(estateWithUser);
   } catch (err) {
     next(err);
   }
 };
+
 export const getEstates = async (req, res, next) => {
   try {
     const { search, city, price, type } = req.query;

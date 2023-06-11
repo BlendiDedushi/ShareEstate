@@ -55,7 +55,6 @@ const EstateSchema = new mongoose.Schema({
   },
   createdBy: {
     type: String,
-    ref: 'User',
     required: true,
   },
   characteristics: {

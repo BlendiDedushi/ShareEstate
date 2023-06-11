@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken";
 import { createCustomer } from "./payment.js";
 import RoommatePreferences from "../models/RoommatePreferences.js";
 import { invalidatedTokens } from "../utils/verifyToken.js";
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 
 export const register = async (req, res, next) => {
   try {
@@ -122,3 +124,85 @@ export const googleLogin = async (req, res, next) => {
   }
 };
 
+export const forgetPassword = async (req, res, next) => {
+  const { email } = req.body;
+
+  try {
+    // Check if the user with the provided email exists
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found!" });
+    }
+
+    // Generate a unique token
+    const token = crypto.randomBytes(20).toString("hex");
+
+    // Store the token in the user's document
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
+    await user.save();
+
+    const resetPasswordLink = `http://localhost:8900/api/auth/reset-password?token=${token}`;
+
+    // Create a nodemailer transporter
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_EMAIL,
+        pass: process.env.GMAIL_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+
+    // Compose the email
+    const mailOptions = {
+      from: process.env.GMAIL_EMAIL,
+      to: email,
+      subject: "Password Reset",
+      text: `Hi ${user.username},\n\nYou have requested to reset your password. Please click on the following link to reset your password:\n\n${resetPasswordLink}`,
+    };
+
+    // Send the email
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log("Error sending email:", error);
+        return res.status(500).json({ success: false, message: "Failed to send password reset email!" });
+      }
+      console.log("Password reset email sent:", info.response);
+      res.status(200).json({ success: true, message: "Password reset link has been sent to your email!" });
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export const resetPassword = async (req, res, next) => {
+  const { token, newPassword } = req.body;
+
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid or expired token!" });
+    }
+
+    user.password = bcrypt.hashSync(newPassword, bcrypt.genSaltSync(10));
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "Password has been reset successfully!" });
+  } catch (error) {
+    next(error);
+  }
+};
