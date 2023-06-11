@@ -7,6 +7,7 @@ import RoommatePreferences from "../models/RoommatePreferences.js";
 import { invalidatedTokens } from "../utils/verifyToken.js";
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import { Op } from "sequelize";
 
 export const register = async (req, res, next) => {
   try {
@@ -144,7 +145,6 @@ export const forgetPassword = async (req, res, next) => {
 
     const resetPasswordLink = `http://localhost:8900/api/auth/reset-password?token=${token}`;
 
-    // Create a nodemailer transporter
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -156,7 +156,6 @@ export const forgetPassword = async (req, res, next) => {
       },
     });
 
-    // Compose the email
     const mailOptions = {
       from: process.env.GMAIL_EMAIL,
       to: email,
@@ -164,7 +163,6 @@ export const forgetPassword = async (req, res, next) => {
       text: `Hi ${user.username},\n\nYou have requested to reset your password. Please click on the following link to reset your password:\n\n${resetPasswordLink}`,
     };
 
-    // Send the email
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log("Error sending email:", error);
@@ -184,8 +182,10 @@ export const resetPassword = async (req, res, next) => {
 
   try {
     const user = await User.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() },
+      where: {
+        resetPasswordToken: token,
+        resetPasswordExpires: { [Op.gt]: new Date() },
+      },
     });
 
     if (!user) {
@@ -195,8 +195,8 @@ export const resetPassword = async (req, res, next) => {
     }
 
     user.password = bcrypt.hashSync(newPassword, bcrypt.genSaltSync(10));
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpires = undefined;
+    user.resetPasswordToken = null;
+    user.resetPasswordExpires = null;
     await user.save();
 
     res
