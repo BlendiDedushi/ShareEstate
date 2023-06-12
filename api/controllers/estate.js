@@ -1,8 +1,5 @@
 import Estate from "../models/Estate.js";
 import User from "../models/User.js";
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import fs from 'fs';
 import multer from 'multer';
 import path from "path";
 import upload from "../utils/multer.js";

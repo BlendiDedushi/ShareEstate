@@ -106,7 +106,6 @@ export const googleLogin = async (req, res, next) => {
         googleId: googleUser.id,
       });
     } else if (!user.googleId) {
-      // Update the user's googleId if it's not set
       user.googleId = googleUser.id;
       await user.save();
     }
@@ -129,18 +128,15 @@ export const forgetPassword = async (req, res, next) => {
   const { email } = req.body;
 
   try {
-    // Check if the user with the provided email exists
     const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found!" });
     }
 
-    // Generate a unique token
     const token = crypto.randomBytes(20).toString("hex");
 
-    // Store the token in the user's document
     user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
+    user.resetPasswordExpires = Date.now() + 3600000; 
     await user.save();
 
     const resetPasswordLink = `http://localhost:8900/api/auth/reset-password?token=${token}`;

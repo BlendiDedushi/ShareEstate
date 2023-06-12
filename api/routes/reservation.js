@@ -5,7 +5,7 @@ import { verifyToken } from '../utils/verifyToken.js';
 
 const router = express.Router();
 
-//create
+
 router.post("/",verifyToken, createReservation);
 router.post("/payments",verifyToken,processPayment);
 

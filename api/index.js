@@ -17,8 +17,7 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import session from "express-session";
 import jwt from "jsonwebtoken";
-import { googleLogin } from "./controllers/auth.js";
-import Estate from "./models/Estate.js";
+import contactRoute from './routes/contact.js'
 
 const app = express();
 
@@ -77,20 +76,17 @@ sequelize
   .then(() => {
     console.log('MSSQL models synchronized with the database!');
 
-    // Define the associations between User and Reservation
     User.hasMany(Reservation, { foreignKey: 'userId', as: 'reservations' });
     Reservation.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
     Reservation.hasOne(Payment, { foreignKey: "reservationId", as: "payment" });
     Payment.belongsTo(Reservation, { foreignKey: "reservationId", as: "reservation" });
-
-
-    // return Reservation.sync(); 
+ 
     return sequelize.sync();
   })
   .then(() => {
     console.log('Reservation model synchronized with the database!');
-    return connect(); // Connect to MongoDB
+    return connect(); 
   })
   .then(() => {
     console.log('Database relationships established!');
@@ -120,6 +116,7 @@ app.use('/api/estates', estatesRoute);
 app.use('/api/rooms', roomsRoute);
 app.use('/api/reservation',reservationRoute);
 app.use('/api/roommates',rommatefindRoute);
+app.use('/api/contact',contactRoute);
 
 app.get(
   '/api/auth/google',
