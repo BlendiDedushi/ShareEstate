@@ -56,24 +56,26 @@ const Hotel = ({ estate }) => {
 
   const photos = [
     {
-      src: estate.photos[0],
+      src: `http://localhost:8900/uploads/${estate.photos[0]}`,
     },
     {
-      src: estate.photos[1],
+      src: `http://localhost:8900/uploads/${estate.photos[1]}`,
     },
     {
-      src: estate.photos[2],
+      src: `http://localhost:8900/uploads/${estate.photos[2]}`,
     },
     {
-      src: estate.photos[3],
+      src: `http://localhost:8900/uploads/${estate.photos[3]}`,
     },
     {
-      src: estate.photos[4],
+      src: `http://localhost:8900/uploads/${estate.photos[4]}`,
     },
     {
-      src: estate.photos[5],
+      src: `http://localhost:8900/uploads/${estate.photos[5]}`,
     },
   ];
+
+  console.log(estate);
 
   const handleReservation = async () => {
     if(cookie.token){

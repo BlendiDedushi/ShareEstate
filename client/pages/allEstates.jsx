@@ -77,9 +77,9 @@ const AllEstates = ({data}) => {
                                 onChange={(e) => setPrice(e.target.value)}
                             >
                                 <option value="">Price</option>
-                                <option value="200">200$</option>
-                                <option value="500">500%</option>
-                                <option value="1000">1000$</option>
+                                <option value="200">200€</option>
+                                <option value="500">500€</option>
+                                <option value="1000">1000€</option>
                             </select>
                         </div>
                         <div className="flex flex-col justify-center">
