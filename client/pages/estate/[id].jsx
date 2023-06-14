@@ -52,7 +52,7 @@ const Hotel = ({ estate }) => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [cookie] = useCookies(['token']);
-
+  const [message, setMessage] = useState('');
 
   const photos = [
     {
@@ -90,10 +90,25 @@ const Hotel = ({ estate }) => {
         router.push({pathname:'/PaymentPage', query:{id: res.data.reservation.id}});
       })
     }else{
-      await router.push('login');
+      await router.push('/login');
     }
   }
-  
+
+  const handleSubmitEmail = async (e) => {
+    e.preventDefault();
+    await axios.post(`http://localhost:8900/api/users/send-email/${estate?._id}`, {},{
+        headers: {
+          Authorization: `Bearer ${cookie.token}`
+        }
+      }).then(() => {
+        setMessage("");
+      }).catch(() => {
+         router.push('/login');
+      })
+  }
+  const handleChange = (event) => {
+    setMessage(event.target.value);
+  };
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -189,6 +204,29 @@ const Hotel = ({ estate }) => {
         </div>
         <Map latitude={estate.latitude} longitude={estate.longitude} />
       </div>
+      <form className="max-w-md mx-auto p-4 shadow-md" onSubmit={handleSubmitEmail}>
+        <div className="mb-4">
+          <label htmlFor="message" className="block text-gray-700 font-bold mb-2">
+            Message
+          </label>
+          <textarea
+              id="message"
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500"
+              rows="4"
+              value={message}
+              onChange={handleChange}
+              required
+          />
+        </div>
+        <div className="text-center">
+          <button
+              type="submit"
+              className="py-2 px-4 bg-indigo-500 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none"
+          >
+            Send Message
+          </button>
+        </div>
+      </form>
       <MailList />
       <Footer />
     </div>
