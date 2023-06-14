@@ -27,6 +27,7 @@
     "react-cookie": "^4.1.1",
     "react-date-range": "^1.4.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.9.0",
     "react-leaflet": "^4.2.1",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.11.2",
