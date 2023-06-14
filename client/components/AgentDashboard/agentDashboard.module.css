@@ -31,6 +31,14 @@
     background-color: #e6e6e6;
     font-weight: bold;
   }
+  .left ul li.activeD {
+    background-color: #e6e6e6;
+    font-weight: bold;
+  }
+  .left ul li.activeU {
+    background-color: #e6e6e6;
+    font-weight: bold;
+  }
   
   .left ul li img {
     margin-left: 10px;
