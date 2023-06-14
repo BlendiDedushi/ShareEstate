@@ -24,6 +24,7 @@ const app = express();
 dotenv.config();
 app.use(cors());
 
+app.use('/uploads', express.static('uploads'));
 
 const connect = async () => {
   try {

@@ -20,7 +20,6 @@ const AgentD = ({ data }) => {
     <div>
       <Navbar />
       <AgentDashboard data={data}/>
-      <Footer />
     </div>
   );
 };

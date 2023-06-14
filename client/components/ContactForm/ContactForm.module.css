@@ -1,0 +1,116 @@
+.contact-form {
+    max-width: 900px;
+    height: 550px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 5px;
+    display: flex; /* Add flex display */
+    overflow: auto; 
+  }
+  .contact-form::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .image {
+    width: 400px;
+    height: 400px; /* Adjust the width as needed */
+    margin-right: 20px; /* Add margin to create space between the image and the form */
+    animation-name: rotate;
+    animation-duration: 13s; /* Adjust the duration as needed */
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  
+
+  
+  .form-container {
+    flex: 1; /* Allow the form container to take the remaining space */
+  }
+  
+  .contact-form h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .fade-in {
+    animation-name: fade;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    opacity: 0;
+    font-family: cursive;
+  }
+  
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .form-group textarea {
+    height: 100px;
+  }
+  
+  .input-icon {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+  
+  .submit-button {
+    background-color: #4CAF50;
+    color: rgb(0, 0, 0);
+    padding: 7px 20px;
+    font-size: 16px;
+    font-family: cursive;
+    border: 2px solid #000000;
+    border-radius: 25px;
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background-color: #417054;
+  }
+  
+  .submit-button:focus {
+    outline: none;
+    border-color: #4CAF50;
+  }
+  
+  .submit-button:active {
+    background-color: #3e8e41;
+    border-color: #3e8e41;
+  }
+  
+  .icon-animation {
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+  }
+  
+  /* Apply delay to each icon */
+  .icon-animation:nth-child(1) {
+    animation-delay: 0.8s;
+  }
+  

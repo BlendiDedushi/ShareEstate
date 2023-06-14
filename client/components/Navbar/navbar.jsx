@@ -41,6 +41,9 @@ const Navbar = () => {
           <Link href="/eByCity">
             <button className={styles.navButton}>EstatesByCity</button>
           </Link>
+          <Link href="/contactF">
+            <button className={styles.navButton}>Contact Us!</button>
+          </Link>
         </div>
         {!token &&
           <div className={styles.navItems}>

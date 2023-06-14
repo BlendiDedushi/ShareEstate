@@ -2,6 +2,9 @@ import styles from "./propertyList.module.css";
 import React, {useEffect, useState} from "react";
 import Link from "next/link";
 import {useRouter} from "next/router";
+import { Card, CardContent, Typography, Rating } from '@mui/material';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
 
 const PropertyList = ({ data }) => {
   const router = useRouter();
@@ -72,21 +75,35 @@ const PropertyList = ({ data }) => {
           <div className={styles.properties}>
             {filteredEstates.map((estate) => (
               <Link key={estate?._id} href={`/estate/${estate?._id}`}>
-                <div className={styles.fpItem}>
+                <Card className={styles.fpItem}>
                   <img
-                    src={estate?.photos[0]}
+                    src={`http://localhost:8900/uploads/${estate.photos[0]}`}
                     alt=""
                     className={styles.fpImg}
                   />
-                  <span className={styles.fpName}>Name: {estate?.name}</span>
-                  <span className={styles.fpCity}>Location: {estate?.city}</span>
-                  <span className={styles.fpPrice}>
-                    Price: {estate?.cheapestPrice}€
-                  </span>
-                  <div className={styles.fpRating}>
-                    <button>{estate?.rating}</button>
-                  </div>
-                </div>
+                  <CardContent>
+                    <Typography variant="subtitle1" className={styles.fpName}>
+                      Name: {estate?.name}
+                    </Typography>
+                    <Typography variant="subtitle2" className={styles.fpCity}>
+                      Location: {estate?.city}
+                    </Typography>
+                    <Typography variant="body2" className={styles.fpPrice}>
+                      Price: {estate?.cheapestPrice}€
+                    </Typography>
+                    <div className={styles.fpRating}>
+                      <Rating
+                        name={`rating-${estate?._id}`}
+                        value={estate?.rating}
+                        max={5}
+                        precision={0.5}
+                        readOnly
+                        emptyIcon={<StarBorderIcon style={{ fontSize: 28 }} />}
+                        icon={<StarIcon style={{ fontSize: 28 }} />}
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
               </Link>
             ))}
           </div>

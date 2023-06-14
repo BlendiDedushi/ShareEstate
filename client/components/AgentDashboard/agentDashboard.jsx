@@ -5,6 +5,8 @@ import SuccessPopup from "@/components/Success/SuccessPopup";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { useCookies } from "react-cookie";
+import UsersC from "@/pages/users/users";
 
 const AgentDashboard = () => {
   const [selectedEstate, setSelectedEstate] = useState(null);
@@ -14,21 +16,32 @@ const AgentDashboard = () => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [estateData, setEstateData] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [cookie, setCookie] = useCookies(["token"]);
   const [formData, setFormData] = useState({
     name: "",
     type: "",
     city: "",
-    latitude: 0,
-    longitude: 0,
     distance: "",
     photos: [],
     title: "",
     desc: "",
     rating: 0,
-    rooms: [],
     cheapestPrice: 0,
     featured: false,
-    createdBy: "",
+    characteristics: {
+      rooms: 0,
+      bathrooms: 0,
+      parking: false,
+      balcony: false,
+    },
+    lifestyle: {
+      smoking: false,
+      studentFriendly: false,
+      familyFriendly: false,
+      petsAllowed: false,
+      ageRestrictions: 0,
+    },
   });
   const [activeTab, setActiveTab] = useState("MyProfile");
 
@@ -63,7 +76,9 @@ const AgentDashboard = () => {
 
   const handleUpdateSubmit = async (estateId) => {
     try {
-      const updatedEstate = estateData.find((estate) => estate._id === estateId);
+      const updatedEstate = estateData.find(
+        (estate) => estate._id === estateId
+      );
       await updateEstate(estateId, updatedEstate);
       // Reset the selectedEstate and selectedEstateField states
       setSelectedEstate(null);
@@ -81,15 +96,18 @@ const AgentDashboard = () => {
     setSelectedEstate(estateId);
   };
 
-
-
   const createEstate = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post(
         "http://localhost:8900/api/estates",
-        formData
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${cookie.token}`,
+          },
+        }
       );
       setEstateData([...estateData, response.data]);
       setShowSuccessPopup(true);
@@ -161,13 +179,27 @@ const AgentDashboard = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
+    // Split the name by '.' to handle nested properties
+    const nameArray = name.split(".");
+    if (nameArray.length === 1) {
+      setFormData({ ...formData, [name]: value });
+    } else if (nameArray.length === 2) {
+      const [parent, child] = nameArray;
+      setFormData({
+        ...formData,
+        [parent]: {
+          ...formData[parent],
+          [child]: value,
+        },
+      });
+    }
+  };
 
   const handleFileInputChange = (e) => {
     const fileArray = Array.from(e.target.files);
-    setFormData({ ...formData, photos: fileArray });
+    const fileNames = fileArray.map((file) => file.name);
+    setFormData({ ...formData, photos: fileNames });
   };
 
   const clearForm = () => {
@@ -175,17 +207,26 @@ const AgentDashboard = () => {
       name: "",
       type: "",
       city: "",
-      latitude: 0,
-      longitude: 0,
       distance: "",
       photos: [],
       title: "",
       desc: "",
       rating: 0,
-      rooms: [],
       cheapestPrice: 0,
       featured: false,
-      createdBy: "",
+      characteristics: {
+        rooms: 0,
+        bathrooms: 0,
+        parking: false,
+        balcony: false,
+      },
+      lifestyle: {
+        smoking: false,
+        studentFriendly: false,
+        familyFriendly: false,
+        petsAllowed: false,
+        ageRestrictions: 0,
+      },
     });
     const fileInput = document.querySelector('input[name="photos"]');
     if (fileInput) {
@@ -198,146 +239,251 @@ const AgentDashboard = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "MyProfile":
-        return <div>My Profile Content</div>;
+        return <div></div>;
+      case "Users":
+        return (
+          <div>
+            <UsersC />
+          </div>
+        );
       case "CreateEstate":
         return (
           <div>
             <form className={styles.createForm} onSubmit={createEstate}>
-              <label>
-                <p>Name:</p>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>Type:</p>
-                <input
-                  type="text"
-                  name="type"
-                  value={formData.type}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>City:</p>
-                <input
-                  type="text"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>Latitude:</p>
-                <input
-                  type="number"
-                  name="latitude"
-                  value={formData.latitude}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>Longitude:</p>
-                <input
-                  type="number"
-                  name="longitude"
-                  value={formData.longitude}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>Distance:</p>
-                <input
-                  type="text"
-                  name="distance"
-                  value={formData.distance}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>Photos:</p>
-                <input
-                  type="file"
-                  name="photos"
-                  multiple
-                  onChange={handleFileInputChange}
-                />
-              </label>
-              <label>
-                <p>Title:</p>
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>Description:</p>
-                <input
-                  type="text"
-                  name="desc"
-                  value={formData.desc}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>Rating:</p>
-                <input
-                  type="number"
-                  name="rating"
-                  min={0}
-                  max={5}
-                  value={formData.rating}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>Rooms:</p>
-                <input
-                  type="text"
-                  name="rooms"
-                  value={formData.rooms}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>Cheapest Price:</p>
-                <input
-                  type="number"
-                  name="cheapestPrice"
-                  value={formData.cheapestPrice}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <label>
-                <p>Featured:</p>
-                <input
-                  type="checkbox"
-                  name="featured"
-                  checked={formData.featured}
-                  onChange={(e) =>
-                    setFormData({ ...formData, featured: e.target.checked })
-                  }
-                />
-              </label>
-              <label>
-                <p>Created By:</p>
-                <input
-                  type="text"
-                  name="createdBy"
-                  value={formData.createdBy}
-                  onChange={handleInputChange}
-                />
-              </label>
-              <div className={styles.btns}>
-                <button onClick={clearForm}>Clear</button>
-                <button type="submit">Create</button>
+              <div className={styles.createForm1}>
+                <label>
+                  <p>Name:</p>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>Type:</p>
+                  <input
+                    type="text"
+                    name="type"
+                    value={formData.type}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>City:</p>
+                  <input
+                    type="text"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>Distance:</p>
+                  <input
+                    type="text"
+                    name="distance"
+                    value={formData.distance}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>Title:</p>
+                  <input
+                    type="text"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>Description:</p>
+                  <input
+                    type="text"
+                    name="desc"
+                    value={formData.desc}
+                    onChange={handleInputChange}
+                  />
+                </label>
+              </div>
+              <div className={styles.createForm2}>
+                <label>
+                  <p>Rooms:</p>
+                  <input
+                    type="number"
+                    name="characteristics.rooms"
+                    value={formData.characteristics.rooms}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>Bathrooms:</p>
+                  <input
+                    type="number"
+                    name="characteristics.bathrooms"
+                    value={formData.characteristics.bathrooms}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>Cheapest Price:</p>
+                  <input
+                    type="number"
+                    name="cheapestPrice"
+                    value={formData.cheapestPrice}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>Age Restrictions:</p>
+                  <input
+                    type="number"
+                    name="lifestyle.ageRestrictions"
+                    value={formData.lifestyle.ageRestrictions}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>Rating:</p>
+                  <input
+                    type="number"
+                    name="rating"
+                    min={0}
+                    max={5}
+                    value={formData.rating}
+                    onChange={handleInputChange}
+                  />
+                </label>
+                <label>
+                  <p>Photos:</p>
+                  <input
+                    type="file"
+                    name="photos"
+                    multiple
+                    onChange={handleFileInputChange}
+                  />
+                </label>
+              </div>
+              <div className={styles.createForm3}>
+                <label>
+                  <p>Featured:</p>
+                  <input
+                    type="checkbox"
+                    name="featured"
+                    checked={formData.featured}
+                    onChange={(e) =>
+                      setFormData({ ...formData, featured: e.target.checked })
+                    }
+                  />
+                </label>
+                <label>
+                  <p>Parking:</p>
+                  <input
+                    type="checkbox"
+                    name="characteristics.parking"
+                    checked={formData.characteristics.parking}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        characteristics: {
+                          ...formData.characteristics,
+                          parking: e.target.checked,
+                        },
+                      })
+                    }
+                  />
+                </label>
+                <label>
+                  <p>Balcony:</p>
+                  <input
+                    type="checkbox"
+                    name="characteristics.balcony"
+                    checked={formData.characteristics.balcony}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        characteristics: {
+                          ...formData.characteristics,
+                          balcony: e.target.checked,
+                        },
+                      })
+                    }
+                  />
+                </label>
+                <label>
+                  <p>Smoking:</p>
+                  <input
+                    type="checkbox"
+                    name="lifestyle.smoking"
+                    checked={formData.lifestyle.smoking}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        lifestyle: {
+                          ...formData.lifestyle,
+                          smoking: e.target.checked,
+                        },
+                      })
+                    }
+                  />
+                </label>
+                <label>
+                  <p>Student Friendly:</p>
+                  <input
+                    type="checkbox"
+                    name="lifestyle.studentFriendly"
+                    checked={formData.lifestyle.studentFriendly}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        lifestyle: {
+                          ...formData.lifestyle,
+                          studentFriendly: e.target.checked,
+                        },
+                      })
+                    }
+                  />
+                </label>
+                <label>
+                  <p>Family Friendly:</p>
+                  <input
+                    type="checkbox"
+                    name="lifestyle.familyFriendly"
+                    checked={formData.lifestyle.familyFriendly}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        lifestyle: {
+                          ...formData.lifestyle,
+                          familyFriendly: e.target.checked,
+                        },
+                      })
+                    }
+                  />
+                </label>
+                <label>
+                  <p>Pets Allowed:</p>
+                  <input
+                    type="checkbox"
+                    name="lifestyle.petsAllowed"
+                    checked={formData.lifestyle.petsAllowed}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        lifestyle: {
+                          ...formData.lifestyle,
+                          petsAllowed: e.target.checked,
+                        },
+                      })
+                    }
+                  />
+                </label>
               </div>
             </form>
+            <div className={styles.btns}>
+              <button type="submit">Create</button>
+              <button onClick={clearForm}>Clear</button>
+            </div>
           </div>
         );
       case "DeleteEstate":
@@ -345,11 +491,7 @@ const AgentDashboard = () => {
           <div className={styles.properties}>
             {estateData?.map((estate) => (
               <div key={estate.id} className={styles.fpItemD}>
-                <img
-                  src={estate.photos[0]}
-                  alt=""
-                  className={styles.fpImg}
-                />
+                <img src={estate.photos[0]} alt="" className={styles.fpImg} />
                 <span className={styles.fpName}>{estate.name}</span>
                 <span className={styles.fpCity}>{estate.city}</span>
                 <span className={styles.fpPrice}>
@@ -378,10 +520,7 @@ const AgentDashboard = () => {
               const isUpdating = selectedEstate === estate._id;
               return (
                 <div key={estate._id} className={styles.fpItem}>
-                  <img
-                    src={estate.photos[0]}
-                    className={styles.fpImg}
-                  />
+                  <img src={estate.photos[0]} alt="" className={styles.fpImg} />
                   <span
                     className={styles.fpName}
                     onClick={() => setEstateToUpdateField("name")}
@@ -468,6 +607,17 @@ const AgentDashboard = () => {
               <img
                 src="https://cdn-icons-png.flaticon.com/128/2102/2102647.png"
                 alt="Profile"
+              />
+            </li>
+            <li
+              className={activeTab === "Users" ? styles.active : ""}
+              onClick={() => handleTabClick("Users")}
+              role="button"
+            >
+              Users
+              <img
+                src="https://cdn-icons-png.flaticon.com/128/694/694642.png"
+                alt="Users"
               />
             </li>
             <li

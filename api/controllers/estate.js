@@ -27,8 +27,8 @@ export const createEstate = async (req, res, next) => {
 
       if (req.files) {
         const filepaths = req.files.map((file) =>{
-          const fullPath = path.resolve(file.path);
-          return fullPath
+          const filename = file.filename; // Get the filename with extension
+          return filename
         })
         newEstate.photos = filepaths;
       }
