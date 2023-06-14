@@ -18,7 +18,7 @@ router.put("/:id", verifyToken, updateUser);
 
 router.delete("/:id", verifyAdmin, deleteUser);
 
-router.get("/:id", verifyAdmin,getUser);
+router.get("/:id", verifyToken ,getUser);
 
 router.get("/address/:id",verifyToken, getAddress);
 

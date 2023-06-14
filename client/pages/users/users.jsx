@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import styles from './users.module.css';
+import styles from "../../pages/style/users.module.css";
 import { useCookies } from 'react-cookie';
 
 const DeleteConfirmationPopup = ({ closePopup, confirmDelete }) => {

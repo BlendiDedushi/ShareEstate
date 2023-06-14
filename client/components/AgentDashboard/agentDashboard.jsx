@@ -7,6 +7,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
 import UsersC from "@/pages/users/users";
+import MyProfile from "@/pages/users/myProf";
 
 const AgentDashboard = () => {
   const [selectedEstate, setSelectedEstate] = useState(null);
@@ -239,7 +240,9 @@ const AgentDashboard = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "MyProfile":
-        return <div></div>;
+        return <div>
+            <MyProfile />
+        </div>;
       case "Users":
         return (
           <div>

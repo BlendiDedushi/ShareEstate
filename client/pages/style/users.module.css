@@ -1,0 +1,174 @@
+.userbtn {
+  margin-left: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4caf50;
+  color: #fff;
+  cursor: pointer;
+  width: 80px; /* Adjusted width */
+  transition: background-color 0.3s ease;
+}
+
+.userbtn:hover {
+  background-color: #45a049;
+}
+
+.userss {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  margin-top: 20px;
+  padding: 10px;
+  border-bottom: 2px solid black;
+  background-color: #f2f2f2; /* Added background color */
+}
+
+.userD {
+  display: flex;
+  gap: 40px;
+  align-items: center; /* Added alignment */
+}
+
+.userD span {
+  display: flex;
+  align-items: center; /* Adjusted alignment */
+}
+
+.userss img {
+  width: 60px;
+}
+
+.userss span {
+  display: flex;
+  flex-direction: column;
+}
+
+.userbtnn {
+  display: flex;
+  gap: 15px; /* Adjusted gap */
+  align-items: center; /* Added alignment */
+}
+
+.userbtnn button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #4caf50;
+  color: #fff;
+  cursor: pointer;
+  width: 80px; /* Adjusted width */
+  transition: background-color 0.3s ease;
+}
+
+.userbtnn button:last-child {
+  background-color: #f44336;
+}
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popupContent {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.popupContent h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.popupContent p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.popupContent h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.popupContent div {
+  margin-bottom: 10px;
+}
+
+.popupContent label {
+  display: inline-block;
+  width: 100px;
+  font-weight: bold;
+}
+
+.popupButtons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.popupButtons button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #45a049;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 0 5px;
+}
+
+.popupButtons button:last-child {
+  background-color: #f44336;
+}
+
+.deleteConfirmationPopup {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 100%;
+}
+
+.deleteConfirmationPopup h2 {
+  margin-top: 0;
+  color: red;
+}
+
+.deleteConfirmationPopup p {
+  margin-bottom: 10px;
+}
+
+.popupButtonss {
+  display: flex;
+  justify-content: center;
+}
+
+.popupButtonss button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.popupButtonss button:first-child {
+  background-color: #45a049;
+  color: #fff;
+}
+
+.popupButtonss button:last-child {
+  background-color:#f44336;
+  color: #fff;
+}
