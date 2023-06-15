@@ -25,14 +25,6 @@ const Popup = ({ selectedUser, closePopup, saveChanges, setSelectedUser }) => {
             onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })}
           />
         </div>
-        <div>
-          <label>Role:</label>
-          <input
-            type="text"
-            value={selectedUser.role}
-            onChange={(e) => setSelectedUser({ ...selectedUser, role: e.target.value })}
-          />
-        </div>
         <div className={styles.popupButtons}>
           <button onClick={saveChanges}>Save</button>
           <button onClick={closePopup}>Cancel</button>
@@ -95,14 +87,14 @@ const MyProfile = () => {
 
   const saveChanges = async () => {
     try {
-      await axios.put(`http://localhost:8900/api/users/${selectedUser._id}`, selectedUser, {
+      await axios.put(`http://localhost:8900/api/users/${loggedInUserId}`, selectedUser, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
       });
-
+  
       closePopup();
-
+  
       console.log("User updated successfully.");
     } catch (error) {
       console.error("Error:", error);
@@ -125,6 +117,9 @@ const MyProfile = () => {
           </span>
           <span>
             Role: <b>{selectedUser.role}</b>
+          </span>
+          <span>
+          stripeCustomerId: <b>{selectedUser.stripeCustomerId}</b>
           </span>
         </div>
         <div className={styles.userbtnn}>

@@ -11,6 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cookies, setCookie] = useCookies(["token"]);
+  const [error, setError] = useState("");
 
   const handleGoogleLogin = async () => {
     try {
@@ -33,25 +34,25 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    await axios
-      .post("http://localhost:8900/api/auth/login", {
+    try {
+      const res = await axios.post("http://localhost:8900/api/auth/login", {
         username: username,
         email: email,
         password: password,
-      })
-      .then((res) => {
-        router.push("/");
-        setCookie("token", res.data.token, { path: "/" });
-      })
-      .catch((err) => {
-        console.log(err);
       });
+
+      router.push("/");
+      setCookie("token", res.data.token, { path: "/" });
+    } catch (error) {
+      setError("Something went wrong. Please check your credentials and try again.");
+      console.log(error);
+    }
   };
 
   return (
     <div className={styles.modalContent}>
       <h2>Login Form</h2>
-      <br></br>
+      <br />
       <div className={styles.formGroup}>
         <input
           type="text"
@@ -106,6 +107,7 @@ const Login = () => {
       <Link href="/registration" className="mt-[15px] text-[14px] text-[#135de3] underline">
         You don't have an account? Create a new one
       </Link>
+      {error && <p className={styles.error}>{error}</p>}
     </div>
   );
 };

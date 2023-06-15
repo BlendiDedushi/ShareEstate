@@ -154,3 +154,17 @@
     width: 100%; 
   }
    */
+
+.error{
+  color: red;
+  display: flex;
+  justify-content: center;
+}
+
+.cond{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 100px;
+  cursor: default;
+}

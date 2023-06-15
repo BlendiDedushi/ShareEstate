@@ -482,11 +482,11 @@ const AgentDashboard = () => {
                   />
                 </label>
               </div>
-            </form>
             <div className={styles.btns}>
               <button type="submit">Create</button>
               <button onClick={clearForm}>Clear</button>
             </div>
+            </form>
           </div>
         );
       case "DeleteEstate":

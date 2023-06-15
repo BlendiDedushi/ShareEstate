@@ -8,6 +8,9 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -21,17 +24,77 @@ const Register = () => {
     setPassword(e.target.value);
   };
 
+  const validateForm = () => {
+    let isValid = true;
+
+    if (username.trim() === "") {
+      setUsernameError("Please enter a username.");
+      isValid = false;
+    } else {
+      setUsernameError("");
+    }
+
+    if (email.trim() === "") {
+      setEmailError("Please enter an email.");
+      isValid = false;
+    } else if (!isValidEmail(email)) {
+      setEmailError("Please enter a valid email.");
+      isValid = false;
+    } else {
+      setEmailError("");
+    }
+
+    if (password.trim() === "") {
+      setPasswordError("Please enter a password.");
+      isValid = false;
+    } else if (password.length < 5) {
+      setPasswordError("Password should be at least 5 characters long.");
+      isValid = false;
+    } else if (!hasUppercaseLetter(password)) {
+      setPasswordError("Password should contain at least 1 uppercase letter.");
+      isValid = false;
+    } else if (!hasSymbol(password)) {
+      setPasswordError("Password should contain at least 1 symbol.");
+      isValid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    return isValid;
+  };
+
+  const isValidEmail = (email) => {
+    // A simple email validation using regular expression
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const hasUppercaseLetter = (password) => {
+    const uppercaseRegex = /[A-Z]/;
+    return uppercaseRegex.test(password);
+  };
+
+  const hasSymbol = (password) => {
+    const symbolRegex = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
+    return symbolRegex.test(password);
+  };
+
   const handleRegister = async () => {
-    await axios.post('http://localhost:8900/api/auth/register', {
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      await axios.post("http://localhost:8900/api/auth/register", {
         username: username,
         email: email,
-        password: password
-      }
-    ).then(() => {
-      router.push('/');
-    }).catch((err) => {
-      console.log(err);
-    })
+        password: password,
+      });
+
+      router.push("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -50,6 +113,7 @@ const Register = () => {
         <label htmlFor="registerUsername" className={styles.label}>
           Username
         </label>
+        {usernameError && <p className={styles.error}>{usernameError}</p>}
       </div>
       <div className={styles.formGroup}>
         <input
@@ -63,6 +127,7 @@ const Register = () => {
         <label htmlFor="registerEmail" className={styles.label}>
           Email
         </label>
+        {emailError && <p className={styles.error}>{emailError}</p>}
       </div>
       <div className={styles.formGroup}>
         <input
@@ -76,10 +141,18 @@ const Register = () => {
         <label htmlFor="registerPassword" className={styles.label}>
           Password
         </label>
+        {passwordError && <p className={styles.error}>{passwordError}</p>}
       </div>
       <button className={styles.signupButton} onClick={handleRegister}>
         Sign Up
       </button>
+      <div>
+        <span className={styles.cond}>
+        <small>• Password should be at least 5 characters long.</small>
+        <small>• Password should contain at least 1 uppercase letter.</small>
+        <small>• Password should contain at least 1 symbol .</small>
+        </span>
+      </div>
     </div>
   );
 };

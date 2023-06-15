@@ -18,7 +18,7 @@ const DeleteConfirmationPopup = ({ closePopup, confirmDelete }) => {
   );
 };
 
-const Popup = ({ selectedUser, closePopup, saveChanges }) => {
+const Popup = ({ selectedUser, setSelectedUser, closePopup, saveChanges }) => {
   return (
     <div className={styles.popup}>
       <div className={styles.popupContent}>
@@ -180,6 +180,7 @@ const UsersC = () => {
       {isPopupOpen && selectedUser && (
         <Popup
           selectedUser={selectedUser}
+          setSelectedUser={setSelectedUser} // Pass the setSelectedUser function
           closePopup={closePopup}
           saveChanges={saveChanges}
         />
