@@ -15,16 +15,13 @@ const Map = ({ latitude, longitude }) => {
       center={[latitude, longitude]}
       zoom={8}
       scrollWheelZoom={false}
-      style={{ height: 850, width: 500 }}
+      style={{ height: 510, width: 500 }}
     >
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <Marker className="pin" position={[latitude, longitude]} icon={customIcon}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
       </Marker>
     </MapContainer>
   );

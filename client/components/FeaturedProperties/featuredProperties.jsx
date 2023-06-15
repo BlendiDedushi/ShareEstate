@@ -37,7 +37,10 @@ const FeaturedProperties = ({ data }) => {
       {data?.map((estate) => (
         <Link href={`/estate/${estate._id}`} key={estate.id}>
           <Card className={styles.fpItem}>
-            <img src={`http://localhost:8900/uploads/${estate.photos[0]}`} alt="" className={styles.fpImg} />
+            <img 
+            // src={`http://localhost:8900/uploads/${estate.photos[0]}`}
+            src={`${estate.photos[0]}`}
+             alt="" className={styles.fpImg} />
             <CardContent>
               <Typography variant="subtitle1" className={styles.fpName}>
                 {estate.name}

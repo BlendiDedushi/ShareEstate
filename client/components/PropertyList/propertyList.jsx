@@ -77,7 +77,8 @@ const PropertyList = ({ data }) => {
               <Link key={estate?._id} href={`/estate/${estate?._id}`}>
                 <Card className={styles.fpItem}>
                   <img
-                    src={`http://localhost:8900/uploads/${estate.photos[0]}`}
+                    // src={`http://localhost:8900/uploads/${estate.photos[0]}`}
+                    src={`${estate.photos[0]}`}
                     alt=""
                     className={styles.fpImg}
                   />

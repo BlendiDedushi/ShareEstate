@@ -91,18 +91,13 @@ export const getAddress = async (req, res, next) => {
 
 export const sendEmail = async (req, res, next) => {
   const { estateId } = req.params;
-  const { subject, message } = req.body;
+  const { message } = req.body;
+  const receiverEmail = 'blendi.dedushaj1@gmail.com';
 
   try {
-
     const estate = await Estate.findById(estateId);
     if (!estate) {
       return res.status(404).json({ success: false, message: 'Estate not found.' });
-    }
-
-    const agent = await User.findOne({ where: { id: estate.createdBy } });
-    if (!agent) {
-      return res.status(404).json({ success: false, message: 'Agent not found.' });
     }
 
     const transporter = nodemailer.createTransport({
@@ -118,9 +113,9 @@ export const sendEmail = async (req, res, next) => {
 
     const mailOptions = {
       from: req.user.email,
-      to: agent.email,
-      subject: subject,
-      text: message,
+      to: receiverEmail,
+      subject: `${estate.name}-${estate.city}`,
+      text: `${message}\n\n--------------------------\nFrom: ${req.user.email}`,
     };
 
     await transporter.sendMail(mailOptions);
@@ -130,6 +125,7 @@ export const sendEmail = async (req, res, next) => {
     next(error);
   }
 };
+
 
 
 export const sendMessage = async (req, res, next) => {
