@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import styles from "../../pages/style/users.module.css";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 
 const DeleteConfirmationPopup = ({ closePopup, confirmDelete }) => {
   return (
@@ -53,6 +53,26 @@ const Popup = ({ selectedUser, setSelectedUser, closePopup, saveChanges }) => {
             }
           />
         </div>
+        <div>
+          <label>Lat:</label>
+          <input
+            type="number"
+            value={selectedUser.latitude}
+            onChange={(e) =>
+              setSelectedUser({ ...selectedUser, latitude: parseFloat(e.target.value) })
+            }
+          />
+        </div>
+        <div>
+          <label>Long:</label>
+          <input
+            type="number"
+            value={selectedUser.longitude}
+            onChange={(e) =>
+              setSelectedUser({ ...selectedUser, longitude: parseFloat(e.target.value) })
+            }
+          />
+        </div>
         <div className={styles.popupButtons}>
           <button onClick={saveChanges}>Save</button>
           <button onClick={closePopup}>Cancel</button>
@@ -64,25 +84,40 @@ const Popup = ({ selectedUser, setSelectedUser, closePopup, saveChanges }) => {
 
 const UsersC = () => {
   const [users, setUsers] = useState([]);
-  const [cookies] = useCookies(['token']);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [cookies] = useCookies(["token"]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [filterRole, setFilterRole] = useState("");
+  const [searchUsername, setSearchUsername] = useState("");
+  const [sortBy, setSortBy] = useState("asc");
 
   useEffect(() => {
     getUsers();
   }, []);
 
+  useEffect(() => {
+    applyFilters();
+    setFilteredUsers(prevFilteredUsers => {
+      const sortedUsers = [...prevFilteredUsers];
+      sortedUsers.sort((a, b) => a.username.localeCompare(b.username));
+      return sortedUsers;
+    });
+  
+    setSortBy("asc");
+  }, [users, filterRole, searchUsername]);
+
   const getUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:8900/api/users', {
+      const response = await axios.get("http://localhost:8900/api/users", {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
       });
       setUsers(response.data);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
@@ -106,13 +141,16 @@ const UsersC = () => {
         },
       });
 
-      setUsers((prevUsers) => prevUsers.filter((user) => user.id !== selectedUser.id));
+      setUsers((prevUsers) =>
+        prevUsers.filter((user) => user.id !== selectedUser.id)
+      );
 
       closeDeletePopup();
 
-      console.log('User deleted successfully.');
+      console.log("User deleted successfully.");
+      window.location.reload();
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
@@ -134,40 +172,115 @@ const UsersC = () => {
 
   const saveChanges = async () => {
     try {
-      await axios.put(`http://localhost:8900/api/users/${selectedUser.id}`, selectedUser, {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
+      await axios.put(
+        `http://localhost:8900/api/users/${selectedUser.id}`,
+        selectedUser,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
 
       setUsers((prevUsers) =>
-        prevUsers.map((user) => (user.id === selectedUser.id ? selectedUser : user))
+        prevUsers.map((user) =>
+          user.id === selectedUser.id ? selectedUser : user
+        )
       );
 
       closePopup();
 
-      console.log('User updated successfully.');
+      console.log("User updated successfully.");
+      window.location.reload();
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
+  };
+
+  const applyFilters = () => {
+    let filteredUsers = users;
+
+    if (filterRole !== "") {
+      filteredUsers = filteredUsers.filter((user) => user.role === filterRole);
+    }
+
+    if (searchUsername !== "") {
+      filteredUsers = filteredUsers.filter((user) =>
+        user.username.toLowerCase().includes(searchUsername.toLowerCase())
+      );
+    }
+
+    setFilteredUsers(filteredUsers);
+  };
+
+  const toggleSortOrder = () => {
+    setFilteredUsers((prevFilteredUsers) => {
+      const sortedUsers = [...prevFilteredUsers];
+      if (sortBy === "asc") {
+        sortedUsers.sort((a, b) => b.username.localeCompare(a.username));
+      } else if (sortBy === "desc") {
+        sortedUsers.sort((a, b) => a.username.localeCompare(b.username));
+      }
+      return sortedUsers;
+    });
+
+    setSortBy((prevSortBy) => (prevSortBy === "asc" ? "desc" : "asc"));
   };
 
   return (
     <div>
-      {users.map((user) => (
+      <div className={styles.filtr}>
+        <button onClick={toggleSortOrder}>
+          Sort: ({sortBy === "desc" ? "A-Z" : "Z-A"})
+        </button>
+        <div>
+          <label>Search by username: </label>
+          <input
+            type="text"
+            value={searchUsername}
+            onChange={(e) => setSearchUsername(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Filter by role: </label>
+          <select
+            value={filterRole}
+            onChange={(e) => setFilterRole(e.target.value)}
+          >
+            <option value="">All Roles</option>
+            <option value="admin">Admin</option>
+            <option value="agent">Agent</option>
+            <option value="user">User</option>
+          </select>
+        </div>
+      </div>
+
+      {filteredUsers.map((user) => (
         <div key={user.id} className={styles.userss}>
           <div className={styles.userD}>
             <span>
-              Username:
-              <span><b>{user.username}</b></span>
+              Username: <b>{user.username}</b>
             </span>
             <span>
-              Email:
-              <span><b>{user.email}</b></span>
-            </span>
+            Email: <b>{user.email}</b>
+          </span>
             <span>
               Role:
-              <span><b>{user.role}</b></span>
+              <span>
+                <b>{user.role}</b>
+              </span>
+            </span>
+            <span>
+              Lat: 
+              <span>
+                <b>{user.latitude}</b>
+              </span>
+            </span>
+            <span>
+              Long: 
+              <span>
+                <b>{user.longitude}</b>
+              </span>
             </span>
           </div>
           <div className={styles.userbtnn}>
@@ -177,16 +290,16 @@ const UsersC = () => {
         </div>
       ))}
 
-      {isPopupOpen && selectedUser && (
+      {isPopupOpen && (
         <Popup
           selectedUser={selectedUser}
-          setSelectedUser={setSelectedUser} // Pass the setSelectedUser function
+          setSelectedUser={setSelectedUser}
           closePopup={closePopup}
           saveChanges={saveChanges}
         />
       )}
 
-      {isDeletePopupOpen && selectedUser && (
+      {isDeletePopupOpen && (
         <DeleteConfirmationPopup
           closePopup={closeDeletePopup}
           confirmDelete={confirmDelete}

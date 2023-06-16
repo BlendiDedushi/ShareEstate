@@ -16,7 +16,6 @@ import { useCookies } from "react-cookie";
 import { useRouter } from "next/router";
 
 const Map = dynamic(() => import("components/Map/map"), {
-  loading: () => <p>loading...</p>,
   ssr: false,
 });
 
@@ -54,15 +53,57 @@ const Hotel = ({ estate }) => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
   const [cookie] = useCookies(["token"]);
+  const [cookies] = useCookies(["token"]);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [distance, setDistance] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [loggedInUserId, setLoggedInUserId] = useState(null);
+
+  useEffect(() => {
+    const fetchLoggedInUser = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8900/api/users/${loggedInUserId}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+            },
+          }
+        );
+        setSelectedUser(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (loggedInUserId) {
+      fetchLoggedInUser();
+    }
+  }, [loggedInUserId, cookies.token]);
+
+  useEffect(() => {
+    const fetchLoggedInUserId = async () => {
+      try {
+        const response = await axios.get("http://localhost:8900/api/users/me", {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        });
+        setLoggedInUserId(response.data.id);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchLoggedInUserId();
+  }, [cookies.token]);
 
   useEffect(() => {
     const fetchPrishtinaCoordinates = async () => {
       try {
-        calculateDistance(42.6629138, 21.1655028);
+        calculateDistance(selectedUser.latitude, selectedUser.longitude);
       } catch (error) {
         console.log("Error calculating distance:", error);
       }
@@ -70,12 +111,12 @@ const Hotel = ({ estate }) => {
     fetchPrishtinaCoordinates();
   }, []);
 
-  const calculateDistance = (prishtinaLat, prishtinaLon) => {
+  const calculateDistance = (uLat, uLon) => {
     const radianFactor = Math.PI / 180;
     const earthRadiusKm = 6371.071; // Radius of the Earth in kilometers
 
-    const lat1 = prishtinaLat * radianFactor;
-    const lon1 = prishtinaLon * radianFactor;
+    const lat1 = uLat * radianFactor;
+    const lon1 = uLon * radianFactor;
     const lat2 = estate.latitude * radianFactor;
     const lon2 = estate.longitude * radianFactor;
 
@@ -132,8 +173,8 @@ const Hotel = ({ estate }) => {
 
   const handleSubmitEmail = async (e) => {
     e.preventDefault();
-    setErrorMessage('');
-    setSuccessMessage('');
+    setErrorMessage("");
+    setSuccessMessage("");
 
     try {
       const response = await axios.post(
@@ -147,20 +188,20 @@ const Hotel = ({ estate }) => {
       );
 
       setSuccessMessage(response.data.message);
-      setMessage('');
+      setMessage("");
 
       setTimeout(() => {
-        setSuccessMessage('');
+        setSuccessMessage("");
       }, 5000);
     } catch (error) {
       if (error.response) {
         setErrorMessage(error.response.data.message);
       } else {
-        setErrorMessage('Something went wrong while sending the message.');
+        setErrorMessage("Something went wrong while sending the message.");
       }
 
       setTimeout(() => {
-        setErrorMessage('');
+        setErrorMessage("");
       }, 5000);
     }
   };
@@ -320,10 +361,11 @@ const Hotel = ({ estate }) => {
           <div className={styles.hotelAddress}>
             <FontAwesomeIcon icon={faLocationDot} />
             <span>
-              {estate.city} <br />
-              {distance !== null
-                ? `•Distance from Prishtina to ${estate.city} – ${distance}km`
-                : ""}
+              {estate.city}
+              <br />
+              {distance !== null &&
+                <span>•Distance from your destination to {estate.city}–{" "}{distance}km</span>
+              }
             </span>
             <form
               className="max-w-md mx-auto p-4 shadow-md bg-white rounded-lg mt-5"
@@ -344,10 +386,12 @@ const Hotel = ({ estate }) => {
                   onChange={handleChangeMessage}
                   required
                 />
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
+                {errorMessage && (
+                  <p className="error-message">{errorMessage}</p>
+                )}
                 {successMessage && (
-              <p className="success-message">{successMessage}</p>
-            )}
+                  <p className="success-message">{successMessage}</p>
+                )}
               </div>
               <div className="flex justify-center">
                 <button

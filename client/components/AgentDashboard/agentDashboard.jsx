@@ -9,7 +9,7 @@ import { useCookies } from "react-cookie";
 import UsersC from "@/pages/users/users";
 import MyProfile from "@/pages/users/myProf";
 
-const AgentDashboard = () => {
+const AgentDashboard = ({ data }) => {
   const [selectedEstate, setSelectedEstate] = useState(null);
   const [selectedEstateField, setSelectedEstateField] = useState(null);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -57,8 +57,7 @@ const AgentDashboard = () => {
     try {
       const response = await axios.get("http://localhost:8900/api/estates");
       setEstateData(response.data);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -124,8 +123,7 @@ const AgentDashboard = () => {
       await updateEstate(estateId, updatedEstate);
       setSelectedEstate(null);
       setSelectedEstateField(null);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const setEstateToUpdateField = (fieldName) => {
@@ -151,7 +149,7 @@ const AgentDashboard = () => {
       );
       setEstateData([...estateData, response.data]);
       setShowSuccessPopup(true);
-      setShowErrorPopup(false); 
+      setShowErrorPopup(false);
       clearForm();
     } catch (error) {
       console.error("Error creating estate:", error);
@@ -184,20 +182,14 @@ const AgentDashboard = () => {
         updatedEstateData[updatedEstateIndex] = updatedEstate;
         setEstateData(updatedEstateData);
       }
-      
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const deleteEstate = async (estateId) => {
     try {
       await axios.delete(`http://localhost:8900/api/estates/${estateId}`);
       setEstateData(estateData.filter((estate) => estate._id !== estateId));
-      
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const showDeleteConfirmation = (estate) => {
@@ -220,7 +212,6 @@ const AgentDashboard = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    
     const nameArray = name.split(".");
     if (nameArray.length === 1) {
       setFormData({ ...formData, [name]: value });
@@ -276,6 +267,29 @@ const AgentDashboard = () => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+
+  const [search, setSearch] = useState();
+  const [price, setPrice] = useState();
+
+  const handleSearch = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8900/api/estates`, {
+        params: {
+          search: search,
+          price: price,
+        },
+      });
+      setEstateData(response.data);
+    } catch (error) {
+      // Handle the error
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, [price, search]);
+
   const renderContent = () => {
     if (selectedUser.role === "admin") {
       switch (activeTab) {
@@ -542,110 +556,205 @@ const AgentDashboard = () => {
               </form>
             </div>
           );
-        case "DeleteEstate":
-          return (
-            <div className={styles.properties}>
-              {estateData?.map((estate) => (
-                <div key={estate.id} className={styles.fpItemD}>
-                  <img src={estate.photos[0]} alt="" className={styles.fpImg} />
-                  <span className={styles.fpName}>{estate.name}</span>
-                  <span className={styles.fpCity}>{estate.city}</span>
-                  <span className={styles.fpPrice}>
-                    Starting from ${estate.cheapestPrice}
-                  </span>
-                  <div className={styles.fpRatingg}>
-                    <button onClick={() => showDeleteConfirmation(estate)}>
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
-              {showDeletePopup && (
-                <DeleteConfirmationPopup
-                  estateName={estateToDelete?.name}
-                  onCancel={hideDeleteConfirmation}
-                  onConfirm={confirmDeleteEstate}
-                />
-              )}
-            </div>
-          );
         case "UpdateEstate":
           return (
-            <div className={styles.properties}>
-              {estateData.map((estate) => {
-                const isUpdating = selectedEstate === estate._id;
-                return (
-                  <div key={estate._id} className={styles.fpItem}>
+            <div>
+              <div className={`${styles.formGroup} mb-[20px] mx-[25px]`}>
+                <div className={"flex gap-[20px]"}>
+                  <div className="flex flex-col justify-center">
+                    <label htmlFor="price" className="mb-[5px] text-[16px]">
+                      Select a price:
+                    </label>
+                    <select
+                      id="price"
+                      className="px-4 py-2 border border-gray-300 rounded-[10px] focus:outline-none w-[200px]"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                    >
+                      <option value="">Price</option>
+                      <option value="200">200€</option>
+                      <option value="500">500€</option>
+                      <option value="1000">1000€</option>
+                    </select>
+                  </div>
+                  <div className="flex flex-col justify-center">
+                    <label htmlFor="search" className="mb-[5px] text-[16px]">
+                      Search:
+                    </label>
+                    <input
+                      type={"search"}
+                      id="search"
+                      placeholder={"Search..."}
+                      className="px-4 py-2 border border-gray-300 rounded-[10px] focus:outline-none w-[200px]"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className={styles.properties}>
+                {estateData
+                  .filter(
+                    (estate) =>
+                      estate.createdBy.toString() === selectedUser.id.toString()
+                  )
+                  .map((estate) => {
+                    const isUpdating = selectedEstate === estate._id;
+                    return (
+                      <div key={estate._id} className={styles.fpItem}>
+                        <img
+                          src={estate.photos[0]}
+                          alt=""
+                          className={styles.fpImg}
+                        />
+                        <span
+                          className={styles.fpName}
+                          onClick={() => setEstateToUpdateField("name")}
+                        >
+                          {isUpdating && selectedEstateField === "name" ? (
+                            <input
+                              type="text"
+                              value={estate.name}
+                              onChange={(e) =>
+                                handleInputChangeee(e, estate._id, "name")
+                              }
+                              onBlur={() => setEstateToUpdate(null)}
+                            />
+                          ) : (
+                            estate.name
+                          )}
+                        </span>
+                        <span
+                          className={styles.fpCity}
+                          onClick={() => setEstateToUpdateField("city")}
+                        >
+                          {isUpdating && selectedEstateField === "city" ? (
+                            <input
+                              type="text"
+                              value={estate.city}
+                              onChange={(e) =>
+                                handleInputChangeee(e, estate._id, "city")
+                              }
+                              onBlur={() => setEstateToUpdate(null)}
+                            />
+                          ) : (
+                            estate.city
+                          )}
+                        </span>
+                        <span
+                          className={styles.fpPrice}
+                          onClick={() =>
+                            setEstateToUpdateField("cheapestPrice")
+                          }
+                        >
+                          {isUpdating &&
+                          selectedEstateField === "cheapestPrice" ? (
+                            <input
+                              type="number"
+                              value={estate.cheapestPrice}
+                              onChange={(e) =>
+                                handleInputChangeee(
+                                  e,
+                                  estate._id,
+                                  "cheapestPrice"
+                                )
+                              }
+                              onBlur={() => setEstateToUpdate(null)}
+                            />
+                          ) : (
+                            `Starting from $${estate.cheapestPrice}`
+                          )}
+                        </span>
+                        <div className={styles.fpRating}>
+                          {isUpdating ? (
+                            <button
+                              onClick={() => handleUpdateSubmit(estate._id)}
+                            >
+                              Save
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => setEstateToUpdate(estate._id)}
+                            >
+                              Update
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+          );
+        case "DeleteEstate":
+          return (
+            <div>
+              <div className={`${styles.formGroup} mb-[20px] mx-[25px]`}>
+                <div className={"flex gap-[20px]"}>
+                  <div className="flex flex-col justify-center">
+                    <label htmlFor="price" className="mb-[5px] text-[16px]">
+                      Select a price:
+                    </label>
+                    <select
+                      id="price"
+                      className="px-4 py-2 border border-gray-300 rounded-[10px] focus:outline-none w-[200px]"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                    >
+                      <option value="">Price</option>
+                      <option value="200">200€</option>
+                      <option value="500">500€</option>
+                      <option value="1000">1000€</option>
+                    </select>
+                  </div>
+                  <div className="flex flex-col justify-center">
+                    <label htmlFor="search" className="mb-[5px] text-[16px]">
+                      Search:
+                    </label>
+                    <input
+                      type={"search"}
+                      id="search"
+                      placeholder={"Search..."}
+                      className="px-4 py-2 border border-gray-300 rounded-[10px] focus:outline-none w-[200px]"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className={styles.properties}>
+              {estateData
+                  .filter(
+                    (estate) =>
+                      estate.createdBy.toString() === selectedUser.id.toString()
+                  )
+                  .map((estate) => (
+                  <div key={estate.id} className={styles.fpItemD}>
                     <img
                       src={estate.photos[0]}
                       alt=""
                       className={styles.fpImg}
                     />
-                    <span
-                      className={styles.fpName}
-                      onClick={() => setEstateToUpdateField("name")}
-                    >
-                      {isUpdating && selectedEstateField === "name" ? (
-                        <input
-                          type="text"
-                          value={estate.name}
-                          onChange={(e) =>
-                            handleInputChangeee(e, estate._id, "name")
-                          }
-                          onBlur={() => setEstateToUpdate(null)}
-                        />
-                      ) : (
-                        estate.name
-                      )}
+                    <span className={styles.fpName}>{estate.name}</span>
+                    <span className={styles.fpCity}>{estate.city}</span>
+                    <span className={styles.fpPrice}>
+                      Starting from ${estate.cheapestPrice}
                     </span>
-                    <span
-                      className={styles.fpCity}
-                      onClick={() => setEstateToUpdateField("city")}
-                    >
-                      {isUpdating && selectedEstateField === "city" ? (
-                        <input
-                          type="text"
-                          value={estate.city}
-                          onChange={(e) =>
-                            handleInputChangeee(e, estate._id, "city")
-                          }
-                          onBlur={() => setEstateToUpdate(null)}
-                        />
-                      ) : (
-                        estate.city
-                      )}
-                    </span>
-                    <span
-                      className={styles.fpPrice}
-                      onClick={() => setEstateToUpdateField("cheapestPrice")}
-                    >
-                      {isUpdating && selectedEstateField === "cheapestPrice" ? (
-                        <input
-                          type="number"
-                          value={estate.cheapestPrice}
-                          onChange={(e) =>
-                            handleInputChangeee(e, estate._id, "cheapestPrice")
-                          }
-                          onBlur={() => setEstateToUpdate(null)}
-                        />
-                      ) : (
-                        `Starting from $${estate.cheapestPrice}`
-                      )}
-                    </span>
-                    <div className={styles.fpRating}>
-                      {isUpdating ? (
-                        <button onClick={() => handleUpdateSubmit(estate._id)}>
-                          Save
-                        </button>
-                      ) : (
-                        <button onClick={() => setEstateToUpdate(estate._id)}>
-                          Update
-                        </button>
-                      )}
+                    <div className={styles.fpRatingg}>
+                      <button onClick={() => showDeleteConfirmation(estate)}>
+                        Delete
+                      </button>
                     </div>
                   </div>
-                );
-              })}
+                ))}
+                {showDeletePopup && (
+                  <DeleteConfirmationPopup
+                    estateName={estateToDelete?.name}
+                    onCancel={hideDeleteConfirmation}
+                    onConfirm={confirmDeleteEstate}
+                  />
+                )}
+              </div>
             </div>
           );
         default:
@@ -668,74 +777,73 @@ const AgentDashboard = () => {
     <div>
       <div className={styles.dash}>
         <div className={styles.left}>
-        <ul>
-          <li
-            className={activeTab === "MyProfile" ? styles.active : ""}
-            onClick={() => handleTabClick("MyProfile")}
-            role="button"
-          >
-            My Profile
-            <img
-              src="https://cdn-icons-png.flaticon.com/128/2102/2102647.png"
-              alt="Profile"
-            />
-          </li>
-          {selectedUser.role === "admin" && (
+          <ul>
             <li
-              className={activeTab === "Users" ? styles.active : ""}
-              onClick={() => handleTabClick("Users")}
+              className={activeTab === "MyProfile" ? styles.active : ""}
+              onClick={() => handleTabClick("MyProfile")}
               role="button"
             >
-              Users
+              My Profile
               <img
-                src="https://cdn-icons-png.flaticon.com/128/694/694642.png"
-                alt="Users"
+                src="https://cdn-icons-png.flaticon.com/128/2102/2102647.png"
+                alt="Profile"
               />
             </li>
-          )}
-          {selectedUser.role === "agent" && (
-            <>
+            {selectedUser.role === "admin" && (
               <li
-                className={activeTab === "CreateEstate" ? styles.active : ""}
-                onClick={() => handleTabClick("CreateEstate")}
+                className={activeTab === "Users" ? styles.active : ""}
+                onClick={() => handleTabClick("Users")}
                 role="button"
               >
-                Create Estate
+                Users
                 <img
-                  src="https://cdn-icons-png.flaticon.com/128/10015/10015412.png"
-                  alt="Create"
+                  src="https://cdn-icons-png.flaticon.com/128/694/694642.png"
+                  alt="Users"
                 />
               </li>
-              <li
-                className={activeTab === "DeleteEstate" ? styles.activeD : ""}
-                onClick={() => handleTabClick("DeleteEstate")}
-                role="button"
-              >
-                Delete Estate
-                <img
-                  src="https://cdn-icons-png.flaticon.com/128/484/484662.png"
-                  alt="Delete"
-                />
-              </li>
-              <li
-                className={activeTab === "UpdateEstate" ? styles.activeU : ""}
-                onClick={() => handleTabClick("UpdateEstate")}
-                role="button"
-              >
-                Update Estate
-                <img
-                  src="https://cdn-icons-png.flaticon.com/128/875/875100.png"
-                  alt="Update"
-                />
-              </li>
-            </>
-          )}
-        </ul>
+            )}
+            {selectedUser.role === "agent" && (
+              <>
+                <li
+                  className={activeTab === "CreateEstate" ? styles.active : ""}
+                  onClick={() => handleTabClick("CreateEstate")}
+                  role="button"
+                >
+                  Create Estate
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/128/10015/10015412.png"
+                    alt="Create"
+                  />
+                </li>
+                <li
+                  className={activeTab === "UpdateEstate" ? styles.activeU : ""}
+                  onClick={() => handleTabClick("UpdateEstate")}
+                  role="button"
+                >
+                  Update Estate
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/128/875/875100.png"
+                    alt="Update"
+                  />
+                </li>
+                <li
+                  className={activeTab === "DeleteEstate" ? styles.activeD : ""}
+                  onClick={() => handleTabClick("DeleteEstate")}
+                  role="button"
+                >
+                  Delete Estate
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/128/484/484662.png"
+                    alt="Delete"
+                  />
+                </li>
+              </>
+            )}
+          </ul>
         </div>
         <div className={styles.right}>{renderContent()}</div>
         {showSuccessPopup && <SuccessPopup onClose={handleSuccessPopupClose} />}
-
-        {/* {showErrorPopup && <ErrorPopup onClose={handleErrorPopupClose} />} */}
+        {showErrorPopup && <ErrorPopup onClose={handleErrorPopupClose} />}
       </div>
     </div>
   );

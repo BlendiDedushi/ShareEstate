@@ -1,3 +1,15 @@
+.filtr{
+  display: flex;
+  justify-content: space-around;
+}
+.filtr div, .filtr button{
+  border: 1px solid black;
+  padding: 8px;
+  border-radius: 10px;
+}
+.filtr div>input{
+  border: 1px solid black;
+}
 .userbtn {
   margin-left: 10px;
   padding: 8px 16px;

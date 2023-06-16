@@ -1,11 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../pages/style/myProf.module.css";
 import axios from "axios";
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 import { useCookies } from "react-cookie";
+import { LoadingScreen } from "@/components/Load/LoadingScreen";
 
-
-const Popup = ({ selectedUser, closePopup, saveChanges, setSelectedUser, errorMessage }) => {
+const Popup = ({
+  selectedUser,
+  closePopup,
+  saveChanges,
+  setSelectedUser,
+  errorMessage,
+}) => {
   return (
     <div className={styles.popup}>
       <div className={styles.popupContent}>
@@ -16,7 +22,9 @@ const Popup = ({ selectedUser, closePopup, saveChanges, setSelectedUser, errorMe
           <input
             type="text"
             value={selectedUser.username}
-            onChange={(e) => setSelectedUser({ ...selectedUser, username: e.target.value })}
+            onChange={(e) =>
+              setSelectedUser({ ...selectedUser, username: e.target.value })
+            }
           />
         </div>
         <div>
@@ -24,7 +32,9 @@ const Popup = ({ selectedUser, closePopup, saveChanges, setSelectedUser, errorMe
           <input
             type="text"
             value={selectedUser.email}
-            onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })}
+            onChange={(e) =>
+              setSelectedUser({ ...selectedUser, email: e.target.value })
+            }
           />
         </div>
         <div>
@@ -32,7 +42,29 @@ const Popup = ({ selectedUser, closePopup, saveChanges, setSelectedUser, errorMe
           <input
             type="password"
             value={selectedUser.password}
-            onChange={(e) => setSelectedUser({ ...selectedUser, password: e.target.value })}
+            onChange={(e) =>
+              setSelectedUser({ ...selectedUser, password: e.target.value })
+            }
+          />
+        </div>
+        <div>
+          <label>Lat:</label>
+          <input
+            type="number"
+            value={selectedUser.latitude}
+            onChange={(e) =>
+              setSelectedUser({ ...selectedUser, latitude: parseFloat(e.target.value) })
+            }
+          />
+        </div>
+        <div>
+          <label>Long:</label>
+          <input
+            type="number"
+            value={selectedUser.longitude}
+            onChange={(e) =>
+              setSelectedUser({ ...selectedUser, longitude: parseFloat(e.target.value) })
+            }
           />
         </div>
         <div className={styles.popupButtons}>
@@ -44,23 +76,24 @@ const Popup = ({ selectedUser, closePopup, saveChanges, setSelectedUser, errorMe
   );
 };
 
-
-
 const MyProfile = () => {
   const [loggedInUserId, setLoggedInUserId] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [cookies] = useCookies(["token"]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("")
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const fetchLoggedInUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:8900/api/users/${loggedInUserId}/`, {
-          headers: {
-            Authorization: `Bearer ${cookies.token}`,
-          },
-        });
+        const response = await axios.get(
+          `http://localhost:8900/api/users/${loggedInUserId}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookies.token}`,
+            },
+          }
+        );
         setSelectedUser(response.data);
       } catch (error) {
         console.error(error);
@@ -73,7 +106,6 @@ const MyProfile = () => {
   }, [loggedInUserId, cookies.token]);
 
   useEffect(() => {
-    // Fetch the logged-in user's ID
     const fetchLoggedInUserId = async () => {
       try {
         const response = await axios.get("http://localhost:8900/api/users/me", {
@@ -86,7 +118,7 @@ const MyProfile = () => {
         console.error(error);
       }
     };
-  
+
     fetchLoggedInUserId();
   }, [cookies.token]);
 
@@ -104,56 +136,58 @@ const MyProfile = () => {
         setErrorMessage("Please enter a username.");
         return;
       }
-  
+
       if (!selectedUser.email) {
         setErrorMessage("Please enter an email.");
         return;
       }
-  
+
       if (!selectedUser.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
         setErrorMessage("Please enter a valid email.");
         return;
       }
-  
+
       if (!selectedUser.password) {
         setErrorMessage("Please enter a password.");
         return;
       }
-  
+
       if (selectedUser.password.length < 5) {
         setErrorMessage("Password should be at least 5 characters long.");
         return;
       }
-  
+
       if (!/[A-Z]/.test(selectedUser.password)) {
         setErrorMessage("Password should contain at least 1 uppercase letter.");
         return;
       }
-  
+
       if (!/[!@#$%^&*]/.test(selectedUser.password)) {
         setErrorMessage("Password should contain at least 1 symbol.");
         return;
       }
-  
-      // Hash the new password if it exists
       let hashedPassword = null;
       if (selectedUser.password) {
         hashedPassword = await bcrypt.hash(selectedUser.password, 10);
       }
-  
-      // Create a new object with the updated fields
       const updatedUser = {
         username: selectedUser.username,
         email: selectedUser.email,
         password: hashedPassword,
+        latitude: selectedUser.latitude,
+        longitude: selectedUser.longitude,
       };
-  
-      await axios.put(`http://localhost:8900/api/users/${loggedInUserId}`, updatedUser, {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      });
-  
+
+      await axios.put(
+        `http://localhost:8900/api/users/${loggedInUserId}`,
+        updatedUser,
+        {
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
+        }
+      );
+
       closePopup();
       window.location.reload();
     } catch (error) {
@@ -162,13 +196,20 @@ const MyProfile = () => {
   };
 
   if (!selectedUser) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingScreen />
+      </div>
+    );
   }
 
   return (
     <div>
       <div className={styles.userss}>
         <div className={styles.userD}>
+          <span>
+            ID: <b>{selectedUser.id}</b>
+          </span>
           <span>
             Username: <b>{selectedUser.username}</b>
           </span>
@@ -179,7 +220,13 @@ const MyProfile = () => {
             Role: <b>{selectedUser.role}</b>
           </span>
           <span>
-          stripeCustomerId: <b>{selectedUser.stripeCustomerId}</b>
+            stripeCustomerId: <b>{selectedUser.stripeCustomerId}</b>
+          </span>
+          <span>
+            Lat: <b>{selectedUser.latitude}</b>
+          </span>
+          <span>
+            Long: <b>{selectedUser.longitude}</b>
           </span>
         </div>
         <div className={styles.userbtnn}>

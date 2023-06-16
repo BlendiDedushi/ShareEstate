@@ -92,9 +92,9 @@ const Login = () => {
           Password
         </label>
       </div>
-      <Link href="/forget-password" className="mt-[10px] text-[14px] text-[#135de3] underline">
+      {/* <Link href="/forget-password" className="mt-[10px] text-[14px] text-[#135de3] underline">
         Forget password?
-      </Link>
+      </Link> */}
 
       <button className={styles.loginButton} onClick={handleLogin}>
         Login

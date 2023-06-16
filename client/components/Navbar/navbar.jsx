@@ -1,26 +1,31 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import styles from "./navbar.module.css";
 import Link from "next/link";
 import Image from "next/image";
-import {useCookies} from "react-cookie";
+import { useCookies } from "react-cookie";
 import { useRouter } from "next/router";
-
+import { LoadingScreen } from "../Load/LoadingScreen";
 
 const Navbar = () => {
-  const [cookie, setCookie, removeCookie] = useCookies(['token']);
+  const [cookie, setCookie, removeCookie] = useCookies(["token"]);
   const [token, setToken] = useState(false);
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (cookie.token) {
       setToken(true);
     }
-  },[])
+  }, []);
 
   const logout = () => {
-    removeCookie('token');
+    removeCookie("token");
     setToken(false);
     router.push("/");
+  };
+
+  const handleClick = () => {
+    setIsLoading(true);
   };
 
   return (
@@ -28,24 +33,41 @@ const Navbar = () => {
       <div className={styles.navContainer}>
         <Link href={"/"}>
           <div className="flex items-center gap-x-[20px]">
-            <Image alt={'logo'} src="/images/case-logo.svg" width={60} height={60} />
+            <Image
+              alt={"logo"}
+              src="/images/case-logo.svg"
+              width={60}
+              height={60}
+            />
             <span className="text-[20px] font-semibold text-[#333333]">
               ShareEstate
             </span>
           </div>
         </Link>
         <div>
-          <Link href="/allEstates">
-            <button className={styles.navButton}>AllEstates</button>
-          </Link>
-          <Link href="/eByCity">
-            <button className={styles.navButton}>EstatesByCity</button>
-          </Link>
-          <Link href="/contactF">
-            <button className={styles.navButton}>Contact Us!</button>
-          </Link>
+          {isLoading ? (
+            <LoadingScreen />
+          ) : (
+            <div>
+              <Link href="/allEstates">
+                <button className={styles.navButton} onClick={handleClick}>
+                  AllEstates
+                </button>
+              </Link>
+              <Link href="/eByCity">
+                <button className={styles.navButton} onClick={handleClick}>
+                  EstatesByCity
+                </button>
+              </Link>
+              <Link href="/contactF">
+                <button className={styles.navButton} onClick={handleClick}>
+                  Contact Us!
+                </button>
+              </Link>
+            </div>
+          )}
         </div>
-        {!token &&
+        {!token && (
           <div className={styles.navItems}>
             <Link href={"/registration"}>
               <button className={styles.navButton}>Register</button>
@@ -54,18 +76,18 @@ const Navbar = () => {
               <button className={styles.navButton}>Login</button>
             </Link>
           </div>
-        }
+        )}
       </div>
-      {token &&
-      <div>
-        <Link href={"/AgentDashboard"}>
-              <button className={styles.navButton}>MyProfile</button>
-        </Link>
-        <button className={styles.navButton} onClick={logout}>
+      {token && (
+        <div>
+          <Link href={"/AgentDashboard"}>
+            <button className={styles.navButton}>MyProfile</button>
+          </Link>
+          <button className={styles.navButton} onClick={logout}>
             Logout
-        </button>
-      </div>
-      }
+          </button>
+        </div>
+      )}
     </div>
   );
 };
