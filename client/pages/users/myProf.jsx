@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../pages/style/myProf.module.css";
 import axios from "axios";
+import bcrypt from 'bcryptjs';
 import { useCookies } from "react-cookie";
 
 
-const Popup = ({ selectedUser, closePopup, saveChanges, setSelectedUser }) => {
+const Popup = ({ selectedUser, closePopup, saveChanges, setSelectedUser, errorMessage }) => {
   return (
     <div className={styles.popup}>
       <div className={styles.popupContent}>
         <h2>Edit User</h2>
+        {errorMessage && <p className={styles.error}>{errorMessage}</p>}
         <div>
           <label>Username:</label>
           <input
@@ -25,6 +27,14 @@ const Popup = ({ selectedUser, closePopup, saveChanges, setSelectedUser }) => {
             onChange={(e) => setSelectedUser({ ...selectedUser, email: e.target.value })}
           />
         </div>
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={selectedUser.password}
+            onChange={(e) => setSelectedUser({ ...selectedUser, password: e.target.value })}
+          />
+        </div>
         <div className={styles.popupButtons}>
           <button onClick={saveChanges}>Save</button>
           <button onClick={closePopup}>Cancel</button>
@@ -34,11 +44,14 @@ const Popup = ({ selectedUser, closePopup, saveChanges, setSelectedUser }) => {
   );
 };
 
+
+
 const MyProfile = () => {
   const [loggedInUserId, setLoggedInUserId] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [cookies] = useCookies(["token"]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("")
 
   useEffect(() => {
     const fetchLoggedInUser = async () => {
@@ -87,15 +100,62 @@ const MyProfile = () => {
 
   const saveChanges = async () => {
     try {
-      await axios.put(`http://localhost:8900/api/users/${loggedInUserId}`, selectedUser, {
+      if (!selectedUser.username) {
+        setErrorMessage("Please enter a username.");
+        return;
+      }
+  
+      if (!selectedUser.email) {
+        setErrorMessage("Please enter an email.");
+        return;
+      }
+  
+      if (!selectedUser.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        setErrorMessage("Please enter a valid email.");
+        return;
+      }
+  
+      if (!selectedUser.password) {
+        setErrorMessage("Please enter a password.");
+        return;
+      }
+  
+      if (selectedUser.password.length < 5) {
+        setErrorMessage("Password should be at least 5 characters long.");
+        return;
+      }
+  
+      if (!/[A-Z]/.test(selectedUser.password)) {
+        setErrorMessage("Password should contain at least 1 uppercase letter.");
+        return;
+      }
+  
+      if (!/[!@#$%^&*]/.test(selectedUser.password)) {
+        setErrorMessage("Password should contain at least 1 symbol.");
+        return;
+      }
+  
+      // Hash the new password if it exists
+      let hashedPassword = null;
+      if (selectedUser.password) {
+        hashedPassword = await bcrypt.hash(selectedUser.password, 10);
+      }
+  
+      // Create a new object with the updated fields
+      const updatedUser = {
+        username: selectedUser.username,
+        email: selectedUser.email,
+        password: hashedPassword,
+      };
+  
+      await axios.put(`http://localhost:8900/api/users/${loggedInUserId}`, updatedUser, {
         headers: {
           Authorization: `Bearer ${cookies.token}`,
         },
       });
   
       closePopup();
-  
-      console.log("User updated successfully.");
+      window.location.reload();
     } catch (error) {
       console.error("Error:", error);
     }
@@ -132,6 +192,7 @@ const MyProfile = () => {
           closePopup={closePopup}
           saveChanges={saveChanges}
           setSelectedUser={setSelectedUser}
+          errorMessage={errorMessage}
         />
       )}
     </div>
