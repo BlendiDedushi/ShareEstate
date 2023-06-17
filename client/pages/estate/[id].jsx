@@ -57,7 +57,7 @@ const Hotel = ({ estate }) => {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [distance, setDistance] = useState(null);
+  const [distance, setDistance] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
   const [loggedInUserId, setLoggedInUserId] = useState(null);
 
@@ -101,38 +101,42 @@ const Hotel = ({ estate }) => {
   }, [cookies.token]);
 
   useEffect(() => {
-    const fetchPrishtinaCoordinates = async () => {
-      try {
-        calculateDistance(selectedUser.latitude, selectedUser.longitude);
-      } catch (error) {
-        console.log("Error calculating distance:", error);
+    const calculateDistance = () => {
+      if (
+        selectedUser &&
+        selectedUser.latitude !== null &&
+        selectedUser.longitude !== null &&
+        estate &&
+        estate.latitude !== null &&
+        estate.longitude !== null
+      ) {
+        const radianFactor = Math.PI / 180;
+        const earthRadiusKm = 6371.071;
+  
+        const lat1 = selectedUser.latitude * radianFactor;
+        const lon1 = selectedUser.longitude * radianFactor;
+        const lat2 = estate.latitude * radianFactor;
+        const lon2 = estate.longitude * radianFactor;
+  
+        const diffLat = lat2 - lat1;
+        const diffLon = lon2 - lon1;
+  
+        const a =
+          Math.sin(diffLat / 2) ** 2 +
+          Math.cos(lat1) * Math.cos(lat2) * Math.sin(diffLon / 2) ** 2;
+  
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  
+        const distanceInKm = earthRadiusKm * c;
+  
+        setDistance(distanceInKm.toFixed(2));
+      } else {
+        console.log("Missing coordinates data.");
       }
     };
-    fetchPrishtinaCoordinates();
-  }, []);
-
-  const calculateDistance = (uLat, uLon) => {
-    const radianFactor = Math.PI / 180;
-    const earthRadiusKm = 6371.071; // Radius of the Earth in kilometers
-
-    const lat1 = uLat * radianFactor;
-    const lon1 = uLon * radianFactor;
-    const lat2 = estate.latitude * radianFactor;
-    const lon2 = estate.longitude * radianFactor;
-
-    const diffLat = lat2 - lat1;
-    const diffLon = lon2 - lon1;
-
-    const a =
-      Math.sin(diffLat / 2) ** 2 +
-      Math.cos(lat1) * Math.cos(lat2) * Math.sin(diffLon / 2) ** 2;
-
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    const distanceInKm = earthRadiusKm * c;
-
-    setDistance(distanceInKm.toFixed(2));
-  };
+  
+    calculateDistance();
+  }, [selectedUser, estate]);
 
   const photos = estate.photos.map((photo) => ({
     src: `${photo}`,
@@ -222,6 +226,8 @@ const Hotel = ({ estate }) => {
 
     setSlideNumber(newSlideNumber);
   };
+
+  const isLoggedIn = Boolean(cookies.token);
 
   return (
     <div>
@@ -363,9 +369,12 @@ const Hotel = ({ estate }) => {
             <span>
               {estate.city}
               <br />
-              {distance !== null &&
-                <span>•Distance from your destination to {estate.city}–{" "}{distance}km</span>
-              }
+              {distance !== null && isLoggedIn &&(
+                <span>
+                  •Distance from your destination to {estate.city} – {distance}
+                  km
+                </span>
+              )}
             </span>
             <form
               className="max-w-md mx-auto p-4 shadow-md bg-white rounded-lg mt-5"
@@ -386,7 +395,7 @@ const Hotel = ({ estate }) => {
                   onChange={handleChangeMessage}
                   required
                 />
-                {errorMessage && (
+                {errorMessage && !isLoggedIn &&(
                   <p className="error-message">{errorMessage}</p>
                 )}
                 {successMessage && (

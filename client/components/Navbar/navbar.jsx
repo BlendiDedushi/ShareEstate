@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/router";
 import { LoadingScreen } from "../Load/LoadingScreen";
+import axios from "axios";
 
 const Navbar = () => {
   const [cookie, setCookie, removeCookie] = useCookies(["token"]);
@@ -18,10 +19,15 @@ const Navbar = () => {
     }
   }, []);
 
-  const logout = () => {
-    removeCookie("token");
-    setToken(false);
-    router.push("/");
+  const logout = async () => {
+    try {
+      await axios.post("http://localhost:8900/api/auth/logout");
+      removeCookie("token");
+      setToken(false);
+      router.push("/");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const handleClick = () => {

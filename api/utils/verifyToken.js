@@ -17,7 +17,7 @@ export const verifyToken = (req, res, next) => {
   } 
   
   jwt.verify(token, process.env.JWT, (err, decodedToken) => {
-    if (err) return next(createError(403, "Token is not valid!"));
+    if (err) return next(createError(403, "You need to be logged in"));
     req.user = decodedToken;
     next();
   });
