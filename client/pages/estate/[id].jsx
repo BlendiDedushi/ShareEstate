@@ -369,7 +369,7 @@ const Hotel = ({ estate }) => {
             <span>
               {estate.city}
               <br />
-              {distance !== null && isLoggedIn &&(
+              {distance !== null &&(
                 <span>
                   •Distance from your destination to {estate.city} – {distance}
                   km

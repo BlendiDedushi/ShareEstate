@@ -65,6 +65,11 @@ const Navbar = () => {
                   EstatesByCity
                 </button>
               </Link>
+              <Link href="/FindRoomate">
+                <button className={styles.navButton} onClick={handleClick}>
+                Find-Roommate
+                </button>
+              </Link>
               <Link href="/contactF">
                 <button className={styles.navButton} onClick={handleClick}>
                   Contact Us!

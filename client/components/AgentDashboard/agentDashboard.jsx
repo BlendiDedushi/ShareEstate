@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useCookies } from "react-cookie";
 import UsersC from "@/pages/users/users";
 import MyProfile from "@/pages/users/myProf";
+import Preferences from "@/pages/users/myPreferences";
 
 const AgentDashboard = ({ data }) => {
   const [selectedEstate, setSelectedEstate] = useState(null);
@@ -293,6 +294,24 @@ const AgentDashboard = ({ data }) => {
   }, [price, search]);
 
   const renderContent = () => {
+    if (selectedUser.role === "user") {
+      switch (activeTab) {
+        case "MyProfile":
+          return (
+            <div>
+              <MyProfile />
+            </div>
+          );
+        case "Preferences":
+          return (
+            <div>
+              <Preferences />
+            </div>
+          );
+        default:
+          return null;
+      }
+    }
     if (selectedUser.role === "admin") {
       switch (activeTab) {
         case "MyProfile":
@@ -800,6 +819,19 @@ const AgentDashboard = ({ data }) => {
                 alt="Profile"
               />
             </li>
+            {selectedUser.role === "user" && (
+              <li
+                className={activeTab === "Preferences" ? styles.active : ""}
+                onClick={() => handleTabClick("Preferences")}
+                role="button"
+              >
+                MyPreferences
+                <img
+                  src="https://cdn-icons-png.flaticon.com/128/7862/7862026.png"
+                  alt="Preferences"
+                />
+              </li>
+            )}
             {selectedUser.role === "admin" && (
               <li
                 className={activeTab === "Users" ? styles.active : ""}

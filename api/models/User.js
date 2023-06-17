@@ -72,7 +72,35 @@ User.init(
     resetPasswordExpires: {
       type: DataTypes.DATE,
       allowNull: true,
-    }
+    },
+    gender: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    smoking: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    preferredGender: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    age: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    occupation: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    preferredLocation: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    bio: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
   },
   {
     sequelize, 

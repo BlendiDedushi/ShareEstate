@@ -276,13 +276,13 @@ const UsersC = () => {
             <span>
               Lat: 
               <span>
-                <b>{user.latitude}</b>
+                <b>{user.latitude.toFixed(4)}</b>
               </span>
             </span>
             <span>
               Long: 
               <span>
-                <b>{user.longitude}</b>
+                <b>{user.longitude.toFixed(4)}</b>
               </span>
             </span>
           </div>

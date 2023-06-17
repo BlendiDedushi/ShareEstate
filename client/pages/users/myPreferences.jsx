@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../pages/style/myProf.module.css";
+import styles from "../../pages/style/myPreferences.module.css";
 import axios from "axios";
-import bcrypt from "bcryptjs";
 import { useCookies } from "react-cookie";
 import { LoadingScreen } from "@/components/Load/LoadingScreen";
 
@@ -18,48 +17,77 @@ const Popup = ({
         <h2>Edit User</h2>
         {errorMessage && <p className={styles.error}>{errorMessage}</p>}
         <div>
-          <label>Username:</label>
+          <label>Gender:</label>
           <input
             type="text"
-            value={selectedUser.username}
+            value={selectedUser.gender}
             onChange={(e) =>
-              setSelectedUser({ ...selectedUser, username: e.target.value })
+              setSelectedUser({ ...selectedUser, gender: e.target.value })
             }
           />
         </div>
         <div>
-          <label>Email:</label>
+          <label>Smoking:</label>
           <input
-            type="text"
-            value={selectedUser.email}
+            type="checkbox"
+            checked={selectedUser.smoking}
             onChange={(e) =>
-              setSelectedUser({ ...selectedUser, email: e.target.value })
+              setSelectedUser({ ...selectedUser, smoking: e.target.checked })
             }
           />
         </div>
         <div>
-          <label>Lat:</label>
+          <label>Preferred Gender:</label>
           <input
-            type="number"
-            value={selectedUser.latitude}
+            type="text"
+            value={selectedUser.preferredGender}
             onChange={(e) =>
               setSelectedUser({
                 ...selectedUser,
-                latitude: parseFloat(e.target.value),
+                preferredGender: e.target.value,
               })
             }
           />
         </div>
         <div>
-          <label>Long:</label>
+          <label>Age:</label>
           <input
             type="number"
-            value={selectedUser.longitude}
+            value={selectedUser.age}
+            onChange={(e) =>
+              setSelectedUser({ ...selectedUser, age: e.target.value })
+            }
+          />
+        </div>
+        <div>
+          <label>Occupation:</label>
+          <input
+            type="text"
+            value={selectedUser.occupation}
+            onChange={(e) =>
+              setSelectedUser({ ...selectedUser, occupation: e.target.value })
+            }
+          />
+        </div>
+        <div>
+          <label>Preferred Location:</label>
+          <input
+            type="text"
+            value={selectedUser.preferredLocation}
             onChange={(e) =>
               setSelectedUser({
                 ...selectedUser,
-                longitude: parseFloat(e.target.value),
+                preferredLocation: e.target.value,
               })
+            }
+          />
+        </div>
+        <div>
+          <label>Bio:</label>
+          <textarea
+            value={selectedUser.bio}
+            onChange={(e) =>
+              setSelectedUser({ ...selectedUser, bio: e.target.value })
             }
           />
         </div>
@@ -72,43 +100,19 @@ const Popup = ({
   );
 };
 
-const ResetPasswordPopup = ({
-  selectedUser,
-  closePopup,
-  saveChanges,
-  setSelectedUser,
-  errorMessage,
-}) => {
-  return (
-    <div className={styles.popup}>
-      <div className={styles.popupContent}>
-        <h2>Reset Password</h2>
-        {errorMessage && <p className={styles.error}>{errorMessage}</p>}
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={selectedUser.password}
-            onChange={(e) =>
-              setSelectedUser({ ...selectedUser, password: e.target.value })
-            }
-          />
-        </div>
-        <div className={styles.popupButtons}>
-          <button onClick={saveChanges}>Save</button>
-          <button onClick={closePopup}>Cancel</button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const MyProfile = () => {
+const Preferences = () => {
   const [loggedInUserId, setLoggedInUserId] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState({
+    gender: "",
+    smoking: false,
+    preferredGender: "",
+    age: null,
+    occupation: "",
+    preferredLocation: "",
+    bio: "",
+  });
   const [cookies] = useCookies(["token"]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isResetPasswordOpen, setIsResetPasswordOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -154,38 +158,22 @@ const MyProfile = () => {
     setIsPopupOpen(true);
   };
 
-  const handleResetPassword = () => {
-    setIsResetPasswordOpen(true);
-  };
-
   const closePopup = () => {
     setIsPopupOpen(false);
-    setIsResetPasswordOpen(false);
   };
 
   const saveChanges = async () => {
     try {
-      if (!selectedUser.username) {
-        setErrorMessage("Please enter a username.");
-        return;
-      }
-
-      if (!selectedUser.email) {
-        setErrorMessage("Please enter an email.");
-        return;
-      }
-
-      if (!selectedUser.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-        setErrorMessage("Please enter a valid email.");
-        return;
-      }
-
       const updatedUser = {
-        username: selectedUser.username,
-        email: selectedUser.email,
-        latitude: selectedUser.latitude,
-        longitude: selectedUser.longitude,
+        gender: selectedUser.gender,
+        smoking: selectedUser.smoking,
+        preferredGender: selectedUser.preferredGender,
+        age: selectedUser.age,
+        occupation: selectedUser.occupation,
+        preferredLocation: selectedUser.preferredLocation,
+        bio: selectedUser.bio,
       };
+
       await axios.put(
         `http://localhost:8900/api/users/${loggedInUserId}`,
         updatedUser,
@@ -203,52 +191,6 @@ const MyProfile = () => {
     }
   };
 
-  const resetPassword = async () => {
-    try {
-    if (!selectedUser.password) {
-      setErrorMessage("Please enter a password.");
-      return;
-    }
-
-    if (selectedUser.password.length < 5) {
-      setErrorMessage("Password should be at least 5 characters long.");
-      return;
-    }
-
-    if (!/[A-Z]/.test(selectedUser.password)) {
-      setErrorMessage("Password should contain at least 1 uppercase letter.");
-      return;
-    }
-
-    if (!/[!@#$%^&*.]+/.test(selectedUser.password)) {
-      setErrorMessage("Password should contain at least 1 symbol.");
-      return;
-    }
-    let hashedPassword = null;
-    if (selectedUser.password) {
-      hashedPassword = await bcrypt.hash(selectedUser.password, 10);
-    }
-
-    const updatedUser = {
-      password: hashedPassword,
-    };
-    await axios.put(
-      `http://localhost:8900/api/users/${loggedInUserId}`,
-      updatedUser,
-      {
-        headers: {
-          Authorization: `Bearer ${cookies.token}`,
-        },
-      }
-    );
-
-    closePopup();
-    window.location.reload();
-  } catch (error) {
-    console.error("Error:", error);
-  }
-  };
-
   if (!selectedUser) {
     return (
       <div>
@@ -259,26 +201,31 @@ const MyProfile = () => {
 
   return (
     <div className={styles.u}>
-      <button onClick={handleResetPassword}>Reset Password</button>
       <div className={styles.userss}>
         <div className={styles.userD}>
           <span>
             Username: <b>{selectedUser.username}</b>
           </span>
           <span>
-            Email: <b>{selectedUser.email}</b>
+            Gender: <b>{selectedUser.gender}</b>
           </span>
           <span>
-            Role: <b>{selectedUser.role}</b>
+            Smoking: <b>{selectedUser.smoking ? "Yes" : "No"}</b>
           </span>
           <span>
-            stripeCustomerId: <b>{selectedUser.stripeCustomerId}</b>
+            Preferred Gender: <b>{selectedUser.preferredGender}</b>
           </span>
           <span>
-            Lat: <b>{selectedUser.latitude}</b>
+            Age: <b>{selectedUser.age}</b>
           </span>
           <span>
-            Long: <b>{selectedUser.longitude}</b>
+            Occupation: <b>{selectedUser.occupation}</b>
+          </span>
+          <span>
+            Preferred Location: <b>{selectedUser.preferredLocation}</b>
+          </span>
+          <span>
+            Bio: <b>{selectedUser.bio}</b>
           </span>
         </div>
         <div className={styles.userbtnn}>
@@ -294,17 +241,8 @@ const MyProfile = () => {
           errorMessage={errorMessage}
         />
       )}
-      {isResetPasswordOpen && (
-        <ResetPasswordPopup
-          selectedUser={selectedUser}
-          closePopup={closePopup}
-          saveChanges={resetPassword}
-          setSelectedUser={setSelectedUser}
-          errorMessage={errorMessage}
-        />
-      )}
     </div>
   );
 };
 
-export default MyProfile;
+export default Preferences;
