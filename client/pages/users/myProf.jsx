@@ -38,22 +38,15 @@ const Popup = ({
           />
         </div>
         <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={selectedUser.password}
-            onChange={(e) =>
-              setSelectedUser({ ...selectedUser, password: e.target.value })
-            }
-          />
-        </div>
-        <div>
           <label>Lat:</label>
           <input
             type="number"
             value={selectedUser.latitude}
             onChange={(e) =>
-              setSelectedUser({ ...selectedUser, latitude: parseFloat(e.target.value) })
+              setSelectedUser({
+                ...selectedUser,
+                latitude: parseFloat(e.target.value),
+              })
             }
           />
         </div>
@@ -63,7 +56,41 @@ const Popup = ({
             type="number"
             value={selectedUser.longitude}
             onChange={(e) =>
-              setSelectedUser({ ...selectedUser, longitude: parseFloat(e.target.value) })
+              setSelectedUser({
+                ...selectedUser,
+                longitude: parseFloat(e.target.value),
+              })
+            }
+          />
+        </div>
+        <div className={styles.popupButtons}>
+          <button onClick={saveChanges}>Save</button>
+          <button onClick={closePopup}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ResetPasswordPopup = ({
+  selectedUser,
+  closePopup,
+  saveChanges,
+  setSelectedUser,
+  errorMessage,
+}) => {
+  return (
+    <div className={styles.popup}>
+      <div className={styles.popupContent}>
+        <h2>Reset Password</h2>
+        {errorMessage && <p className={styles.error}>{errorMessage}</p>}
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={selectedUser.password}
+            onChange={(e) =>
+              setSelectedUser({ ...selectedUser, password: e.target.value })
             }
           />
         </div>
@@ -81,6 +108,7 @@ const MyProfile = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [cookies] = useCookies(["token"]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isResetPasswordOpen, setIsResetPasswordOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -126,8 +154,13 @@ const MyProfile = () => {
     setIsPopupOpen(true);
   };
 
+  const handleResetPassword = () => {
+    setIsResetPasswordOpen(true);
+  };
+
   const closePopup = () => {
     setIsPopupOpen(false);
+    setIsResetPasswordOpen(false);
   };
 
   const saveChanges = async () => {
@@ -147,37 +180,12 @@ const MyProfile = () => {
         return;
       }
 
-      if (!selectedUser.password) {
-        setErrorMessage("Please enter a password.");
-        return;
-      }
-
-      if (selectedUser.password.length < 5) {
-        setErrorMessage("Password should be at least 5 characters long.");
-        return;
-      }
-
-      if (!/[A-Z]/.test(selectedUser.password)) {
-        setErrorMessage("Password should contain at least 1 uppercase letter.");
-        return;
-      }
-
-      if (!/[!@#$%^&*]/.test(selectedUser.password)) {
-        setErrorMessage("Password should contain at least 1 symbol.");
-        return;
-      }
-      let hashedPassword = null;
-      if (selectedUser.password) {
-        hashedPassword = await bcrypt.hash(selectedUser.password, 10);
-      }
       const updatedUser = {
         username: selectedUser.username,
         email: selectedUser.email,
-        password: hashedPassword,
         latitude: selectedUser.latitude,
         longitude: selectedUser.longitude,
       };
-
       await axios.put(
         `http://localhost:8900/api/users/${loggedInUserId}`,
         updatedUser,
@@ -195,6 +203,52 @@ const MyProfile = () => {
     }
   };
 
+  const resetPassword = async () => {
+    try {
+    if (!selectedUser.password) {
+      setErrorMessage("Please enter a password.");
+      return;
+    }
+
+    if (selectedUser.password.length < 5) {
+      setErrorMessage("Password should be at least 5 characters long.");
+      return;
+    }
+
+    if (!/[A-Z]/.test(selectedUser.password)) {
+      setErrorMessage("Password should contain at least 1 uppercase letter.");
+      return;
+    }
+
+    if (!/[!@#$%^&*.]+/.test(selectedUser.password)) {
+      setErrorMessage("Password should contain at least 1 symbol.");
+      return;
+    }
+    let hashedPassword = null;
+    if (selectedUser.password) {
+      hashedPassword = await bcrypt.hash(selectedUser.password, 10);
+    }
+
+    const updatedUser = {
+      password: hashedPassword,
+    };
+    await axios.put(
+      `http://localhost:8900/api/users/${loggedInUserId}`,
+      updatedUser,
+      {
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      }
+    );
+
+    closePopup();
+    window.location.reload();
+  } catch (error) {
+    console.error("Error:", error);
+  }
+  };
+
   if (!selectedUser) {
     return (
       <div>
@@ -204,7 +258,8 @@ const MyProfile = () => {
   }
 
   return (
-    <div>
+    <div className={styles.u}>
+      <button onClick={handleResetPassword}>Reset Password</button>
       <div className={styles.userss}>
         <div className={styles.userD}>
           <span>
@@ -238,6 +293,15 @@ const MyProfile = () => {
           selectedUser={selectedUser}
           closePopup={closePopup}
           saveChanges={saveChanges}
+          setSelectedUser={setSelectedUser}
+          errorMessage={errorMessage}
+        />
+      )}
+      {isResetPasswordOpen && (
+        <ResetPasswordPopup
+          selectedUser={selectedUser}
+          closePopup={closePopup}
+          saveChanges={resetPassword}
           setSelectedUser={setSelectedUser}
           errorMessage={errorMessage}
         />

@@ -258,6 +258,9 @@ const UsersC = () => {
       {filteredUsers.map((user) => (
         <div key={user.id} className={styles.userss}>
           <div className={styles.userD}>
+          <span>
+            ID: <b>{user.id}</b>
+          </span>
             <span>
               Username: <b>{user.username}</b>
             </span>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "../components/Navbar/navbar.module.css";
 import axios from "axios";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 const Register = () => {
@@ -11,6 +12,27 @@ const Register = () => {
   const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
+
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLatitude(position.coords.latitude);
+          setLongitude(position.coords.longitude);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+      setLatitude(42.6629);
+      setLongitude(21.1655);
+    }
+  }, []);
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -64,7 +86,6 @@ const Register = () => {
   };
 
   const isValidEmail = (email) => {
-    // A simple email validation using regular expression
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
@@ -83,14 +104,16 @@ const Register = () => {
     if (!validateForm()) {
       return;
     }
-
+  
     try {
       await axios.post("http://localhost:8900/api/auth/register", {
         username: username,
         email: email,
         password: password,
+        latitude: latitude,
+        longitude: longitude, 
       });
-
+  
       router.push("/");
     } catch (error) {
       console.log(error);

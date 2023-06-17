@@ -24,7 +24,6 @@ const EstateSchema = new mongoose.Schema({
   },
   distance: {
     type: String,
-    required: true,
   },
   photos: {
     type: [String],

@@ -25,9 +25,10 @@ const AgentDashboard = ({ data }) => {
   const [formData, setFormData] = useState({
     name: "",
     type: "",
-    city: "",
-    distance: "",
-    photos: [],
+    city: "Prishtina",
+    latitude: 42.6629138,
+    longitude: 21.1655028,
+    photos: ["https://images.unsplash.com/photo-1624204386084-dd8c05e32226?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8YXBhcnRtZW50JTIwYnVpbGRpbmd8ZW58MHx8MHx8fDA%3D&w=1000&q=80"],
     title: "",
     desc: "",
     rating: 0,
@@ -238,7 +239,8 @@ const AgentDashboard = ({ data }) => {
       name: "",
       type: "",
       city: "",
-      distance: "",
+      latitude: 42.6629138,
+      longitude: 21.1655028,
       photos: [],
       title: "",
       desc: "",
@@ -349,11 +351,20 @@ const AgentDashboard = ({ data }) => {
                     />
                   </label>
                   <label>
-                    <p>Distance:</p>
+                    <p>Latitude:</p>
                     <input
                       type="text"
-                      name="distance"
-                      value={formData.distance}
+                      name="city"
+                      value={formData.latitude}
+                      onChange={handleInputChange}
+                    />
+                  </label>
+                  <label>
+                    <p>Longitude:</p>
+                    <input
+                      type="text"
+                      name="city"
+                      value={formData.latitude}
                       onChange={handleInputChange}
                     />
                   </label>
@@ -723,30 +734,30 @@ const AgentDashboard = ({ data }) => {
                 </div>
               </div>
               <div className={styles.properties}>
-              {estateData
+                {estateData
                   .filter(
                     (estate) =>
                       estate.createdBy.toString() === selectedUser.id.toString()
                   )
                   .map((estate) => (
-                  <div key={estate.id} className={styles.fpItemD}>
-                    <img
-                      src={estate.photos[0]}
-                      alt=""
-                      className={styles.fpImg}
-                    />
-                    <span className={styles.fpName}>{estate.name}</span>
-                    <span className={styles.fpCity}>{estate.city}</span>
-                    <span className={styles.fpPrice}>
-                      Starting from ${estate.cheapestPrice}
-                    </span>
-                    <div className={styles.fpRatingg}>
-                      <button onClick={() => showDeleteConfirmation(estate)}>
-                        Delete
-                      </button>
+                    <div key={estate.id} className={styles.fpItemD}>
+                      <img
+                        src={estate.photos[0]}
+                        alt=""
+                        className={styles.fpImg}
+                      />
+                      <span className={styles.fpName}>{estate.name}</span>
+                      <span className={styles.fpCity}>{estate.city}</span>
+                      <span className={styles.fpPrice}>
+                        Starting from ${estate.cheapestPrice}
+                      </span>
+                      <div className={styles.fpRatingg}>
+                        <button onClick={() => showDeleteConfirmation(estate)}>
+                          Delete
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
                 {showDeletePopup && (
                   <DeleteConfirmationPopup
                     estateName={estateToDelete?.name}

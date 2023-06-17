@@ -18,6 +18,8 @@ export const register = async (req, res, next) => {
       username: req.body.username,
       email: req.body.email,
       password: hash,
+      latitude: req.body.latitude,
+      longitude: req.body.longitude, 
     });
     await newUser.save();
 
