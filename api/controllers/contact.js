@@ -2,17 +2,16 @@ import Contact from '../models/Contact.js';
 import User from '../models/User.js';
 import nodemailer from 'nodemailer';
 
-export const sendMessage = async (req, res, next) => {
-  const { subject, message } = req.body;
+export const contactForm = async (req, res, next) => {
+  const { name, email, phone, subject, message } = req.body;
 
   try {
-    const senderId = req.user.id; 
-    const sender = await User.findByPk(senderId);
-
     const contact = new Contact({
+      name,
+      email,
+      phone,
       subject,
       message,
-      sender : sender.email,
     });
 
     await contact.save();
@@ -34,10 +33,10 @@ export const sendMessage = async (req, res, next) => {
     });
 
     const mailOptions = {
-      from: sender.email,
+      from: email,
       to: admin.email,
       subject: subject,
-      text: message,
+      text: `${message}\n\nFrom: ${name}\nPhone Number: ${phone}`,
     };
 
     await transporter.sendMail(mailOptions);

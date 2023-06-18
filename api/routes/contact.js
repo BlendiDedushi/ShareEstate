@@ -1,9 +1,8 @@
 import express from 'express';
-import { sendMessage } from "../controllers/contact.js";
-import { verifyToken } from '../utils/verifyToken.js';
+import { contactForm } from "../controllers/contact.js";
 
 const router = express.Router();
 
-router.post('/',verifyToken ,sendMessage);
+router.post('/', contactForm);
 
 export default router;
