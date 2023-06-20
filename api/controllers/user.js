@@ -1,13 +1,13 @@
 import User from "../models/User.js";
 import Estate from "../models/Estate.js";
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 import upload from "../utils/multer.js";
 import { createError } from "../utils/error.js";
 import path from "path";
 
 export const updateUser = async (req, res, next) => {
   try {
-    upload.single('avatar')(req, res, async (err) => {
+    upload.single("avatar")(req, res, async (err) => {
       if (err) {
         return next(err);
       }
@@ -34,7 +34,6 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
-
 export const deleteUser = async (req, res, next) => {
   try {
     const deletedUser = await User.destroy({ where: { id: req.params.id } });
@@ -49,7 +48,7 @@ export const deleteUser = async (req, res, next) => {
 
 export const getUser = async (req, res, next) => {
   try {
-    const userId = req.user.id; // Assuming you have implemented authentication middleware
+    const userId = req.user.id;
 
     const user = await User.findByPk(userId);
     if (!user) {
@@ -73,7 +72,7 @@ export const getUsers = async (req, res, next) => {
 
 export const getAddress = async (req, res, next) => {
   try {
-    const userId = req.user.id; 
+    const userId = req.user.id;
 
     const user = await User.findByPk(userId);
     if (!user) {
@@ -88,20 +87,21 @@ export const getAddress = async (req, res, next) => {
   }
 };
 
-
 export const sendEmail = async (req, res, next) => {
   const { estateId } = req.params;
   const { message } = req.body;
-  const receiverEmail = 'blendi.dedushaj1@gmail.com';
+  const receiverEmail = "blendi.dedushaj1@gmail.com";
 
   try {
     const estate = await Estate.findById(estateId);
     if (!estate) {
-      return res.status(404).json({ success: false, message: 'Estate not found.' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Estate not found." });
     }
 
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
         user: process.env.GMAIL_EMAIL,
         pass: process.env.GMAIL_PASSWORD,
@@ -120,13 +120,13 @@ export const sendEmail = async (req, res, next) => {
 
     await transporter.sendMail(mailOptions);
 
-    res.status(200).json({ success: true, message: 'Email sent successfully.' });
+    res
+      .status(200)
+      .json({ success: true, message: "Email sent successfully." });
   } catch (error) {
     next(error);
   }
 };
-
-
 
 export const sendMessage = async (req, res, next) => {
   const { userId } = req.params;
@@ -135,11 +135,13 @@ export const sendMessage = async (req, res, next) => {
   try {
     const user = await User.findByPk(userId);
     if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found.' });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
     }
 
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
         user: process.env.GMAIL_EMAIL,
         pass: process.env.GMAIL_PASSWORD,
@@ -158,7 +160,9 @@ export const sendMessage = async (req, res, next) => {
 
     await transporter.sendMail(mailOptions);
 
-    res.status(200).json({ success: true, message: 'Message sent successfully.' });
+    res
+      .status(200)
+      .json({ success: true, message: "Message sent successfully." });
   } catch (error) {
     next(error);
   }
