@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Abel&family=Poppins:ital,wght@0,300;0,400;1,200&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Abel&family=Poppins:ital,wght@0,300;0,400;1,200&display=swap");
 
 .cont {
   display: flex;
@@ -9,15 +9,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 40px;
+  margin-left: 60px;
 }
 
 .hotelWrapper {
   width: 100%;
-  max-width: 1024px;
+  max-width: 1200px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 30px;
   position: relative;
   padding: 0px 20px;
 }
@@ -49,8 +50,8 @@
   font-size: 30px;
   color: #333;
   font-weight: 800;
-  font-family: 'Abel', sans-serif;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Abel", sans-serif;
+  font-family: "Poppins", sans-serif;
   margin-bottom: 10px;
   animation: fadeIn 1s ease-in-out;
 }
@@ -61,8 +62,8 @@
 }
 
 .hotelAddress span {
-  font-size: 16px;
-  color: #555;
+  font-size: 20px;
+  color: #393737;
 }
 
 .hotelAddress svg {
@@ -71,7 +72,7 @@
 }
 
 .hotelPriceHighlight {
-  font-size: 16px;
+  font-size: 20px;
   animation: fadeIn 2.5s ease-in-out;
   display: flex;
   align-items: center;
@@ -124,9 +125,9 @@
 }
 
 .hotelImg {
-  width: 300px;
-  height: 200px;
-  margin-bottom: 5px;
+  width: 400px;
+  height: 300px;
+  margin-bottom: 10px;
   object-fit: cover;
   cursor: pointer;
 }
@@ -156,20 +157,20 @@
   gap: 20px;
 }
 
-.hotelDetailsPrice>h1 {
+.hotelDetailsPrice > h1 {
   font-size: 18px;
   color: #555;
 }
 
-.hotelDetailsPrice>span {
+.hotelDetailsPrice > span {
   font-size: 14px;
 }
 
-.hotelDetailsPrice>h2 {
+.hotelDetailsPrice > h2 {
   font-weight: 300;
 }
 
-.hotelDetailsPrice>Link>button {
+.hotelDetailsPrice > Link > button {
   border: none;
   padding: 10px 20px;
   background-color: #0071c2;
@@ -183,7 +184,7 @@
   position: sticky;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 96vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.613);
   z-index: 999;
@@ -222,24 +223,20 @@
 
 .reserveButton {
   border: none;
-  padding: 10px;
-  background-color: #0071c2;
+  padding: 20px;
+  background-color: #247ebe;
   color: white;
-  font-weight: bold;
+  font-size: 17px;
   cursor: pointer;
   border-radius: 5px;
-  margin-left: 410px;
+  margin-left: 700px;
 }
 
 .charLife {
-  margin-top: 40px;
+  margin-top: 70px;
   display: flex;
   justify-content: flex-start;
   gap: 100px;
-}
-
-.charLife h3 {
-  font-weight: bold;
 }
 
 .hotelPriceHighlight b {
@@ -250,4 +247,9 @@
 .red {
   color: #0071c2;
   font-weight: 800;
+}
+
+.map {
+  height: 1000px;
+  margin-top: 50px;
 }

@@ -38,14 +38,16 @@ const Navbar = () => {
     <div className={styles.navbar}>
       <div className={styles.navContainer}>
         <Link href={"/"}>
-          <div className="flex items-center gap-x-[20px]">
+          <div className={`flex items-center gap-x-2 ${styles.logoContainer}`}>
             <Image
               alt={"logo"}
               src="/images/case-logo.svg"
               width={60}
               height={60}
             />
-            <span className="text-[20px] font-semibold text-[#333333]">
+            <span
+              className={`text-[20px] font-semibold text-white ${styles.logoText}`}
+            >
               ShareEstate
             </span>
           </div>
@@ -66,11 +68,11 @@ const Navbar = () => {
                 </button>
               </Link>
               {token && (
-              <Link href="/FindRoomate">
-                <button className={styles.navButton} onClick={handleClick}>
-                Find-Roommate
-                </button>
-              </Link>
+                <Link href="/FindRoomate">
+                  <button className={styles.navButton} onClick={handleClick}>
+                    Find-Roommate
+                  </button>
+                </Link>
               )}
               <Link href="/contactF">
                 <button className={styles.navButton} onClick={handleClick}>

@@ -112,29 +112,29 @@ const Hotel = ({ estate }) => {
       ) {
         const radianFactor = Math.PI / 180;
         const earthRadiusKm = 6371.071;
-  
+
         const lat1 = selectedUser.latitude * radianFactor;
         const lon1 = selectedUser.longitude * radianFactor;
         const lat2 = estate.latitude * radianFactor;
         const lon2 = estate.longitude * radianFactor;
-  
+
         const diffLat = lat2 - lat1;
         const diffLon = lon2 - lon1;
-  
+
         const a =
           Math.sin(diffLat / 2) ** 2 +
           Math.cos(lat1) * Math.cos(lat2) * Math.sin(diffLon / 2) ** 2;
-  
+
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  
+
         const distanceInKm = earthRadiusKm * c;
-  
+
         setDistance(distanceInKm.toFixed(2));
       } else {
         console.log("Missing coordinates data.");
       }
     };
-  
+
     calculateDistance();
   }, [selectedUser, estate]);
 
@@ -362,14 +362,14 @@ const Hotel = ({ estate }) => {
             </div>
           </div>
         </div>
-        <div>
+        <div className={styles.map}>
           <Map latitude={estate.latitude} longitude={estate.longitude} />
           <div className={styles.hotelAddress}>
             <FontAwesomeIcon icon={faLocationDot} />
             <span>
               {estate.city}
               <br />
-              {distance !== null &&(
+              {distance !== null && (
                 <span>
                   •Distance from your destination to {estate.city} – {distance}
                   km
@@ -395,7 +395,7 @@ const Hotel = ({ estate }) => {
                   onChange={handleChangeMessage}
                   required
                 />
-                {errorMessage && !isLoggedIn &&(
+                {errorMessage && !isLoggedIn && (
                   <p className="error-message">{errorMessage}</p>
                 )}
                 {successMessage && (

@@ -1,170 +1,184 @@
 .navbar {
-    /* Your navbar styles here */
-    background-color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
+  background-color: #333333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
-  
+
+.logoContainer {
+  margin-left: -165px;
+}
+
+.logoText {
+  color: white;
+  margin-left: 20px;
+  font-size: 26px; /* Updated font size */
+}
 
 .navContainer {
-    width: 100%;
-    max-width: 1024px;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  width: 100%;
+  max-width: 1024px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .logo {
-    font-weight: 500;
+  font-weight: 500;
+  font-size: 24px;
+  color: white;
 }
 
 .navButton {
-    margin-left: 20px;
-    border: none;
-    padding: 7px 13px;
-    cursor: pointer;
-    border-radius: 8px;
-    color: #417054;
-    background-color: #EFEFEF;
+  margin-left: 20px;
+  border: none;
+  padding: 7px 13px;
+  cursor: pointer;
+  border-radius: 8px;
+  color: white;
+  background-color: transparent;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
 }
-  
+
+.navButton:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
 .label {
-    position: absolute;
-    top: 50%;
-    left: 12px;
-    transform: translateY(-50%);
-    pointer-events: none;
-    transition: all 0.2s;
-    color: #888;
-  }
-  
-  .inputField {
-    display: flex;
-    justify-content: center;
-    width: 370px;
-    margin: 3px 0px;
-    padding: 8px;
-    border: 2px solid #417054;
-    border-radius: 20px;
-  }
-  .inputField:focus + .label,
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: all 0.2s;
+  color: #888;
+}
+
+.inputField {
+  display: flex;
+  justify-content: center;
+  width: 370px;
+  margin: 3px 0px;
+  padding: 8px;
+  border: 2px solid #417054;
+  border-radius: 20px;
+}
+
+.inputField:focus + .label,
 .inputField:not(:placeholder-shown) + .label {
   transform: translate(0, -200%) scale(0.8);
   color: #000;
 }
-  
-  .signupButton {
-    background-color: #417054;
-    color: #fff;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-  }
-  
-  .loginButton {
-    background-color: #417054;
-    color: #fff;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-  }
-  
-  /* .closeButton {
-    background-color: #000000;
-    color: #ffffff;
-    padding: 8px 16px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-  } */
-  
-  .modalContent {
-    /* Your modal content styles here */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .signupButton,
-  .loginButton {
-    /* Your button styles here */
-    margin-top: 16px;
-  }
-  
-  .closeButton {
-    /* Your close button styles here */
-    margin-top: 8px;
-  }
-  
 
+.signupButton,
+.loginButton {
+  background-color: #417054;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
 
+.signupButton:hover,
+.loginButton:hover {
+  background-color: #2f523d;
+}
 
+.modalContent {
+  margin-top: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
 
+.modalContent > h2 {
+  border-bottom: 2px solid #000;
+  pointer-events: none;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
 
+.formGroup {
+  position: relative;
+  margin-bottom: 16px;
+}
 
+.signupButton,
+.loginButton {
+  margin-top: 16px;
+  width: 15%;
+}
 
-
-  /* .modal {
-    width: 400px; 
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  } */
-  
-  .modalContent {
-    /* Your modal content styles here */
-    margin-top: 150px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-  }
-
-  .modalContent>h2{
-    border-bottom: 2px solid #000;
-    pointer-events: none;
-  }
-  
-  .formGroup {
-
-    position: relative;
-    margin-bottom: 16px;
-  }
-    
-  .signupButton,
-  .loginButton {
-    margin-top: 16px;
-    width: 15%; 
-  }
-
-  .loginButton:hover,
-  .signupButton:hover{
-    box-shadow: 0px 1px 15px 5px #2f523d;
-  }
-
-  
-  /* .closeButton {
-    margin-top: 8px;
-    width: 100%; 
-  }
-   */
-
-.error{
+.error {
   color: red;
   display: flex;
   justify-content: center;
 }
 
-.cond{
+.cond {
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin-top: 100px;
   cursor: default;
+}
+
+/* Updated styles for links */
+
+.navButton {
+  position: relative;
+  text-decoration: none;
+}
+
+.navButton::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  transition: width 0.3s ease;
+}
+
+.navButton:hover::after {
+  width: 100%;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  margin-left: 25px;
+}
+
+.formGroup label {
+  margin-bottom: 5px;
+  font-size: 16px;
+  color: #999999; /* Grayish font color */
+}
+
+.formGroup .inputField {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  color: #615f5f;
+}
+
+.formGroup .inputField input,
+.formGroup .inputField select {
+  padding: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 10px;
+  outline: none;
+  width: 300px; /* Adjust the width as desired */
+  color: #615f5f; /* Grayish font color */
 }

@@ -22,6 +22,7 @@
     "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
     "date-fns": "^2.30.0",
+    "framer-motion": "^10.12.16",
     "leaflet": "^1.9.4",
     "next": "13.3.1",
     "react": "18.2.0",

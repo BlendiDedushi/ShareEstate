@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
-import { FaUser, FaEnvelope, FaPhone, FaComment } from 'react-icons/fa';
-import styles from './ContactForm.module.css';
-import axios from 'axios';
+import React, { useState } from "react";
+import { FaUser, FaEnvelope, FaPhone, FaComment } from "react-icons/fa";
+import styles from "./ContactForm.module.css";
+import axios from "axios";
 
 const ContactForm = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [subject, setSubject] = useState('');
-  const [message, setMessage] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handlePhoneChange = (e) => {
-    const sanitizedValue = e.target.value.replace(/\D/g, '');
+    const sanitizedValue = e.target.value.replace(/\D/g, "");
     setPhone(sanitizedValue);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage('');
-    setSuccessMessage('');
+    setErrorMessage("");
+    setSuccessMessage("");
 
     try {
       const response = await axios.post(`http://localhost:8900/api/contact/`, {
@@ -32,40 +32,39 @@ const ContactForm = () => {
       });
 
       setSuccessMessage(response.data.message);
-      setName('');
-      setEmail('');
-      setPhone('');
-      setSubject('');
-      setMessage('');
+      setName("");
+      setEmail("");
+      setPhone("");
+      setSubject("");
+      setMessage("");
 
       setTimeout(() => {
-        setSuccessMessage('');
+        setSuccessMessage("");
       }, 5000);
     } catch (error) {
       if (error.response) {
         setErrorMessage(error.response.data.message);
       } else {
-        setErrorMessage('Something went wrong while sending the message.');
+        setErrorMessage("Something went wrong while sending the message.");
       }
 
       setTimeout(() => {
-        setErrorMessage('');
+        setErrorMessage("");
       }, 5000);
     }
   };
 
   return (
-    <div className={styles['contact-form']}>
+    <div className={styles["contact-form-container"]}>
       <img
-        src="https://static.vecteezy.com/system/resources/previews/008/470/319/original/envelope-anime-cute-character-cartoon-model-emotion-illustration-clipart-drawing-kawaii-manga-design-idea-art-free-png.png"
-        alt="Envelope"
-        className={styles['image']}
+        src="https://brokerpublicportal.com/wp-content/uploads/2020/08/hero-houses-blue-1.jpg"
+        alt="Header"
+        className={styles["header-image"]}
       />
-      <div className={styles['form-container']}>
-        <h2 className={`${styles['fade-in']}`}>Contact Form</h2>
+      <div className={styles["form-container"]}>
+        <h2 className={styles["fade-in"]}>Contact Us</h2>
         <form onSubmit={handleSubmit}>
-          <div className={styles['form-group']}>
-            <FaUser className={`${styles['input-icon']} ${styles['fade-in']} ${styles['icon-animation']}`} />
+          <div className={styles["form-group"]}>
             <input
               type="text"
               id="name"
@@ -74,9 +73,9 @@ const ContactForm = () => {
               onChange={(e) => setName(e.target.value)}
               required
             />
+            <FaUser className={styles["input-icon"]} />
           </div>
-          <div className={styles['form-group']}>
-            <FaEnvelope className={`${styles['input-icon']} ${styles['fade-in']} ${styles['icon-animation']}`} />
+          <div className={styles["form-group"]}>
             <input
               type="email"
               id="email"
@@ -85,9 +84,9 @@ const ContactForm = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+            <FaEnvelope className={styles["input-icon"]} />
           </div>
-          <div className={styles['form-group']}>
-            <FaPhone className={`${styles['input-icon']} ${styles['fade-in']} ${styles['icon-animation']}`} />
+          <div className={styles["form-group"]}>
             <input
               type="tel"
               id="phone"
@@ -96,9 +95,9 @@ const ContactForm = () => {
               onChange={handlePhoneChange}
               required
             />
+            <FaPhone className={styles["input-icon"]} />
           </div>
-          <div className={styles['form-group']}>
-            <FaComment className={`${styles['input-icon']} ${styles['fade-in']} ${styles['icon-animation']}`} />
+          <div className={styles["form-group"]}>
             <input
               id="subject"
               placeholder="Subject"
@@ -106,9 +105,9 @@ const ContactForm = () => {
               onChange={(e) => setSubject(e.target.value)}
               required
             ></input>
+            <FaComment className={styles["input-icon"]} />
           </div>
-          <div className={styles['form-group']}>
-            <FaComment className={`${styles['input-icon']} ${styles['fade-in']} ${styles['icon-animation']}`} />
+          <div className={styles["form-group"]}>
             <textarea
               id="message"
               placeholder="Your Message"
@@ -116,11 +115,16 @@ const ContactForm = () => {
               onChange={(e) => setMessage(e.target.value)}
               required
             ></textarea>
+            <FaComment className={styles["input-icon"]} />
           </div>
-          {errorMessage && <div className={styles['error-message']}>{errorMessage}</div>}
-            {successMessage && <div className={styles['success-message']}>{successMessage}</div>}
-          <div className={styles['form-group']}>
-            <button type="submit" className={styles['submit-button']}>
+          {errorMessage && (
+            <div className={styles["error-message"]}>{errorMessage}</div>
+          )}
+          {successMessage && (
+            <div className={styles["success-message"]}>{successMessage}</div>
+          )}
+          <div className={styles["form-group"]}>
+            <button type="submit" className={styles["submit-button"]}>
               Submit
             </button>
           </div>
