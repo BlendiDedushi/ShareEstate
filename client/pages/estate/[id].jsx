@@ -416,7 +416,6 @@ const Hotel = ({ estate }) => {
       </div>
 
       <MailList />
-      <Footer />
     </div>
   );
 };

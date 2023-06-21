@@ -273,7 +273,7 @@ const Roommate = () => {
             </div>
           );
         })}
-      {!shouldDisplayUsers() && <p> <LoadingScreen /> </p>}
+      {!shouldDisplayUsers() && <LoadingScreen />}
       <Footer />
     </div>
   );

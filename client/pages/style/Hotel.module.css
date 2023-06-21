@@ -223,13 +223,13 @@
 
 .reserveButton {
   border: none;
-  padding: 20px;
+  padding:9px;
   background-color: #247ebe;
   color: white;
   font-size: 17px;
   cursor: pointer;
   border-radius: 5px;
-  margin-left: 700px;
+  margin-left: 450px;
 }
 
 .charLife {
