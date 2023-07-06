@@ -5,24 +5,45 @@ ShareEstate is a platform that allows users to book hotel rooms, apartments, and
 ## **Getting Started**
 
 To get started with ShareEstate, follow these steps:
-
-1. Clone the repository to your local machine.
+### **API**
+1. Open a terminal and navigate to the 'ShareEstate/api' directory.
 2. Install the necessary dependencies by running npm install.
-3. Create a .env file in the root directory of the project and set the required environment variables
-4. Run the application using npm start.
+3. Start the API server by running npm start.
+
+### **Client**
+1. Open another terminal window and navigate to the 'ShareEstate/client' directory.
+2. Install the necessary dependencies by running npm install.
+3. Start the development server by running npm run dev.
 
 ## **Features**
 
 - User authentication and authorization.
-- Search and filter accommodations based on location, date, price, and other parameters.
-- Booking and payment processing.
-- Review and rating system for accommodations.
-- User profile and booking history.
+- User roles: User, Agent, and Admin.
+- Search, sort, and filter functionality.
+- Map integration using React Leaflet in Next.js.
+- Payment processing using Stripe Payment.
+- User profile
+- Rating system for accommodations.
+- LiveChat with integrated chatbot.
+- Roommate Finder that matches users based on preferences.
+- Distance calculation from the logged-in user to the estate.
+- Google Login integration.
+
 
 ## **Technologies Used**
+The ShareEstate project utilizes the following technologies:
+- Node.js
+- Next.js
+- MongoDB database
+- MSSQL database
+- Stripe Payment API
+- Google Login API
 
-- Upcoming...
+## **Contributors**
 
-## **Acknowledgments**
+- Artina Bektashi
+- Ledejna Salihu
+- Andin Budakova
+- Blendi Dedushi
 
-- Upcoming...
+Feel free to explore the ShareEstate platform and provide any feedback or suggestions for improvement. Enjoy your stay!

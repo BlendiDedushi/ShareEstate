@@ -4,22 +4,26 @@ import {
   deleteUser,
   getUser,
   getUsers,
+  getAddress,
+  sendEmail,
+  sendMessage,
 } from "../controllers/user.js";
 import { verifyToken, verifyAdmin } from "../utils/verifyToken.js";
 
 const router = express.Router();
 
-// Get all users
 router.get("/", verifyToken, getUsers);
 
-// Update user
 router.put("/:id", verifyToken, updateUser);
 
-// Delete user
-router.delete("/:id", verifyToken, deleteUser);
+router.delete("/:id", verifyAdmin, deleteUser);
 
-// Get user by id
-router.get("/:id", verifyAdmin,getUser);
+router.get("/:id", verifyToken ,getUser);
 
+router.get("/address/:id",verifyToken, getAddress);
+
+router.post('/send-email/:estateId',verifyToken,sendEmail);
+
+router.post('/contact-user/:userId',verifyToken,sendMessage)
 
 export default router;

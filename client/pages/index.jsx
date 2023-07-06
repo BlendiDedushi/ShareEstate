@@ -1,26 +1,30 @@
-import Featured from "@/components/Featured/featured";
-import FeaturedProperties from "@/components/FeaturedProperties/featuredProperties";
 import Footer from "@/components/Footer/footer";
 import Header from "@/components/Header/header";
 import MailList from "@/components/MailList/mailList";
 import Navbar from "@/components/Navbar/navbar";
-import PropertyList from "@/components/PropertyList/propertyList";
-import styles from "./style/index.module.css";
+import { useCookies } from "react-cookie";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import WhoWeAreSection from "@/components/Section/whoarewesection";
 
 const Home = () => {
+  const [cookie, setCookie] = useCookies(["token"]);
+  const router = useRouter();
+  const { token } = router.query;
+
+  useEffect(() => {
+    if (token) {
+      setCookie("token", token);
+    }
+  }, [token]);
+
   return (
     <div>
       <Navbar />
-      <Header/>
-      <div className={styles.homeContainer}>
-        <Featured/>
-        <h1 className={styles.homeTitle}>Browse by property type</h1>
-        <PropertyList/>
-        <h1 className={styles.homeTitle}>Homes guests love</h1>
-        <FeaturedProperties/>
-        <MailList/>
-        <Footer/>
-      </div>
+      <Header />
+      <WhoWeAreSection />
+      <MailList />
+      <Footer />
     </div>
   );
 };
